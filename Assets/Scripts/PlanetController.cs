@@ -9,16 +9,31 @@ public class PlanetController : MonoBehaviour
     private float currentJumpForce = 0f;
 
     private Rigidbody2D rb;
+    private Renderer rendr;
+    private bool wasShown;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        rendr = GetComponentInChildren<Renderer>();
 
         GameManager.Instance.Player = gameObject;
     }
 
-    void FixedUpdate()
+    void Update()
     {
+        if (rendr.isVisible)
+        {
+            wasShown = true;
+        }
+        else
+        {
+            if (wasShown)
+            {
+                // Game over:
+                GameManager.Instance.GameOver();
+            }
+        }
         if (currentJumpForce > 0f)
         {
             rb.linearVelocity = new Vector2(speed, currentJumpForce);

@@ -19,5 +19,10 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    public void GameOver()
+    {
+        // TODO: Sumfin
+    }
+
 
 }
