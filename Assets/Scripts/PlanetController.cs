@@ -13,6 +13,8 @@ public class PlanetController : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+
+        GameManager.Instance.Player = gameObject;
     }
 
     void FixedUpdate()
