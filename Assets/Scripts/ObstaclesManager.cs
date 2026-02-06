@@ -3,6 +3,7 @@ using UnityEngine;
 public class ObstaclesManager : MonoBehaviour
 {
     public float minGap;
+    public float horizontalSpan;
     public GameObject obstaclePrefab;
     private GameObject lastObstacle;
 
@@ -18,6 +19,7 @@ public class ObstaclesManager : MonoBehaviour
             // Spawning next obstacle just outside of the camera view:
             Vector3 pos = Camera.main.ViewportToWorldPoint(new Vector3(1.1f, 0.5f, 1f));
             pos.z = 0f;
+            pos.y = Random.Range(-horizontalSpan, horizontalSpan);
             lastObstacle = Instantiate(obstaclePrefab, pos, Quaternion.identity, transform);
         }
     }
