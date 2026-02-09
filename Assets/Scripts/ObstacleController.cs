@@ -2,15 +2,18 @@ using UnityEngine;
 
 public class ObstacleController : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    void Awake()
     {
-        
+
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        Vector3 pos = Camera.main.ViewportToWorldPoint(new Vector3(1.1f, 0.5f, 1f));
+        if (transform.position.x < pos.x)
+        {
+
+        }
     }
 }
