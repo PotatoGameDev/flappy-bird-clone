@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(AudioSource))]
 public class PlanetController : MonoBehaviour
 {
     public float speed = 10f;
@@ -11,6 +12,12 @@ public class PlanetController : MonoBehaviour
     private Rigidbody2D rb;
     private Renderer rendr;
     private bool wasShown;
+
+    // Audio sources
+    public AudioSource screamsAudioSource;
+    public AudioSource hitAudioSource;
+
+    public AudioClip[] hitAudioClips;
 
     void Awake()
     {
@@ -53,4 +60,10 @@ public class PlanetController : MonoBehaviour
         }
     }
 
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        SoundManager.Instance.PlayScreams(screamsAudioSource);
+        SoundManager.Instance.PlayRandom(hitAudioSource, hitAudioClips);
+
+    }
 }
