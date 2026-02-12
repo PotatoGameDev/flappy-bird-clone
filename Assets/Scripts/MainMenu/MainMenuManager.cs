@@ -5,6 +5,6 @@ public class MainMenuManager : MonoBehaviour
 {
     public void StartGame()
     {
-        SceneManager.LoadScene("Loading", LoadSceneMode.Single);
+        SceneManager.LoadScene("LevelSelect", LoadSceneMode.Single);
     }
 }

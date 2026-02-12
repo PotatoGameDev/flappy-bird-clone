@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,27 +11,37 @@ public class PlanetController : MonoBehaviour
     private float currentJumpForce = 0f;
 
     private Rigidbody2D rb;
-    private Renderer rendr;
+    private SpriteRenderer rendr;
     private bool wasShown;
 
+    public float invincibilityDurationSeconds = 2f;
+    public float flashSpeed = 1f;
+    private bool invincible = false;
+
     // Audio sources
+    public float screamsVolume = 0.5f;
     public AudioSource screamsAudioSource;
+    public float hitVolume = 1f;
     public AudioSource hitAudioSource;
+    public float quakeVolume = 0.5f;
+    public AudioSource quakeAudioSource;
 
     public AudioClip[] hitAudioClips;
+    public AudioClip[] quakeAudioClips;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        rendr = GetComponentInChildren<Renderer>();
+        rendr = GetComponentInChildren<SpriteRenderer>();
 
-        GameManager.Instance.Player = gameObject;
+        GameManager.Instance.Player = this;
     }
 
     void Update()
     {
         if (rendr.isVisible)
         {
+            // TODO: Not a good way to detect GameOver.
             wasShown = true;
         }
         else
@@ -62,8 +73,40 @@ public class PlanetController : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        SoundManager.Instance.PlayScreams(screamsAudioSource);
-        SoundManager.Instance.PlayRandom(hitAudioSource, hitAudioClips);
+        if (invincible) return;
 
+        StartCoroutine(IFrames());
+
+        SoundManager.Instance.PlayScreams(screamsAudioSource, screamsVolume);
+        SoundManager.Instance.PlayRandom(quakeAudioSource, quakeAudioClips, quakeVolume);
+        SoundManager.Instance.PlayRandom(hitAudioSource, hitAudioClips, hitVolume);
+
+        GameplayManager.Instance.TakeHit(collision.relativeVelocity.magnitude);
+    }
+
+    public int GetRpm()
+    {
+        return (int)Mathf.Abs(rb.angularVelocity / 6);
+    }
+
+    private IEnumerator IFrames()
+    {
+        invincible = true;
+        float elapsed = 0f;
+        Color originalColor = rendr.color;
+
+        while (elapsed < invincibilityDurationSeconds)
+        {
+            elapsed += Time.deltaTime;
+
+            Color color = rendr.color;
+            color.a = Mathf.PingPong(Time.time * flashSpeed, 1f);
+
+            rendr.color = color;
+            yield return null;
+        }
+
+        rendr.color = originalColor;
+        invincible = false;
     }
 }

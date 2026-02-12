@@ -2,11 +2,7 @@ using UnityEngine;
 
 public class ObstacleController : MonoBehaviour
 {
-
-    void Awake()
-    {
-
-    }
+    private bool passed;
 
     void Update()
     {
@@ -14,6 +10,15 @@ public class ObstacleController : MonoBehaviour
         if (transform.position.x < pos.x)
         {
 
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (!passed && collider.CompareTag("Player"))
+        {
+            GameplayManager.Instance.gateCount++;
+            passed = true;
         }
     }
 }
