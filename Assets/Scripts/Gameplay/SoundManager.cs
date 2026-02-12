@@ -8,8 +8,6 @@ public class SoundManager : MonoBehaviour
     public float clipDuration = 1.0f;
     public float fadeDuration = 0.5f;
 
-    private bool screamsPlaying;
-
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -21,15 +19,15 @@ public class SoundManager : MonoBehaviour
         Instance = this;
     }
 
-    public void PlayScreams(AudioSource audioSource)
+    public void PlayScreams(AudioSource audioSource, float volume = 1f)
     {
         if (!audioSource.isPlaying)
         {
-            StartCoroutine(PlaySliceCoroutine(audioSource));
+            StartCoroutine(PlaySliceCoroutine(audioSource, volume));
         }
     }
 
-    IEnumerator PlaySliceCoroutine(AudioSource source)
+    IEnumerator PlaySliceCoroutine(AudioSource source, float volume = 1f)
     {
         AudioClip clip = source.clip;
 
@@ -41,30 +39,31 @@ public class SoundManager : MonoBehaviour
         source.Play();
 
         // Fade in
-        yield return FadeVolume(source, 0f, 1f, fadeDuration);
+        yield return FadeVolume(source, 0f, volume, fadeDuration);
 
         // Play middle section
         yield return new WaitForSeconds(clipDuration - fadeDuration * 2f);
 
         // Fade out
-        yield return FadeVolume(source, 1f, 0f, fadeDuration);
+        yield return FadeVolume(source, volume, 0f, fadeDuration);
 
         source.Stop();
     }
 
-    IEnumerator PlayFirstSliceCoroutine(AudioSource source)
+    IEnumerator PlayFirstSliceCoroutine(AudioSource source, float volume = 1f)
     {
         source.volume = 0f;
+        source.time = 0f;
         source.Play();
 
         // Fade in
-        yield return FadeVolume(source, 0f, 1f, fadeDuration);
+        yield return FadeVolume(source, 0f, volume, fadeDuration);
 
         // Play middle section
         yield return new WaitForSeconds(clipDuration - fadeDuration * 2f);
 
         // Fade out
-        yield return FadeVolume(source, 1f, 0f, fadeDuration);
+        yield return FadeVolume(source, volume, 0f, fadeDuration);
 
         source.Stop();
     }
@@ -85,12 +84,12 @@ public class SoundManager : MonoBehaviour
         source.volume = to;
     }
 
-    public void PlayRandom(AudioSource source, AudioClip[] clips)
+    public void PlayRandom(AudioSource source, AudioClip[] clips, float volume)
     {
         if (source.isPlaying) source.Stop();
 
         source.clip = clips[Random.Range(0, clips.Length)];
 
-        StartCoroutine(PlayFirstSliceCoroutine(source));
+        StartCoroutine(PlayFirstSliceCoroutine(source, volume));
     }
 }
