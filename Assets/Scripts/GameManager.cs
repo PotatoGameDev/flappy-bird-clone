@@ -9,6 +9,10 @@ public class GameManager : MonoBehaviour
 
     public GameState State = new();
 
+    public long[] PopulationBasis = {
+        1000000, 9000000000, 1000000000000,
+    };
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -31,11 +35,24 @@ public class GameManager : MonoBehaviour
         SaveSystem.Save(State);
     }
 
+
+    public long GetPopulationForLevel(int level)
+    {
+        int currentCivType = State.CivTypePassed;
+        long totalPopChange = 0;
+
+        for (int i = 0; i < level; i++)
+        {
+            totalPopChange += State.PopulationChange[i];
+        }
+
+        return PopulationBasis[currentCivType] + totalPopChange;
+    }
 }
 
 [System.Serializable]
 public class GameState
 {
-    public int Population;
-    public int CivType;
+    public long[] PopulationChange;
+    public int CivTypePassed;
 }

@@ -4,12 +4,12 @@ using System.Collections.Generic;
 public class ObstaclesManager : MonoBehaviour
 {
     public float minGap;
-    public float horizontalSpan;
+    public float verticalSpan;
     public GameObject obstaclePrefab;
 
     public float vanishingDistance;
 
-    private List<GameObject> obstacles = new();
+    private readonly List<GameObject> obstacles = new();
 
     void FixedUpdate()
     {
@@ -24,7 +24,7 @@ public class ObstaclesManager : MonoBehaviour
             // Spawning next obstacle just outside of the camera view:
             Vector3 pos = Camera.main.ViewportToWorldPoint(new Vector3(1.1f, 0.5f, 1f));
             pos.z = 0f;
-            pos.y = Random.Range(-horizontalSpan, horizontalSpan);
+            pos.y = Random.Range(-verticalSpan, verticalSpan);
             GameObject obj = Instantiate(obstaclePrefab, pos, Quaternion.identity, transform);
 
             obstacles.Add(obj);

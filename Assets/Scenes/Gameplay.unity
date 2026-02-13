@@ -798,7 +798,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   minGap: 5
-  horizontalSpan: 3.5
+  verticalSpan: 3
   obstaclePrefab: {fileID: 6037163735289081218, guid: 161dda93af069b949867802970020114, type: 3}
   vanishingDistance: 20
 --- !u!4 &478316489
