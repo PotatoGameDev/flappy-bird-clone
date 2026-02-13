@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameplayManager : MonoBehaviour
 {
@@ -60,5 +61,10 @@ public class GameplayManager : MonoBehaviour
 
         FadingTextController ftc = fadingText.GetComponent<FadingTextController>();
         ftc.Init(peopleDied);
+    }
+
+    public void Death()
+    {
+        SceneManager.LoadScene("LevelSelect");
     }
 }
