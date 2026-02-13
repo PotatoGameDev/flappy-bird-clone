@@ -14,6 +14,8 @@ public class GameplayManager : MonoBehaviour
 
     [SerializeField] private GameObject fadingTextPrefab;
 
+    private long currentPopulation = 0;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -27,6 +29,10 @@ public class GameplayManager : MonoBehaviour
 
     void Start()
     {
+
+        // TODO: might be replaying previous level, have to pass the current civ type from menu to here
+        currentPopulation = GameManager.Instance.GetPopulationForLevel(GameManager.Instance.State.CivTypePassed);
+
         UpdateLabels();
     }
 
@@ -37,7 +43,7 @@ public class GameplayManager : MonoBehaviour
 
     private void UpdateLabels()
     {
-        populationLabel.text = "POP: " + GameManager.Instance.State.Population;
+        populationLabel.text = currentPopulation.ToString();
         rpmLabel.text = "RPM: " + GameManager.Instance.Player.GetRpm();
         gateCounterLabel.text = gateCount.ToString();
     }
@@ -49,13 +55,13 @@ public class GameplayManager : MonoBehaviour
         float maxHitForce = 100;
 
         float hitPercent = maxHitPercent * Mathf.Clamp01(force / maxHitForce);
-        int peopleDied = (int)(GameManager.Instance.State.Population * (hitPercent / 100));
-        GameManager.Instance.State.Population -= peopleDied;
+        long peopleDied = (long)(currentPopulation * (hitPercent / 100));
+        currentPopulation -= peopleDied;
 
         AddPopulationLossText(peopleDied);
     }
 
-    private void AddPopulationLossText(int peopleDied)
+    private void AddPopulationLossText(long peopleDied)
     {
         GameObject fadingText = Instantiate(fadingTextPrefab, populationLabel.transform.position, Quaternion.identity, populationLabel.transform.parent);
 

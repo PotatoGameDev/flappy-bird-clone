@@ -15,10 +15,11 @@ public static class SaveSystem
     {
         if (!StateExists())
         {
+            long[] populationChange = { 0, 0, 0 };
             return new GameState
             {
-                CivType = 1,
-                Population = 1000000
+                PopulationChange = populationChange,
+                CivTypePassed = 0,
             };
         }
         string json = File.ReadAllText(SavePath);

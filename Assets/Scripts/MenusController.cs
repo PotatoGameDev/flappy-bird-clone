@@ -65,6 +65,7 @@ public class MenusController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI levelSelectionR;
 
     [SerializeField] private GameObject[] levelSelectionContents;
+    [SerializeField] private TextMeshProUGUI[] levelSelectionStatLabels;
 
     private string[] levelFlavorTexts = {
         "We emerged victorious from all the various wars and cataclisms. From a simple cell to a mighty civilisation ruling the entire planet in peace. No single ruler, no tyrant, just a commonwealth of the people. Now, the goal is clear: To utilize the planet to the fullest, with minimal waste. This can only end well!",
@@ -91,6 +92,14 @@ public class MenusController : MonoBehaviour
             levelSelectionContents[i].SetActive(false);
         }
         levelSelectionContents[currentLevelSelection].SetActive(true);
+
+        bool levelCompleted = currentLevelSelection < GameManager.Instance.State.CivTypePassed;
+        levelSelectionStatLabels[currentLevelSelection].text = string.Format(
+                levelSelectionStatLabels[currentLevelSelection].text,
+                levelCompleted ? "COMPLETED" : "NOT COMPLETED",
+                GameManager.Instance.GetPopulationForLevel(currentLevelSelection).ToString(),
+                9001
+                );
     }
 
     public void OnLevelR()
