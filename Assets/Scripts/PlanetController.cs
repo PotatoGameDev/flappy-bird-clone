@@ -39,19 +39,6 @@ public class PlanetController : MonoBehaviour
 
     void Update()
     {
-        if (rendr.isVisible)
-        {
-            // TODO: Not a good way to detect GameOver.
-            wasShown = true;
-        }
-        else
-        {
-            if (wasShown)
-            {
-                // Game over:
-                GameManager.Instance.GameOver();
-            }
-        }
         if (currentJumpForce > 0f)
         {
             rb.linearVelocity = new Vector2(speed, currentJumpForce);

@@ -7,6 +7,8 @@ public class MenusController : MonoBehaviour
 {
     void Start()
     {
+        GameManager.Instance.StartGame();
+
         currentMainSelection = 1; // We start in level selection
         UpdateMainSelectionMenus();
         UpdateSystemSelectionMenus();
