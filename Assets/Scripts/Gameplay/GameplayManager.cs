@@ -65,6 +65,7 @@ public class GameplayManager : MonoBehaviour
 
     public void Death()
     {
+        GameManager.Instance.Save();
         SceneManager.LoadScene("NewMenu");
     }
 }

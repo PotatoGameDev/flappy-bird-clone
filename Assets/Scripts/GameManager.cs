@@ -19,21 +19,23 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-
-        State.Population = 1000000;
-        State.CivType = 1;
     }
 
-
-    public void GameOver()
+    public void StartGame()
     {
-        // TODO: Sumfin
+        State = SaveSystem.Load();
+    }
+
+    public void Save()
+    {
+        SaveSystem.Save(State);
     }
 
 }
 
+[System.Serializable]
 public class GameState
 {
-    public int Population { get; set; }
-    public int CivType { get; set; }
+    public int Population;
+    public int CivType;
 }
