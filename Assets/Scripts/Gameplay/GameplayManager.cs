@@ -65,6 +65,6 @@ public class GameplayManager : MonoBehaviour
 
     public void Death()
     {
-        SceneManager.LoadScene("LevelSelect");
+        SceneManager.LoadScene("NewMenu");
     }
 }
