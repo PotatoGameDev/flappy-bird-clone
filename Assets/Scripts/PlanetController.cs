@@ -84,6 +84,14 @@ public class PlanetController : MonoBehaviour
         GameplayManager.Instance.TakeHit(collision.relativeVelocity.magnitude);
     }
 
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("BoundaryBack"))
+        {
+            GameplayManager.Instance.Death();
+        }
+    }
+
     public int GetRpm()
     {
         return (int)Mathf.Abs(rb.angularVelocity / 6);
