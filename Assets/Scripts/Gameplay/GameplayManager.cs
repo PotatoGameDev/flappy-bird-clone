@@ -36,11 +36,6 @@ public class GameplayManager : MonoBehaviour
         UpdateLabels();
     }
 
-    void Update()
-    {
-        UpdateLabels();
-    }
-
     private void UpdateLabels()
     {
         populationLabel.text = currentPopulation.ToString();
@@ -59,6 +54,8 @@ public class GameplayManager : MonoBehaviour
         currentPopulation -= peopleDied;
 
         AddPopulationLossText(peopleDied);
+
+        UpdateLabels();
     }
 
     private void AddPopulationLossText(long peopleDied)
@@ -73,5 +70,13 @@ public class GameplayManager : MonoBehaviour
     {
         GameManager.Instance.Save();
         SceneManager.LoadScene("NewMenu");
+    }
+
+
+    public void CollectEnergy()
+    {
+        gateCount++;
+        GameManager.Instance.State.CollectedEnergy++;
+        UpdateLabels();
     }
 }

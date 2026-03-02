@@ -20,6 +20,7 @@ public static class SaveSystem
             {
                 SurvivingPopulation = survivingPopulation,
                 CivTypePassed = 0,
+                CollectedEnergy = 0,
             };
         }
         string json = File.ReadAllText(SavePath);

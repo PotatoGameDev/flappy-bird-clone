@@ -2557,7 +2557,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlanetController
   speed: 10
-  jumpForce: 10
+  jumpForce: 8
   invincibilityDurationSeconds: 2
   flashSpeed: 1
   screamsVolume: 0.1

@@ -37,6 +37,7 @@ public class GameState
 {
     public long[] SurvivingPopulation;
     public int CivTypePassed;
+    public int CollectedEnergy;
 
     public long GetStartingPopulation(int level)
     {
