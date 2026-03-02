@@ -47,7 +47,7 @@ public class MenusController : MonoBehaviour
 
     public void OnMainR()
     {
-        if (currentMainSelection == mainSelectionOptions.Length) return;
+        if (currentMainSelection >= mainSelectionOptions.GetLength(0) - 1) return;
         currentMainSelection++;
         UpdateMainSelectionMenus();
     }

@@ -6,28 +6,41 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(AudioSource))]
 public class PlanetController : MonoBehaviour
 {
-    public float speed = 10f;
-    public float jumpForce = 10f;
+    [SerializeField]
+    private float speed = 10f;
+
+    [SerializeField]
+    private float jumpForce = 10f;
     private float currentJumpForce = 0f;
 
     private Rigidbody2D rb;
     private SpriteRenderer rendr;
     private bool wasShown;
 
-    public float invincibilityDurationSeconds = 2f;
-    public float flashSpeed = 1f;
+    [SerializeField]
+    private float invincibilityDurationSeconds = 2f;
+    [SerializeField]
+    private float flashSpeed = 1f;
     private bool invincible = false;
 
     // Audio sources
-    public float screamsVolume = 0.5f;
-    public AudioSource screamsAudioSource;
-    public float hitVolume = 1f;
-    public AudioSource hitAudioSource;
-    public float quakeVolume = 0.5f;
-    public AudioSource quakeAudioSource;
+    [SerializeField]
+    private float screamsVolume = 0.5f;
+    [SerializeField]
+    private AudioSource screamsAudioSource;
+    [SerializeField]
+    private float hitVolume = 1f;
+    [SerializeField]
+    private AudioSource hitAudioSource;
+    [SerializeField]
+    private float quakeVolume = 0.5f;
+    [SerializeField]
+    private AudioSource quakeAudioSource;
 
-    public AudioClip[] hitAudioClips;
-    public AudioClip[] quakeAudioClips;
+    [SerializeField]
+    private AudioClip[] hitAudioClips;
+    [SerializeField]
+    private AudioClip[] quakeAudioClips;
 
     void Awake()
     {
