@@ -15,7 +15,6 @@ public class PlanetController : MonoBehaviour
 
     private Rigidbody2D rb;
     private SpriteRenderer rendr;
-    private bool wasShown;
 
     [SerializeField]
     private float invincibilityDurationSeconds = 2f;
@@ -67,7 +66,7 @@ public class PlanetController : MonoBehaviour
     {
         if (context.performed)
         {
-            currentJumpForce += 10f;
+            currentJumpForce += jumpForce;
         }
     }
 

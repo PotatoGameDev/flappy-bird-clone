@@ -9,10 +9,6 @@ public class GameManager : MonoBehaviour
 
     public GameState State = new();
 
-    public long[] PopulationBasis = {
-        1000000, 9000000000, 1000000000000,
-    };
-
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -34,25 +30,23 @@ public class GameManager : MonoBehaviour
     {
         SaveSystem.Save(State);
     }
-
-
-    public long GetPopulationForLevel(int level)
-    {
-        int currentCivType = State.CivTypePassed;
-        long totalPopChange = 0;
-
-        for (int i = 0; i < level; i++)
-        {
-            totalPopChange += State.PopulationChange[i];
-        }
-
-        return PopulationBasis[currentCivType] + totalPopChange;
-    }
 }
 
 [System.Serializable]
 public class GameState
 {
-    public long[] PopulationChange;
+    public long[] SurvivingPopulation;
     public int CivTypePassed;
+
+    public long GetStartingPopulation(int level)
+    {
+        // if this is the first level, we return the full starting population
+        if (level == 0) return 9000000;
+
+        // else, we return the surviving population for the previous level
+        return SurvivingPopulation[level - 1];
+    }
+
+    public long GetSurvivingPopulation(int level)
+        => SurvivingPopulation[level];
 }
