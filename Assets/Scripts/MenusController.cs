@@ -23,6 +23,8 @@ public class MenusController : MonoBehaviour
 
     [SerializeField] private GameObject[] mainSelectionContents;
 
+    [SerializeField] private Button startButton;
+
 
     private readonly string[,] mainSelectionOptions = {
         { "", "System", "Level Select" },
@@ -43,6 +45,7 @@ public class MenusController : MonoBehaviour
             mainSelectionContents[i].SetActive(false);
         }
         mainSelectionContents[currentMainSelection].SetActive(true);
+
     }
 
     public void OnMainR()
@@ -68,15 +71,15 @@ public class MenusController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI[] levelSelectionStatLabels;
 
     private string[] levelFlavorTexts = {
-        "We emerged victorious from all the various wars and cataclisms. From a simple cell to a mighty civilisation ruling the entire planet in peace. No single ruler, no tyrant, just a commonwealth of the people. Now, the goal is clear: To utilize the planet to the fullest, with minimal waste. This can only end well!",
+        "We emerged victorious from all the various wars and cataclisms. From a simple cell to a mighty civilization ruling the entire planet in peace. No single ruler, no tyrant, just a commonwealth of the people. Now, the goal is clear: To utilize the planet to the fullest, with minimal waste. This can only end well!",
         "TODO Type II",
         "TODO Type III",
     };
 
     private readonly string[,] levelSelectionOptions = {
-        { "", "Type I Civilisation", "Type II Civilisation" },
-        { "Type I Civilisation", "Type II Civilisation", "Type III Civilisation" },
-        { "Type II Civilisation", "Type III Civilisation", "" },
+        { "", "Type I Civilization", "Type II Civilization" },
+        { "Type I Civilization", "Type II Civilization", "Type III Civilization" },
+        { "Type II Civilization", "Type III Civilization", "" },
     };
 
     private int currentLevelSelection = 0;
@@ -93,13 +96,32 @@ public class MenusController : MonoBehaviour
         }
         levelSelectionContents[currentLevelSelection].SetActive(true);
 
+        // Filling in the stat texts
         bool levelCompleted = currentLevelSelection < GameManager.Instance.State.CivTypePassed;
+        bool previousLevelCompleted = currentLevelSelection - 1 < GameManager.Instance.State.CivTypePassed;
+
+        long startingPopulation = GameManager.Instance.State.GetStartingPopulation(currentLevelSelection);
+        long survivingPopulation = GameManager.Instance.State.GetSurvivingPopulation(currentLevelSelection);
+
         levelSelectionStatLabels[currentLevelSelection].text = string.Format(
                 levelSelectionStatLabels[currentLevelSelection].text,
-                levelCompleted ? "COMPLETED" : "NOT COMPLETED",
-                GameManager.Instance.GetPopulationForLevel(currentLevelSelection).ToString(),
-                9001
+                previousLevelCompleted ? startingPopulation.ToString() : "??",
+                levelCompleted ? survivingPopulation.ToString() : "NOT COMPLETED",
+                0
                 );
+
+        // Update the start button, if the previous level has been completed, then this level can be started
+        if (previousLevelCompleted)
+        {
+            startButton.interactable = true;
+            startButton.GetComponentInChildren<TextMeshProUGUI>().text = "Play";
+        }
+        else
+        {
+            startButton.interactable = false;
+            startButton.GetComponentInChildren<TextMeshProUGUI>().text = "Locked";
+        }
+
     }
 
     public void OnLevelR()

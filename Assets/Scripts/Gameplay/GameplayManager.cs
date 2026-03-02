@@ -31,7 +31,7 @@ public class GameplayManager : MonoBehaviour
     {
 
         // TODO: might be replaying previous level, have to pass the current civ type from menu to here
-        currentPopulation = GameManager.Instance.GetPopulationForLevel(GameManager.Instance.State.CivTypePassed);
+        currentPopulation = GameManager.Instance.State.GetStartingPopulation(GameManager.Instance.State.CivTypePassed);
 
         UpdateLabels();
     }

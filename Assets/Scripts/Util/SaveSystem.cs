@@ -15,10 +15,10 @@ public static class SaveSystem
     {
         if (!StateExists())
         {
-            long[] populationChange = { 0, 0, 0 };
+            long[] survivingPopulation = { 0, 0, 0 };
             return new GameState
             {
-                PopulationChange = populationChange,
+                SurvivingPopulation = survivingPopulation,
                 CivTypePassed = 0,
             };
         }

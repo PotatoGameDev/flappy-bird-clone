@@ -1511,9 +1511,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   State:
-    PopulationChange: 
+    SurvivingPopulation: 
     CivTypePassed: 0
-  PopulationBasis: 40420f0000000000001a7118020000000010a5d4e8000000
 --- !u!4 &416019091
 Transform:
   m_ObjectHideFlags: 0
@@ -1586,11 +1585,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Phase: {0}
+  m_text: 'Starting Population: {0}
 
     Surviving Population: {1}
 
-    Current Energy: {2}'
+    Energy Collected:
+    {2}'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2674,6 +2674,7 @@ MonoBehaviour:
   - {fileID: 169444380}
   - {fileID: 205292931}
   - {fileID: 488857251}
+  startButton: {fileID: 1974077329}
   levelSelectionCurrent: {fileID: 271181297}
   levelSelectionL: {fileID: 1271822737}
   levelSelectionR: {fileID: 1192815759}
@@ -3403,11 +3404,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Phase: {0}
+  m_text: 'Starting Population: {0}
 
     Surviving Population: {1}
 
-    Current Energy: {2}'
+    Energy Collected:
+    {2}'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3544,11 +3546,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Phase: {0}
+  m_text: 'Starting Population: {0}
 
     Surviving Population: {1}
 
-    Current Energy: {2}'
+    Energy Collected:
+    {2}'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
