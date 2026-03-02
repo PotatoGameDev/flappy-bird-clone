@@ -103,11 +103,13 @@ public class MenusController : MonoBehaviour
         long startingPopulation = GameManager.Instance.State.GetStartingPopulation(currentLevelSelection);
         long survivingPopulation = GameManager.Instance.State.GetSurvivingPopulation(currentLevelSelection);
 
+        long currentEnergy = GameManager.Instance.State.CollectedEnergy;
+
         levelSelectionStatLabels[currentLevelSelection].text = string.Format(
                 levelSelectionStatLabels[currentLevelSelection].text,
                 previousLevelCompleted ? startingPopulation.ToString() : "??",
                 levelCompleted ? survivingPopulation.ToString() : "NOT COMPLETED",
-                0
+                currentEnergy
                 );
 
         // Update the start button, if the previous level has been completed, then this level can be started
