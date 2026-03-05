@@ -3567,6 +3567,7 @@ MonoBehaviour:
   gateCounterLabel: {fileID: 1781761502}
   gateCount: 0
   fadingTextPrefab: {fileID: 2296893385617354793, guid: d848e6480a6ed756187cf9251cc9206f, type: 3}
+  fadingTextEnergyPrefab: {fileID: 2296893385617354793, guid: fc18008ea5115d1048a9b48bb07cadf7, type: 3}
 --- !u!4 &2009740623
 Transform:
   m_ObjectHideFlags: 0

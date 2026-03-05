@@ -13,8 +13,26 @@ public class GameplayManager : MonoBehaviour
     public int gateCount = 0;
 
     [SerializeField] private GameObject fadingTextPrefab;
+    [SerializeField] private GameObject fadingTextEnergyPrefab;
 
     private long currentPopulation = 0;
+
+    private string[] casualtiesTexts = {
+        "{0} died",
+        "{0} killed",
+        "{0} squashed",
+        "{0} evaporated",
+        "{0} lost",
+        "{0} are no more",
+        "{0} are now ex-people",
+        "{0} are poorly",
+        "{0} need some milk",
+        "{0} have a bad feeling about this",
+        "{0} did redeem, ma'am",
+        "{0} have no fun",
+        "{0} perished",
+        "{0} don't get no respect",
+    };
 
     void Awake()
     {
@@ -63,7 +81,10 @@ public class GameplayManager : MonoBehaviour
         GameObject fadingText = Instantiate(fadingTextPrefab, populationLabel.transform.position, Quaternion.identity, populationLabel.transform.parent);
 
         FadingTextController ftc = fadingText.GetComponent<FadingTextController>();
-        ftc.Init(peopleDied);
+
+        string text = casualtiesTexts[Random.Range(0, casualtiesTexts.Length - 1)];
+
+        ftc.Init(string.Format(text, peopleDied));
     }
 
     public void Death()
@@ -77,6 +98,19 @@ public class GameplayManager : MonoBehaviour
     {
         gateCount++;
         GameManager.Instance.State.CollectedEnergy++;
+        AddEnergyCollectedText(1); // TODO When upgrades are ready, the energy calculation here
         UpdateLabels();
     }
+
+    private void AddEnergyCollectedText(int energyAdded)
+    {
+        GameObject fadingText = Instantiate(fadingTextEnergyPrefab, gateCounterLabel.transform.position, Quaternion.identity, gateCounterLabel.transform.parent);
+
+        FadingTextController ftc = fadingText.GetComponent<FadingTextController>();
+        ftc.Init("+" + energyAdded + "GW");
+    }
+
+
 }
+
+

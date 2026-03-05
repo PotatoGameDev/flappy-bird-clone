@@ -7,14 +7,23 @@ public class MenusController : MonoBehaviour
 {
     void Start()
     {
-        GameManager.Instance.StartGame();
-
         currentMainSelection = 1; // We start in level selection
         UpdateMainSelectionMenus();
         UpdateSystemSelectionMenus();
         UpdateLevelSelectionMenus();
+
+        UpdateEnergyLabel();
     }
 
+    void OnEnable()
+    {
+        UpgradesManager.Instance.OnUpgrade += HandleUpgrade;
+    }
+
+    void OnDisable()
+    {
+        UpgradesManager.Instance.OnUpgrade -= HandleUpgrade;
+    }
 
     // Main Selection
     [SerializeField] private TextMeshProUGUI mainSelectionCurrent;
@@ -24,7 +33,6 @@ public class MenusController : MonoBehaviour
     [SerializeField] private GameObject[] mainSelectionContents;
 
     [SerializeField] private Button startButton;
-
 
     private readonly string[,] mainSelectionOptions = {
         { "", "System", "Level Select" },
@@ -109,7 +117,7 @@ public class MenusController : MonoBehaviour
                 levelSelectionStatLabels[currentLevelSelection].text,
                 previousLevelCompleted ? startingPopulation.ToString() : "??",
                 levelCompleted ? survivingPopulation.ToString() : "NOT COMPLETED",
-                currentEnergy
+                currentEnergy + "GW"
                 );
 
         // Update the start button, if the previous level has been completed, then this level can be started
@@ -143,6 +151,25 @@ public class MenusController : MonoBehaviour
     public void OnLevelSelectStartClicked()
     {
         SceneManager.LoadScene("Loading");
+    }
+
+    // Upgrades Selection
+
+    [SerializeField] private TextMeshProUGUI energyLabel;
+    private string energyLabelTemplate;
+
+    private void HandleUpgrade(Upgrade upgrade)
+    {
+        UpdateEnergyLabel();
+    }
+
+    private void UpdateEnergyLabel()
+    {
+        if (energyLabelTemplate == null)
+        {
+            energyLabelTemplate = energyLabel.text;
+        }
+        energyLabel.text = string.Format(energyLabelTemplate, GameManager.Instance.State.CollectedEnergy);
     }
 
     // System Selection

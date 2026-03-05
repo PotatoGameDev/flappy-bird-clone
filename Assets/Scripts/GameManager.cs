@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[DefaultExecutionOrder(-1000)]
 public class GameManager : MonoBehaviour
 {
 
@@ -7,7 +8,7 @@ public class GameManager : MonoBehaviour
 
     public PlanetController Player { get; set; }
 
-    public GameState State = new();
+    public GameState State;
 
     void Awake()
     {
@@ -19,10 +20,8 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-    }
 
-    public void StartGame()
-    {
+        // Other
         State = SaveSystem.Load();
     }
 
