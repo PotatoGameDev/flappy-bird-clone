@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1601190177503484598}
   - component: {fileID: 7830396625484553260}
   m_Layer: 5
-  m_Name: FadingText
+  m_Name: CasualtiesFadingText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
