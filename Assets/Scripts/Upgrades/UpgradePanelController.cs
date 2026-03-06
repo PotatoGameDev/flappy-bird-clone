@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class UpgradePanelController : MonoBehaviour
 {
-    [SerializeField] private string upgradeIdent;
+    [SerializeField] private UpgradeId upgradeIdent;
     [SerializeField] private Button upgradeButton;
     [SerializeField] private TextMeshProUGUI nameLabel;
     [SerializeField] private TextMeshProUGUI levelLabel;
@@ -27,7 +27,7 @@ public class UpgradePanelController : MonoBehaviour
 
     private void OnValidate()
     {
-        if (nameLabel != null) nameLabel.text = upgradeIdent;
+        if (nameLabel != null) nameLabel.text = upgradeIdent.ToString();
     }
 
     void UpdateUi()
@@ -56,7 +56,7 @@ public class UpgradePanelController : MonoBehaviour
             upgradeButton.interactable = true;
         }
 
-        if (price > GameManager.Instance.State.CollectedEnergy)
+        if (price > GameManager.Instance.CollectedEnergy)
             upgradeButton.interactable = false;
 
         // Update the level label

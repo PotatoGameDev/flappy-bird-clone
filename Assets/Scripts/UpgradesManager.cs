@@ -21,76 +21,113 @@ public class UpgradesManager : MonoBehaviour
 
     public event Action<Upgrade> OnUpgrade;
 
-    private static readonly Dictionary<string, Upgrade> upgrades = new()
+    private static readonly Dictionary<UpgradeId, Upgrade> upgrades = new()
     {
-        ["O-Ring"] = new Upgrade(
+        [UpgradeId.ORing] = new(
+                UpgradeId.ORing,
                 "O-Ring",
                 10
                 ),
-        ["Accretion Suction"] = new Upgrade(
-                "",
+        [UpgradeId.AccretioSuction] = new(
+                UpgradeId.AccretioSuction,
+                "AccretioSuction",
                 10
                 ),
-        ["Star Lifting"] = new Upgrade(
+        [UpgradeId.StarLifting] = new(
+                UpgradeId.StarLifting,
                 "Star Lifting",
                 10
                 ),
-        ["Android Slavery"] = new Upgrade(
-                "Android Slavery",
+        [UpgradeId.AndroidSlavery] = new(
+                UpgradeId.AndroidSlavery, "Android Slavery",
                 10,
                 2
                 ),
-        ["V'yag-ra Energizing Therapy"] = new Upgrade(
+        [UpgradeId.VyagraEnergizingTherapy] = new(
+                UpgradeId.VyagraEnergizingTherapy,
                 "V'yag-ra Energizing Therapy",
                 10,
                 2
                 ),
-        ["Toorbo"] = new Upgrade(
-                "Toorbo",
+        [UpgradeId.PopulationFactory] = new(
+                UpgradeId.PopulationFactory,
+                "Population Factory",
+                10
+                ),
+        [UpgradeId.ToorboBoost] = new(
+                UpgradeId.ToorboBoost,
+                "Toorbo Boost",
                 10,
                 2
                 ),
-        ["Energy Shield"] = new Upgrade(
+        [UpgradeId.EnergyShield] = new(
+                UpgradeId.EnergyShield,
                 "Energy Shield",
                 10,
                 2
                 ),
-        ["Spin Correction"] = new Upgrade(
-                "Spin Correction",
+        [UpgradeId.SpinDoctor] = new(
+                UpgradeId.SpinDoctor,
+                "Spin Doctor",
                 10,
                 2
                 ),
     };
 
-    public Upgrade GetUpgrade(string ident)
+    public Upgrade GetUpgrade(UpgradeId ident)
     {
-        Debug.Assert(ident != null, "Ident has to be passed.");
         Upgrade upgrade = upgrades[ident];
-        Debug.AssertFormat(ident != null, "Ident {0} does not exist in upgrades, a typo?", ident);
+        Debug.AssertFormat(upgrade != null, "Ident {0} does not exist in upgrades, a typo?", ident);
         return upgrade;
     }
 
-    public void Buy(string ident)
+    public void Buy(UpgradeId ident)
     {
-        GameState state = GameManager.Instance.State;
-
         Upgrade u = GetUpgrade(ident);
 
         int price = u.GetTotalPrice();
 
-        if (state.CollectedEnergy < price)
+        if (GameManager.Instance.CollectedEnergy < price)
             throw new InvalidOperationException("Not enough energy, should be blocked in UI");
 
-        state.CollectedEnergy -= price;
+        GameManager.Instance.CollectedEnergy -= price;
 
         u.Buy();
 
+        DoUpgradeSpecialLogic(u);
+
         OnUpgrade?.Invoke(u);
     }
+
+    private void DoUpgradeSpecialLogic(Upgrade upgrade)
+    {
+        switch (upgrade.Ident)
+        {
+            case UpgradeId.PopulationFactory:
+                {
+                    GameManager.Instance.AddBasePopulation(upgrade.Level * 1000);
+                    break;
+                }
+        }
+    }
+}
+
+public enum UpgradeId
+{
+    ORing,
+    AccretioSuction,
+    StarLifting,
+    AndroidSlavery,
+    VyagraEnergizingTherapy,
+    PopulationFactory,
+    ToorboBoost,
+    EnergyShield,
+    SpinDoctor
 }
 
 public class Upgrade
 {
+    public UpgradeId Ident { get; }
     public string Name { get; }
     public string Description { get; }
     public int EnergyCost { get; }
@@ -98,12 +135,14 @@ public class Upgrade
     public int Level { get; private set; }
 
     public Upgrade(
+            UpgradeId ident,
             string name,
             int energyCost,
             int maxLevel = 1000,
             string description = "TODO"
             )
     {
+        Ident = ident;
         Name = name;
         Description = description;
         EnergyCost = energyCost;

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 [DefaultExecutionOrder(-1000)]
 public class GameManager : MonoBehaviour
@@ -8,7 +9,50 @@ public class GameManager : MonoBehaviour
 
     public PlanetController Player { get; set; }
 
-    public GameState State;
+    // State things
+    private GameState State;
+    public event Action<GameState> OnGameStateChanged;
+
+    public int CurrentLevel
+    {
+        get
+        {
+            return State.CurrentLevel;
+        }
+        set
+        {
+            State.CurrentLevel = value;
+            OnGameStateChanged?.Invoke(State);
+            SaveSystem.Save(State);
+        }
+    }
+
+    public int CollectedEnergy
+    {
+        get
+        {
+            return State.CollectedEnergy;
+        }
+        set
+        {
+            State.CollectedEnergy = value;
+            OnGameStateChanged?.Invoke(State);
+        }
+    }
+
+    public int CivTypePassed
+    {
+        get
+        {
+            return State.CivTypePassed;
+        }
+        set
+        {
+            State.CivTypePassed = value;
+            OnGameStateChanged?.Invoke(State);
+            SaveSystem.Save(State);
+        }
+    }
 
     void Awake()
     {
@@ -29,24 +73,43 @@ public class GameManager : MonoBehaviour
     {
         SaveSystem.Save(State);
     }
-}
 
-[System.Serializable]
-public class GameState
-{
-    public long[] SurvivingPopulation;
-    public int CivTypePassed;
-    public int CollectedEnergy;
-
-    public long GetStartingPopulation(int level)
+    public long GetBasePopulation(int level)
     {
-        // if this is the first level, we return the full starting population
-        if (level == 0) return 9000000;
-
-        // else, we return the surviving population for the previous level
-        return SurvivingPopulation[level - 1];
+        return State.GetBasePopulation(level);
     }
 
-    public long GetSurvivingPopulation(int level)
-        => SurvivingPopulation[level];
+    public long GetBasePopulation()
+    {
+        return State.GetBasePopulation(State.CurrentLevel);
+    }
+
+    public void AddBasePopulation(int toAdd)
+    {
+        State.BasePopulation[State.CurrentLevel] += toAdd;
+
+        OnGameStateChanged?.Invoke(State);
+        SaveSystem.Save(State);
+    }
+}
+
+[Serializable]
+public class GameState
+{
+    public long[] BasePopulation;
+    public int CivTypePassed;
+    public int CollectedEnergy;
+    public int CurrentLevel;
+
+    public GameState()
+    {
+        long[] basePopulation = { 9000000, 0, 0 };
+        BasePopulation = basePopulation;
+        CurrentLevel = 0;
+        CivTypePassed = 0;
+        CollectedEnergy = 0;
+    }
+
+    public long GetBasePopulation(int level)
+        => BasePopulation[level];
 }
