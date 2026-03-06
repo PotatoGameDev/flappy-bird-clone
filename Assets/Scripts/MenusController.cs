@@ -8,21 +8,35 @@ public class MenusController : MonoBehaviour
     void Start()
     {
         currentMainSelection = 1; // We start in level selection
-        UpdateMainSelectionMenus();
-        UpdateSystemSelectionMenus();
-        UpdateLevelSelectionMenus();
 
-        UpdateEnergyLabel();
+        UpdateAllLabels();
     }
 
     void OnEnable()
     {
         UpgradesManager.Instance.OnUpgrade += HandleUpgrade;
+        GameManager.Instance.OnGameStateChanged += UpdateGameStateRelatedLabels;
     }
 
     void OnDisable()
     {
         UpgradesManager.Instance.OnUpgrade -= HandleUpgrade;
+        GameManager.Instance.OnGameStateChanged -= UpdateGameStateRelatedLabels;
+    }
+
+    private void UpdateGameStateRelatedLabels(GameState state)
+    {
+        UpdateAllLabels();
+    }
+
+    private void UpdateAllLabels()
+    {
+        UpdateMainSelectionMenus();
+        UpdateSystemSelectionMenus();
+        UpdateLevelSelectionMenus();
+
+        UpdateEnergyLabel();
+        UpdatePopulationLabel();
     }
 
     // Main Selection
@@ -77,12 +91,7 @@ public class MenusController : MonoBehaviour
 
     [SerializeField] private GameObject[] levelSelectionContents;
     [SerializeField] private TextMeshProUGUI[] levelSelectionStatLabels;
-
-    private string[] levelFlavorTexts = {
-        "We emerged victorious from all the various wars and cataclisms. From a simple cell to a mighty civilization ruling the entire planet in peace. No single ruler, no tyrant, just a commonwealth of the people. Now, the goal is clear: To utilize the planet to the fullest, with minimal waste. This can only end well!",
-        "TODO Type II",
-        "TODO Type III",
-    };
+    private string[] levelSelectionStatLabelTemplates;
 
     private readonly string[,] levelSelectionOptions = {
         { "", "Type I Civilization", "Type II Civilization" },
@@ -90,35 +99,55 @@ public class MenusController : MonoBehaviour
         { "Type II Civilization", "Type III Civilization", "" },
     };
 
-    private int currentLevelSelection = 0;
+    private int CurrentLevelSelection
+    {
+        get
+        {
+            return GameManager.Instance.CurrentLevel;
+        }
+        set
+        {
+            GameManager.Instance.CurrentLevel = value;
+        }
+    }
 
     private void UpdateLevelSelectionMenus()
     {
-        levelSelectionL.text = levelSelectionOptions[currentLevelSelection, 0];
-        levelSelectionCurrent.text = levelSelectionOptions[currentLevelSelection, 1];
-        levelSelectionR.text = levelSelectionOptions[currentLevelSelection, 2];
+        levelSelectionL.text = levelSelectionOptions[CurrentLevelSelection, 0];
+        levelSelectionCurrent.text = levelSelectionOptions[CurrentLevelSelection, 1];
+        levelSelectionR.text = levelSelectionOptions[CurrentLevelSelection, 2];
 
         for (int i = 0; i < levelSelectionContents.Length; i++)
         {
             levelSelectionContents[i].SetActive(false);
         }
-        levelSelectionContents[currentLevelSelection].SetActive(true);
+        levelSelectionContents[CurrentLevelSelection].SetActive(true);
 
         // Filling in the stat texts
-        bool levelCompleted = currentLevelSelection < GameManager.Instance.State.CivTypePassed;
-        bool previousLevelCompleted = currentLevelSelection - 1 < GameManager.Instance.State.CivTypePassed;
+        bool levelCompleted = CurrentLevelSelection < GameManager.Instance.CivTypePassed;
+        bool previousLevelCompleted = CurrentLevelSelection - 1 < GameManager.Instance.CivTypePassed;
 
-        long startingPopulation = GameManager.Instance.State.GetStartingPopulation(currentLevelSelection);
-        long survivingPopulation = GameManager.Instance.State.GetSurvivingPopulation(currentLevelSelection);
+        long startingPopulation = GameManager.Instance.GetBasePopulation(CurrentLevelSelection);
+        long survivingPopulation = GameManager.Instance.GetBasePopulation(CurrentLevelSelection);
 
-        long currentEnergy = GameManager.Instance.State.CollectedEnergy;
+        long currentEnergy = GameManager.Instance.CollectedEnergy;
 
-        levelSelectionStatLabels[currentLevelSelection].text = string.Format(
-                levelSelectionStatLabels[currentLevelSelection].text,
+        if (levelSelectionStatLabelTemplates == null)
+        {
+            levelSelectionStatLabelTemplates = new string[levelSelectionStatLabels.Length];
+
+            for (int i = 0; i < levelSelectionStatLabels.Length; i++)
+            {
+                levelSelectionStatLabelTemplates[i] = levelSelectionStatLabels[i].text;
+            }
+        }
+
+        levelSelectionStatLabels[CurrentLevelSelection].text = string.Format(
+                levelSelectionStatLabelTemplates[CurrentLevelSelection],
                 previousLevelCompleted ? startingPopulation.ToString() : "??",
                 levelCompleted ? survivingPopulation.ToString() : "NOT COMPLETED",
                 currentEnergy + "GW"
-                );
+        );
 
         // Update the start button, if the previous level has been completed, then this level can be started
         if (previousLevelCompleted)
@@ -136,15 +165,15 @@ public class MenusController : MonoBehaviour
 
     public void OnLevelR()
     {
-        if (currentLevelSelection == levelSelectionContents.Length) return;
-        currentLevelSelection++;
+        if (CurrentLevelSelection == levelSelectionContents.Length) return;
+        CurrentLevelSelection++;
         UpdateLevelSelectionMenus();
     }
 
     public void OnLevelL()
     {
-        if (currentLevelSelection == 0) return;
-        currentLevelSelection--;
+        if (CurrentLevelSelection == 0) return;
+        CurrentLevelSelection--;
         UpdateLevelSelectionMenus();
     }
 
@@ -158,9 +187,13 @@ public class MenusController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI energyLabel;
     private string energyLabelTemplate;
 
+    [SerializeField] private TextMeshProUGUI populationLabel;
+    private string populationLabelTemplate;
+
     private void HandleUpgrade(Upgrade upgrade)
     {
         UpdateEnergyLabel();
+        UpdatePopulationLabel();
     }
 
     private void UpdateEnergyLabel()
@@ -169,7 +202,16 @@ public class MenusController : MonoBehaviour
         {
             energyLabelTemplate = energyLabel.text;
         }
-        energyLabel.text = string.Format(energyLabelTemplate, GameManager.Instance.State.CollectedEnergy);
+        energyLabel.text = string.Format(energyLabelTemplate, GameManager.Instance.CollectedEnergy);
+    }
+
+    private void UpdatePopulationLabel()
+    {
+        if (populationLabelTemplate == null)
+        {
+            populationLabelTemplate = populationLabel.text;
+        }
+        populationLabel.text = string.Format(populationLabelTemplate, GameManager.Instance.GetBasePopulation(CurrentLevelSelection));
     }
 
     // System Selection

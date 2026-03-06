@@ -49,7 +49,7 @@ public class GameplayManager : MonoBehaviour
     {
 
         // TODO: might be replaying previous level, have to pass the current civ type from menu to here
-        currentPopulation = GameManager.Instance.State.GetStartingPopulation(GameManager.Instance.State.CivTypePassed);
+        currentPopulation = GameManager.Instance.GetBasePopulation();
 
         UpdateLabels();
     }
@@ -93,12 +93,14 @@ public class GameplayManager : MonoBehaviour
         SceneManager.LoadScene("NewMenu");
     }
 
-
     public void CollectEnergy()
     {
         gateCount++;
-        GameManager.Instance.State.CollectedEnergy++;
-        AddEnergyCollectedText(1); // TODO When upgrades are ready, the energy calculation here
+
+        int collectedEnergy = UpgradesManager.Instance.GetUpgrade(UpgradeId.ORing).Level + 1; // Initial level is 0, so we need to add 1.
+
+        GameManager.Instance.CollectedEnergy += collectedEnergy;
+        AddEnergyCollectedText(collectedEnergy);
         UpdateLabels();
     }
 

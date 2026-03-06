@@ -15,13 +15,7 @@ public static class SaveSystem
     {
         if (!StateExists())
         {
-            long[] survivingPopulation = { 0, 0, 0 };
-            return new GameState
-            {
-                SurvivingPopulation = survivingPopulation,
-                CivTypePassed = 0,
-                CollectedEnergy = 0,
-            };
+            return new GameState();
         }
         string json = File.ReadAllText(SavePath);
         return JsonUtility.FromJson<GameState>(json);
