@@ -1,5 +1,7 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 [DefaultExecutionOrder(-1000)]
 public class GameManager : MonoBehaviour
@@ -71,6 +73,13 @@ public class GameManager : MonoBehaviour
 
     public void Save()
     {
+        // Here we dump the upgrades state in the form of a list of objects with upgrade ID and level.
+        // This will be saved and loaded, way simpler then the whole UpgradeManager.State;
+        Dictionary<UpgradeId, Upgrade> upgrades = UpgradesManager.Instance.State;
+
+        State.Upgrades = upgrades.Values.Select(u => new UpgradeState(u.Ident, u.Level))
+            .ToList();
+
         SaveSystem.Save(State);
     }
 
@@ -91,6 +100,11 @@ public class GameManager : MonoBehaviour
         OnGameStateChanged?.Invoke(State);
         SaveSystem.Save(State);
     }
+
+    public List<UpgradeState> GetUpgradesState()
+    {
+        return State.Upgrades;
+    }
 }
 
 [Serializable]
@@ -100,6 +114,7 @@ public class GameState
     public int CivTypePassed;
     public int CollectedEnergy;
     public int CurrentLevel;
+    public List<UpgradeState> Upgrades;
 
     public GameState()
     {
@@ -108,8 +123,22 @@ public class GameState
         CurrentLevel = 0;
         CivTypePassed = 0;
         CollectedEnergy = 0;
+        Upgrades = new();
     }
 
     public long GetBasePopulation(int level)
         => BasePopulation[level];
+}
+
+[Serializable]
+public class UpgradeState
+{
+    public UpgradeId Ident;
+    public int Level;
+
+    public UpgradeState(UpgradeId ident, int level)
+    {
+        Ident = ident;
+        Level = level;
+    }
 }

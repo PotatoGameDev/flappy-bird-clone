@@ -45,6 +45,10 @@ public class GameplayManager : MonoBehaviour
         Instance = this;
     }
 
+    void OnEnable()
+    {
+    }
+
     void Start()
     {
 
@@ -64,25 +68,40 @@ public class GameplayManager : MonoBehaviour
     public void TakeHit(float force)
     {
         // Calculate casualties:
-        float maxHitPercent = 50;
-        float maxHitForce = 100;
+        float maxHitPercent = 100f;
+        float maxHitForce = 20f;
+
+        int minCasualties = 1000;
 
         float hitPercent = maxHitPercent * Mathf.Clamp01(force / maxHitForce);
-        long peopleDied = (long)(currentPopulation * (hitPercent / 100));
+        long peopleDied = (long)(currentPopulation * (hitPercent / 100f));
+
+        if (peopleDied < minCasualties) peopleDied = minCasualties;
+        if (peopleDied > currentPopulation) peopleDied = currentPopulation;
+
         currentPopulation -= peopleDied;
 
         AddPopulationLossText(peopleDied);
 
         UpdateLabels();
+
+        if (currentPopulation == 0)
+        {
+            Death();
+        }
     }
 
     private void AddPopulationLossText(long peopleDied)
     {
+        float diedPercent = Mathf.Floor(peopleDied / (float)(peopleDied + currentPopulation) * 100f);
+
         GameObject fadingText = Instantiate(fadingTextPrefab, populationLabel.transform.position, Quaternion.identity, populationLabel.transform.parent);
 
         FadingTextController ftc = fadingText.GetComponent<FadingTextController>();
 
         string text = casualtiesTexts[Random.Range(0, casualtiesTexts.Length - 1)];
+
+        text += " (" + diedPercent.ToString("0") + "%)"; // Removes the decimal part
 
         ftc.Init(string.Format(text, peopleDied));
     }
