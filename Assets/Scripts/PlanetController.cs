@@ -62,13 +62,25 @@ public class PlanetController : MonoBehaviour
         }
     }
 
-    public void OnJump(InputAction.CallbackContext context)
+    // Controls:
+
+    public void OnJump(InputAction.CallbackContext ctx)
     {
-        if (context.performed)
+        if (ctx.performed)
         {
             currentJumpForce += jumpForce;
         }
     }
+
+    public void OnBack(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed)
+        {
+            GameplayManager.Instance.Death();
+        }
+    }
+
+    // Collisions:
 
     public void OnCollisionEnter2D(Collision2D collision)
     {

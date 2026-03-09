@@ -17,11 +17,23 @@ public class UpgradesManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        // Not singleton related:
+
+        Load(GameManager.Instance.GetUpgradesState());
+    }
+
+    public void Load(List<UpgradeState> upgrades)
+    {
+        foreach (UpgradeState us in upgrades)
+        {
+            State[us.Ident].Load(us.Level);
+        }
     }
 
     public event Action<Upgrade> OnUpgrade;
 
-    private static readonly Dictionary<UpgradeId, Upgrade> upgrades = new()
+    public readonly Dictionary<UpgradeId, Upgrade> State = new()
     {
         [UpgradeId.ORing] = new(
                 UpgradeId.ORing,
@@ -76,7 +88,7 @@ public class UpgradesManager : MonoBehaviour
 
     public Upgrade GetUpgrade(UpgradeId ident)
     {
-        Upgrade upgrade = upgrades[ident];
+        Upgrade upgrade = State[ident];
         Debug.AssertFormat(upgrade != null, "Ident {0} does not exist in upgrades, a typo?", ident);
         return upgrade;
     }
@@ -97,6 +109,8 @@ public class UpgradesManager : MonoBehaviour
         DoUpgradeSpecialLogic(u);
 
         OnUpgrade?.Invoke(u);
+
+        GameManager.Instance.Save();
     }
 
     private void DoUpgradeSpecialLogic(Upgrade upgrade)
@@ -155,6 +169,11 @@ public class Upgrade
     {
         if (Level >= MaxLevel) throw new InvalidOperationException("Level already maxed, this should be blocked on UI");
         Level++;
+    }
+
+    public void Load(int level)
+    {
+        Level = level;
     }
 
     public int GetTotalPrice()
