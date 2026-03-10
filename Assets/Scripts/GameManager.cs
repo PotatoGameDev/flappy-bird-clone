@@ -105,6 +105,15 @@ public class GameManager : MonoBehaviour
     {
         return State.Upgrades;
     }
+
+    public void UnlockNextPhase()
+    {
+        Debug.Assert(State.CurrentLevel != State.CivTypePassed, "Cannot upgrade level if not in the max level currently");
+
+        State.CivTypePassed++;
+
+        Save();
+    }
 }
 
 [Serializable]
