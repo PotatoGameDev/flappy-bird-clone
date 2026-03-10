@@ -25,9 +25,19 @@ public class UpgradesManager : MonoBehaviour
 
     public void Load(List<UpgradeState> upgrades)
     {
+        ClearUpgrades();
+
         foreach (UpgradeState us in upgrades)
         {
             State[us.Ident].Load(us.Level);
+        }
+    }
+
+    public void ClearUpgrades()
+    {
+        foreach (UpgradeId upgradeId in Enum.GetValues(typeof(UpgradeId)))
+        {
+            State[upgradeId].Load(0);
         }
     }
 

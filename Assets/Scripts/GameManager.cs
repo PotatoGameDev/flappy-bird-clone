@@ -131,8 +131,11 @@ public class GameManager : MonoBehaviour
 
     public void ResetGame()
     {
-        SaveSystem.Reset();
         State = new GameState();
+        UpgradesManager.Instance.ClearUpgrades();
+        Save();
+
+        OnGameStateChanged?.Invoke(State);
     }
 }
 
