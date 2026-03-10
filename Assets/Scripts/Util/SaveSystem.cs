@@ -20,8 +20,6 @@ public static class SaveSystem
         string json = File.ReadAllText(SavePath);
         GameState state = JsonUtility.FromJson<GameState>(json);
 
-        state.CollectedEnergy = 10000;
-
         return state;
     }
 
