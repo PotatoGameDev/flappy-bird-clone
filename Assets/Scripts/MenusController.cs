@@ -46,7 +46,8 @@ public class MenusController : MonoBehaviour
 
     [SerializeField] private GameObject[] mainSelectionContents;
 
-    [SerializeField] private Button startButton;
+    [SerializeField] private Button[] startButtons;
+    [SerializeField] private Button[] advanceButtons;
 
     private readonly string[,] mainSelectionOptions = {
         { "", "System", "Level Select" },
@@ -133,6 +134,7 @@ public class MenusController : MonoBehaviour
         long survivingPopulation = GameManager.Instance.GetBasePopulation(CurrentLevelSelection);
 
         long currentEnergy = GameManager.Instance.CollectedEnergy;
+        long advanceEnergy = levelSelectionEnergyToAdvance[CurrentLevelSelection];
 
         if (levelSelectionStatLabelTemplates == null)
         {
@@ -149,21 +151,40 @@ public class MenusController : MonoBehaviour
                 previousLevelCompleted ? startingPopulation.ToString() : "??",
                 levelCompleted ? survivingPopulation.ToString() : "NOT COMPLETED",
                 currentEnergy + "GW",
-                levelSelectionEnergyToAdvance[CurrentLevelSelection] + "GW"
+                advanceEnergy + "GW"
         );
+
+        // Force update the Advance button:
+        foreach (Button advBtn in advanceButtons)
+        {
+            advBtn.gameObject.SetActive(false);
+        }
 
         // Update the start button, if the previous level has been completed, then this level can be started
         if (previousLevelCompleted)
         {
-            startButton.interactable = true;
-            startButton.GetComponentInChildren<TextMeshProUGUI>().text = "Play";
+            if (currentEnergy >= advanceEnergy)
+            {
+                foreach (Button advBtn in advanceButtons)
+                {
+                    advBtn.gameObject.SetActive(false);
+                }
+            }
+
+            foreach (Button strtBtn in startButtons)
+            {
+                strtBtn.interactable = true;
+                strtBtn.GetComponentInChildren<TextMeshProUGUI>().text = "Play";
+            }
         }
         else
         {
-            startButton.interactable = false;
-            startButton.GetComponentInChildren<TextMeshProUGUI>().text = "Locked";
+            foreach (Button strtBtn in startButtons)
+            {
+                strtBtn.interactable = false;
+                strtBtn.GetComponentInChildren<TextMeshProUGUI>().text = "Locked";
+            }
         }
-
     }
 
     public void OnLevelR()
@@ -183,6 +204,11 @@ public class MenusController : MonoBehaviour
     public void OnLevelSelectStartClicked()
     {
         SceneManager.LoadScene("Loading");
+    }
+
+    public void OnAdvanceClicked()
+    {
+        GameManager.Instance.UnlockNextPhase();
     }
 
     // Upgrades Selection
