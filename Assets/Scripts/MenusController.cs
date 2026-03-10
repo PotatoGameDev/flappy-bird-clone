@@ -100,8 +100,6 @@ public class MenusController : MonoBehaviour
         { "Type II Civilization", "Type III Civilization", "" },
     };
 
-    [SerializeField] private long[] levelSelectionEnergyToAdvance = { 1000, 10000, 100000 };
-
     private int CurrentLevelSelection
     {
         get
@@ -130,11 +128,10 @@ public class MenusController : MonoBehaviour
         bool levelCompleted = CurrentLevelSelection < GameManager.Instance.CivTypePassed;
         bool previousLevelCompleted = CurrentLevelSelection - 1 < GameManager.Instance.CivTypePassed;
 
-        long startingPopulation = GameManager.Instance.GetBasePopulation(CurrentLevelSelection);
-        long survivingPopulation = GameManager.Instance.GetBasePopulation(CurrentLevelSelection);
+        long startingPopulation = GameManager.Instance.GetBasePopulation();
 
         long currentEnergy = GameManager.Instance.CollectedEnergy;
-        long advanceEnergy = levelSelectionEnergyToAdvance[CurrentLevelSelection];
+        long advanceEnergy = GameManager.Instance.GetAdvanceEnergy();
 
         if (levelSelectionStatLabelTemplates == null)
         {
@@ -149,28 +146,21 @@ public class MenusController : MonoBehaviour
         levelSelectionStatLabels[CurrentLevelSelection].text = string.Format(
                 levelSelectionStatLabelTemplates[CurrentLevelSelection],
                 previousLevelCompleted ? startingPopulation.ToString() : "??",
-                levelCompleted ? survivingPopulation.ToString() : "NOT COMPLETED",
+                levelCompleted ? "COMPLETED" : "NOT COMPLETED",
                 currentEnergy + "GW",
                 advanceEnergy + "GW"
         );
 
-        // Force update the Advance button:
+        // Update the Advance button:
+        bool canAdvance = GameManager.Instance.CanAdvanceLevel();
         foreach (Button advBtn in advanceButtons)
         {
-            advBtn.gameObject.SetActive(false);
+            advBtn.gameObject.SetActive(canAdvance);
         }
 
         // Update the start button, if the previous level has been completed, then this level can be started
-        if (previousLevelCompleted)
+        if (GameManager.Instance.CurrentLevel <= GameManager.Instance.CivTypePassed)
         {
-            if (currentEnergy >= advanceEnergy)
-            {
-                foreach (Button advBtn in advanceButtons)
-                {
-                    advBtn.gameObject.SetActive(false);
-                }
-            }
-
             foreach (Button strtBtn in startButtons)
             {
                 strtBtn.interactable = true;
@@ -206,9 +196,13 @@ public class MenusController : MonoBehaviour
         SceneManager.LoadScene("Loading");
     }
 
-    public void OnAdvanceClicked()
+    public void OnLevelSelectAdvanceClicked()
     {
+        if (CurrentLevelSelection == levelSelectionContents.Length - 1) return;
+
         GameManager.Instance.UnlockNextPhase();
+
+        UpdateLevelSelectionMenus();
     }
 
     // Upgrades Selection
@@ -240,7 +234,7 @@ public class MenusController : MonoBehaviour
         {
             populationLabelTemplate = populationLabel.text;
         }
-        populationLabel.text = string.Format(populationLabelTemplate, GameManager.Instance.GetBasePopulation(CurrentLevelSelection));
+        populationLabel.text = string.Format(populationLabelTemplate, GameManager.Instance.GetBasePopulation());
     }
 
     // System Selection

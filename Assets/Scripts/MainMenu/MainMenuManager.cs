@@ -29,7 +29,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void ResetGame()
     {
-        SaveSystem.Reset();
+        GameManager.Instance.ResetGame();
         SceneManager.LoadScene("NewMenu", LoadSceneMode.Single);
     }
 }

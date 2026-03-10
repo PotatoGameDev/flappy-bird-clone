@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
 
     public PlanetController Player { get; set; }
 
+    private readonly int[] energyToAdvance = { 1000, 10000, 100000 };
+
     // State things
     private GameState State;
     public event Action<GameState> OnGameStateChanged;
@@ -83,19 +85,14 @@ public class GameManager : MonoBehaviour
         SaveSystem.Save(State);
     }
 
-    public long GetBasePopulation(int level)
-    {
-        return State.GetBasePopulation(level);
-    }
-
     public long GetBasePopulation()
     {
-        return State.GetBasePopulation(State.CurrentLevel);
+        return State.BasePopulation;
     }
 
     public void AddBasePopulation(int toAdd)
     {
-        State.BasePopulation[State.CurrentLevel] += toAdd;
+        State.BasePopulation += toAdd;
 
         OnGameStateChanged?.Invoke(State);
         SaveSystem.Save(State);
@@ -106,20 +103,43 @@ public class GameManager : MonoBehaviour
         return State.Upgrades;
     }
 
+    public int GetAdvanceEnergy()
+    {
+        return energyToAdvance[State.CurrentLevel];
+    }
+
+    public bool CanAdvanceLevel()
+    {
+        return State.CurrentLevel == State.CivTypePassed
+            && State.CollectedEnergy >= GetAdvanceEnergy();
+    }
+
     public void UnlockNextPhase()
     {
-        Debug.Assert(State.CurrentLevel != State.CivTypePassed, "Cannot upgrade level if not in the max level currently");
+        int advanceEnergy = GetAdvanceEnergy();
+        Debug.Assert(State.CurrentLevel == State.CivTypePassed, "Cannot upgrade level if not in the max level currently");
+        Debug.Assert(State.CollectedEnergy >= advanceEnergy, "Cannot upgrade level if not in the max level currently");
 
+        State.CollectedEnergy -= advanceEnergy;
         State.CivTypePassed++;
+        CurrentLevel++;
 
         Save();
+
+        OnGameStateChanged?.Invoke(State);
+    }
+
+    public void ResetGame()
+    {
+        SaveSystem.Reset();
+        State = new GameState();
     }
 }
 
 [Serializable]
 public class GameState
 {
-    public long[] BasePopulation;
+    public long BasePopulation;
     public int CivTypePassed;
     public int CollectedEnergy;
     public int CurrentLevel;
@@ -127,16 +147,12 @@ public class GameState
 
     public GameState()
     {
-        long[] basePopulation = { 9000000, 0, 0 };
-        BasePopulation = basePopulation;
+        BasePopulation = 9000000;
         CurrentLevel = 0;
         CivTypePassed = 0;
         CollectedEnergy = 0;
         Upgrades = new();
     }
-
-    public long GetBasePopulation(int level)
-        => BasePopulation[level];
 }
 
 [Serializable]
