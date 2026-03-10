@@ -101,7 +101,7 @@ public class GameplayManager : MonoBehaviour
 
         string text = casualtiesTexts[Random.Range(0, casualtiesTexts.Length - 1)];
 
-        text += " (" + diedPercent.ToString("0") + "%)"; // Removes the decimal part
+        text += " (" + diedPercent.ToString("0") + "%)"; // "0" removes the decimal part
 
         ftc.Init(string.Format(text, peopleDied));
     }

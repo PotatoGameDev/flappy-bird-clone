@@ -2167,7 +2167,9 @@ MonoBehaviour:
     Surviving Population: {1}
 
     Energy Collected:
-    {2}'
+    {2}
+
+    Energy Required to Advance: {3}'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5124,7 +5126,9 @@ MonoBehaviour:
     Surviving Population: {1}
 
     Energy Collected:
-    {2}'
+    {2}
+
+    Energy Required to Advance: {3}'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5266,7 +5270,9 @@ MonoBehaviour:
     Surviving Population: {1}
 
     Energy Collected:
-    {2}'
+    {2}
+
+    Energy Required to Advance: {3}'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6417,8 +6423,7 @@ MonoBehaviour:
   m_text: 'We emerged victorious from all the various wars and cataclisms. From a
     simple cell to a mighty civilisation ruling the entire planet in peace. No single
     ruler, no tyrant, just a commonwealth of the people. Now, the goal is clear:
-    To utilize the planet to the fullest, with minimal waste. This can only end well!
-    Also, there is a bunch of space aliens chasing us!'
+    To utilize the planet to the fullest, with minimal waste. This can only end well!'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

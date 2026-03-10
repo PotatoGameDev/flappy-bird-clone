@@ -99,6 +99,8 @@ public class MenusController : MonoBehaviour
         { "Type II Civilization", "Type III Civilization", "" },
     };
 
+    [SerializeField] private long[] levelSelectionEnergyToAdvance = { 1000, 10000, 100000 };
+
     private int CurrentLevelSelection
     {
         get
@@ -146,7 +148,8 @@ public class MenusController : MonoBehaviour
                 levelSelectionStatLabelTemplates[CurrentLevelSelection],
                 previousLevelCompleted ? startingPopulation.ToString() : "??",
                 levelCompleted ? survivingPopulation.ToString() : "NOT COMPLETED",
-                currentEnergy + "GW"
+                currentEnergy + "GW",
+                levelSelectionEnergyToAdvance[CurrentLevelSelection] + "GW"
         );
 
         // Update the start button, if the previous level has been completed, then this level can be started
@@ -165,7 +168,7 @@ public class MenusController : MonoBehaviour
 
     public void OnLevelR()
     {
-        if (CurrentLevelSelection == levelSelectionContents.Length) return;
+        if (CurrentLevelSelection == levelSelectionContents.Length - 1) return;
         CurrentLevelSelection++;
         UpdateLevelSelectionMenus();
     }
