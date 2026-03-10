@@ -18,7 +18,11 @@ public static class SaveSystem
             return new GameState();
         }
         string json = File.ReadAllText(SavePath);
-        return JsonUtility.FromJson<GameState>(json);
+        GameState state = JsonUtility.FromJson<GameState>(json);
+
+        state.CollectedEnergy = 10000;
+
+        return state;
     }
 
     public static bool StateExists()
