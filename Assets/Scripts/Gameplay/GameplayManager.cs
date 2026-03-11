@@ -9,6 +9,7 @@ public class GameplayManager : MonoBehaviour
     public TextMeshProUGUI populationLabel;
     public TextMeshProUGUI rpmLabel;
     public TextMeshProUGUI gateCounterLabel;
+    public TextMeshProUGUI energyLabel;
 
     public int gateCount = 0;
 
@@ -45,10 +46,6 @@ public class GameplayManager : MonoBehaviour
         Instance = this;
     }
 
-    void OnEnable()
-    {
-    }
-
     void Start()
     {
 
@@ -63,6 +60,7 @@ public class GameplayManager : MonoBehaviour
         populationLabel.text = currentPopulation.ToString();
         rpmLabel.text = "RPM: " + GameManager.Instance.Player.GetRpm();
         gateCounterLabel.text = gateCount.ToString();
+        energyLabel.text = GameManager.Instance.CollectedEnergy + "GW";
     }
 
     public void TakeHit(float force)
@@ -116,7 +114,8 @@ public class GameplayManager : MonoBehaviour
     {
         gateCount++;
 
-        int collectedEnergy = UpgradesManager.Instance.GetUpgrade(UpgradeId.ORing).Level + 1; // Initial level is 0, so we need to add 1.
+        // Initial level is 0, so we need to add 1.
+        int collectedEnergy = UpgradesManager.Instance.GetUpgrade(UpgradeId.ORing).Level + 1;
 
         GameManager.Instance.CollectedEnergy += collectedEnergy;
         AddEnergyCollectedText(collectedEnergy);
