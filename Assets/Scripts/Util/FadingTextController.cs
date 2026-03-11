@@ -34,9 +34,30 @@ public class FadingTextController : MonoBehaviour
         Destroy(gameObject);
     }
 
+    IEnumerator Fall(RectTransform rect)
+    {
+        Vector2 start = rect.anchoredPosition + new Vector2(0, 50);
+        Vector2 end = rect.anchoredPosition;
+
+        float t = 0;
+
+        while (t < 1f)
+        {
+            t += Time.deltaTime * 3f;
+            rect.anchoredPosition = Vector2.Lerp(start, end, t);
+            yield return null;
+        }
+    }
+
     public void Init(string text)
     {
         label.text = text;
         StartCoroutine(FadeOut());
+    }
+
+    public void Init2(string text, RectTransform rect)
+    {
+        label.text = text;
+        StartCoroutine(Fall(rect));
     }
 }

@@ -7,20 +7,24 @@ public class GameplayManager : MonoBehaviour
 {
     public static GameplayManager Instance { get; private set; }
 
-    public TextMeshProUGUI populationLabel;
-    public TextMeshProUGUI rpmLabel;
-    public TextMeshProUGUI gateCounterLabel;
-    public TextMeshProUGUI energyLabel;
+    [SerializeField] private TextMeshProUGUI populationLabel;
+    [SerializeField] private TextMeshProUGUI rpmLabel;
+    [SerializeField] private TextMeshProUGUI gateCounterLabel;
+    [SerializeField] private TextMeshProUGUI energyLabel;
 
-    public int gateCount = 0;
+    private int gateCount = 0;
 
-    [SerializeField] private GameObject fadingTextCasualtiesPrefab;
-    [SerializeField] private GameObject fadingTextEnergyPrefab;
-    [SerializeField] private GameObject fadingTextPopulationAddedPrefab;
+    [SerializeField] private Color fadingMessageCasualtiesColor;
+    [SerializeField] private Color fadingMessageEnergyColor;
+    [SerializeField] private Color fadingMessagePopulationAddedColor;
+
+    [SerializeField] private FadingMessagesManager populationMessagesManager;
+    [SerializeField] private FadingMessagesManager energyMessagesManager;
 
     private long currentPopulation = 0;
 
     private readonly static WaitForSeconds EVERY_SECOND = new(1f);
+
 
     private readonly string[] casualtiesTexts = {
         "{0} died",
@@ -83,7 +87,7 @@ public class GameplayManager : MonoBehaviour
 
                 currentPopulation += increase;
                 string text = "+" + increase;
-                AddVanishingText(text, populationLabel.transform, fadingTextPopulationAddedPrefab);
+                populationMessagesManager.Spawn(text, fadingMessagePopulationAddedColor);
             }
             yield return EVERY_SECOND;
         }
@@ -99,7 +103,7 @@ public class GameplayManager : MonoBehaviour
             {
                 currentPopulation += increase;
                 string text = "+" + increase;
-                AddVanishingText(text, populationLabel.transform, fadingTextPopulationAddedPrefab);
+                populationMessagesManager.Spawn(text, fadingMessagePopulationAddedColor);
             }
             yield return EVERY_SECOND;
         }
@@ -107,7 +111,7 @@ public class GameplayManager : MonoBehaviour
 
     private void UpdateLabels()
     {
-        populationLabel.text = currentPopulation.ToString();
+        populationLabel.text = "POP: " + currentPopulation.ToString();
         rpmLabel.text = "RPM: " + GameManager.Instance.Player.GetRpm();
         gateCounterLabel.text = gateCount.ToString();
         energyLabel.text = GameManager.Instance.CollectedEnergy + "GW";
@@ -149,22 +153,7 @@ public class GameplayManager : MonoBehaviour
 
         text = string.Format(text, peopleDied);
 
-        AddVanishingText(text, populationLabel.transform, fadingTextCasualtiesPrefab);
-    }
-
-    private void AddVanishingText(string text, Transform parent, GameObject prefab)
-    {
-        GameObject fadingText = Instantiate
-            (
-                prefab,
-                parent.position,
-                Quaternion.identity,
-                parent.parent
-            );
-
-        FadingTextController ftc = fadingText.GetComponent<FadingTextController>();
-
-        ftc.Init(text);
+        populationMessagesManager.Spawn(text, fadingMessageCasualtiesColor);
     }
 
     public void Death()
@@ -187,10 +176,9 @@ public class GameplayManager : MonoBehaviour
 
     private void AddEnergyCollectedText(int energyAdded)
     {
-        GameObject fadingText = Instantiate(fadingTextEnergyPrefab, gateCounterLabel.transform.position, Quaternion.identity, gateCounterLabel.transform.parent);
+        string text = "+" + energyAdded + "GW";
 
-        FadingTextController ftc = fadingText.GetComponent<FadingTextController>();
-        ftc.Init("+" + energyAdded + "GW");
+        energyMessagesManager.Spawn(text, fadingMessageEnergyColor);
     }
 
 
