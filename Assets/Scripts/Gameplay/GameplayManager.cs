@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class GameplayManager : MonoBehaviour
 {
@@ -13,12 +14,15 @@ public class GameplayManager : MonoBehaviour
 
     public int gateCount = 0;
 
-    [SerializeField] private GameObject fadingTextPrefab;
+    [SerializeField] private GameObject fadingTextCasualtiesPrefab;
     [SerializeField] private GameObject fadingTextEnergyPrefab;
+    [SerializeField] private GameObject fadingTextPopulationAddedPrefab;
 
     private long currentPopulation = 0;
 
-    private string[] casualtiesTexts = {
+    private readonly static WaitForSeconds EVERY_SECOND = new(1f);
+
+    private readonly string[] casualtiesTexts = {
         "{0} died",
         "{0} killed",
         "{0} squashed",
@@ -53,6 +57,52 @@ public class GameplayManager : MonoBehaviour
         currentPopulation = GameManager.Instance.GetBasePopulation();
 
         UpdateLabels();
+
+        int androidSlaveryLevel = UpgradesManager.Instance.GetUpgrade(UpgradeId.AndroidSlavery).Level;
+        if (androidSlaveryLevel > 0)
+        {
+            StartCoroutine(DoAndroidSlavery(androidSlaveryLevel));
+        }
+
+        int vyagraEnergizingTherapy = UpgradesManager.Instance.GetUpgrade(
+                UpgradeId.VyagraEnergizingTherapy
+                ).Level;
+        if (vyagraEnergizingTherapy > 0)
+        {
+            StartCoroutine(DoVyagraEnergizingTherapy(vyagraEnergizingTherapy));
+        }
+    }
+
+    IEnumerator DoAndroidSlavery(int level)
+    {
+        while (true)
+        {
+            long increase = level * 100;
+            if (increase > 0)
+            {
+
+                currentPopulation += increase;
+                string text = "+" + increase;
+                AddVanishingText(text, populationLabel.transform, fadingTextPopulationAddedPrefab);
+            }
+            yield return EVERY_SECOND;
+        }
+    }
+
+    IEnumerator DoVyagraEnergizingTherapy(int level)
+    {
+        float percent = level / 100f;
+        while (true)
+        {
+            long increase = (long)(currentPopulation * percent);
+            if (increase > 0)
+            {
+                currentPopulation += increase;
+                string text = "+" + increase;
+                AddVanishingText(text, populationLabel.transform, fadingTextPopulationAddedPrefab);
+            }
+            yield return EVERY_SECOND;
+        }
     }
 
     private void UpdateLabels()
@@ -93,15 +143,28 @@ public class GameplayManager : MonoBehaviour
     {
         float diedPercent = Mathf.Floor(peopleDied / (float)(peopleDied + currentPopulation) * 100f);
 
-        GameObject fadingText = Instantiate(fadingTextPrefab, populationLabel.transform.position, Quaternion.identity, populationLabel.transform.parent);
-
-        FadingTextController ftc = fadingText.GetComponent<FadingTextController>();
-
         string text = casualtiesTexts[Random.Range(0, casualtiesTexts.Length - 1)];
 
         text += " (" + diedPercent.ToString("0") + "%)"; // "0" removes the decimal part
 
-        ftc.Init(string.Format(text, peopleDied));
+        text = string.Format(text, peopleDied);
+
+        AddVanishingText(text, populationLabel.transform, fadingTextCasualtiesPrefab);
+    }
+
+    private void AddVanishingText(string text, Transform parent, GameObject prefab)
+    {
+        GameObject fadingText = Instantiate
+            (
+                prefab,
+                parent.position,
+                Quaternion.identity,
+                parent.parent
+            );
+
+        FadingTextController ftc = fadingText.GetComponent<FadingTextController>();
+
+        ftc.Init(text);
     }
 
     public void Death()
