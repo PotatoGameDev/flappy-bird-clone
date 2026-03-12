@@ -41,6 +41,9 @@ public class PlanetController : MonoBehaviour
     [SerializeField]
     private AudioClip[] quakeAudioClips;
 
+    // Animations
+    [SerializeField] private Animator explosionAnimation;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -76,7 +79,7 @@ public class PlanetController : MonoBehaviour
     {
         if (ctx.performed)
         {
-            GameplayManager.Instance.Death();
+            Death();
         }
     }
 
@@ -99,7 +102,7 @@ public class PlanetController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("BoundaryBack"))
         {
-            GameplayManager.Instance.Death();
+            Death();
         }
     }
 
@@ -127,5 +130,12 @@ public class PlanetController : MonoBehaviour
 
         rendr.color = originalColor;
         invincible = false;
+    }
+
+    private void Death()
+    {
+        GameplayManager.Instance.Death();
+
+        explosionAnimation.gameObject.SetActive(true);
     }
 }

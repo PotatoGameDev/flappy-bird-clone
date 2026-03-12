@@ -159,6 +159,13 @@ public class GameplayManager : MonoBehaviour
     public void Death()
     {
         GameManager.Instance.Save();
+
+        StartCoroutine(DeathSequence());
+    }
+
+    private IEnumerator DeathSequence()
+    {
+        yield return new WaitForSeconds(2f);
         SceneManager.LoadScene("NewMenu");
     }
 
