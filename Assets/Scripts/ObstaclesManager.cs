@@ -13,11 +13,11 @@ public class ObstaclesManager : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (GameManager.Instance.Player.Dead())
+        if (GameplayManager.Instance.Player.Dead())
         {
             return;
         }
-        float playerPosX = GameManager.Instance.Player.transform.position.x;
+        float playerPosX = GameplayManager.Instance.Player.transform.position.x;
 
         float lastObstaclePosX = obstacles.Count > 0 ? obstacles[^1].transform.position.x : 0f;
 
@@ -37,7 +37,7 @@ public class ObstaclesManager : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.Instance.Player.Dead())
+        if (GameplayManager.Instance.Player.Dead())
         {
             return;
         }
@@ -46,7 +46,7 @@ public class ObstaclesManager : MonoBehaviour
         {
             GameObject obj = obstacles[i];
             if (obj.transform.position.x + vanishingDistance
-                    < GameManager.Instance.Player.transform.position.x)
+                    < GameplayManager.Instance.Player.transform.position.x)
             {
                 obstacles.RemoveAt(i);
                 Destroy(obj);

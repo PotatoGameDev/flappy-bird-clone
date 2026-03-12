@@ -3,9 +3,12 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
+[DefaultExecutionOrder(-500)]
 public class GameplayManager : MonoBehaviour
 {
     public static GameplayManager Instance { get; private set; }
+
+    public PlanetController Player { get; set; }
 
     [SerializeField] private TextMeshProUGUI populationLabel;
     [SerializeField] private TextMeshProUGUI rpmLabel;
@@ -119,7 +122,7 @@ public class GameplayManager : MonoBehaviour
     private void UpdateLabels()
     {
         populationLabel.text = "POP: " + currentPopulation.ToString();
-        rpmLabel.text = "RPM: " + GameManager.Instance.Player.GetRpm();
+        rpmLabel.text = "RPM: " + Player.GetRpm();
         gateCounterLabel.text = gateCount.ToString();
         energyLabel.text = GameManager.Instance.CollectedEnergy + "GW";
     }
@@ -138,9 +141,8 @@ public class GameplayManager : MonoBehaviour
         if (peopleDied < minCasualties) peopleDied = minCasualties;
         if (peopleDied > currentPopulation) peopleDied = currentPopulation;
 
-        currentPopulation -= peopleDied;
-
         AddPopulationLossText(peopleDied);
+
         KillPopulation((int)peopleDied);
     }
 
@@ -151,9 +153,9 @@ public class GameplayManager : MonoBehaviour
 
         UpdateLabels();
 
-        if (currentPopulation == 0)
+        if (currentPopulation <= 0)
         {
-            Death();
+            Player.Death();
         }
     }
 
