@@ -13,6 +13,10 @@ public class ObstaclesManager : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (GameManager.Instance.Player.Dead())
+        {
+            return;
+        }
         float playerPosX = GameManager.Instance.Player.transform.position.x;
 
         float lastObstaclePosX = obstacles.Count > 0 ? obstacles[^1].transform.position.x : 0f;
@@ -33,6 +37,10 @@ public class ObstaclesManager : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.Instance.Player.Dead())
+        {
+            return;
+        }
         // Cleanup:
         for (int i = 0; i < obstacles.Count; i++)
         {

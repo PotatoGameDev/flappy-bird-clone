@@ -1,12 +1,22 @@
 using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(AudioSource))]
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance { get; private set; }
 
     public float clipDuration = 1.0f;
     public float fadeDuration = 0.5f;
+
+    [SerializeField]
+    private AudioSource quakeAudioSource;
+
+    [SerializeField]
+    private AudioSource hitAudioSource;
+
+    [SerializeField]
+    private AudioSource screamAudioSource;
 
     void Awake()
     {
@@ -19,11 +29,11 @@ public class SoundManager : MonoBehaviour
         Instance = this;
     }
 
-    public void PlayScreams(AudioSource audioSource, float volume = 1f)
+    public void PlayScreams(float volume = 1f)
     {
-        if (!audioSource.isPlaying)
+        if (!screamAudioSource.isPlaying)
         {
-            StartCoroutine(PlaySliceCoroutine(audioSource, volume));
+            StartCoroutine(PlaySliceCoroutine(screamAudioSource, volume));
         }
     }
 
@@ -69,7 +79,6 @@ public class SoundManager : MonoBehaviour
     }
 
 
-
     IEnumerator FadeVolume(AudioSource source, float from, float to, float duration)
     {
         float elapsed = 0f;
@@ -84,7 +93,17 @@ public class SoundManager : MonoBehaviour
         source.volume = to;
     }
 
-    public void PlayRandom(AudioSource source, AudioClip[] clips, float volume)
+    public void PlayRandomQuake(AudioClip[] clips, float volume)
+    {
+        PlayRandom(quakeAudioSource, clips, volume);
+    }
+
+    public void PlayRandomHit(AudioClip[] clips, float volume)
+    {
+        PlayRandom(hitAudioSource, clips, volume);
+    }
+
+    private void PlayRandom(AudioSource source, AudioClip[] clips, float volume)
     {
         if (source.isPlaying) source.Stop();
 

@@ -18,6 +18,10 @@ public class CameraMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (GameManager.Instance.Player.Dead())
+        {
+            return;
+        }
         Vector3 pos = transform.position;
         pos.x += speed * Time.deltaTime;
         transform.position = pos;
