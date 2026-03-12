@@ -5,6 +5,11 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlanetController : MonoBehaviour
 {
+    private readonly float RPM_PENALTY_THRESHOLD = 20f;
+
+    private readonly WaitForSeconds EVERY_SECOND = new(1);
+
+
     [SerializeField]
     private float speed = 10f;
 
@@ -37,12 +42,21 @@ public class PlanetController : MonoBehaviour
     // Animations
     [SerializeField] private Animator explosionAnimation;
 
+    // Particles
+    [SerializeField] private ParticleSystem peopleParticleSystem;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         rendr = GetComponentInChildren<SpriteRenderer>();
 
         GameManager.Instance.Player = this;
+    }
+
+    void Start()
+    {
+        // Start updating rotational penalties
+        StartCoroutine(UpdateRorationalPenalties());
     }
 
     void Update()
@@ -63,8 +77,31 @@ public class PlanetController : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(speed, rb.linearVelocity.y);
         }
+
     }
 
+    private IEnumerator UpdateRorationalPenalties()
+    {
+        while (true)
+        {
+            float rpm = GetRpm();
+            float penaltyRpm = 0f;
+            if (rpm > RPM_PENALTY_THRESHOLD)
+            {
+                penaltyRpm = rpm - RPM_PENALTY_THRESHOLD;
+
+                // for each rpm above threshold we kill 100 people
+                GameplayManager.Instance.RotationalDamage((int)(penaltyRpm * 100));
+            }
+
+            var emission = peopleParticleSystem.emission;
+            emission.rateOverTime = penaltyRpm;
+
+            Debug.Log("Emission: " + emission.rateOverTime + " " + peopleParticleSystem.emission.rateOverTime);
+
+            yield return EVERY_SECOND;
+        }
+    }
 
     // Life
     private bool alive = true;

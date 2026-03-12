@@ -43,6 +43,13 @@ public class GameplayManager : MonoBehaviour
         "{0} don't get no respect",
     };
 
+    private readonly string[] rotationCasualtiesTexts = {
+        "{0} suffocated",
+        "{0} boiled",
+        "{0} no one could hear scream",
+        "{0} are lost in space",
+    };
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -134,6 +141,13 @@ public class GameplayManager : MonoBehaviour
         currentPopulation -= peopleDied;
 
         AddPopulationLossText(peopleDied);
+        KillPopulation((int)peopleDied);
+    }
+
+    private void KillPopulation(int dead)
+    {
+
+        currentPopulation -= dead;
 
         UpdateLabels();
 
@@ -141,6 +155,13 @@ public class GameplayManager : MonoBehaviour
         {
             Death();
         }
+    }
+
+    public void RotationalDamage(int dead)
+    {
+        AddPopulationLossTextShort(dead);
+
+        KillPopulation(dead);
     }
 
     private void AddPopulationLossText(long peopleDied)
@@ -154,6 +175,16 @@ public class GameplayManager : MonoBehaviour
         text = string.Format(text, peopleDied);
 
         populationMessagesManager.Spawn(text, fadingMessageCasualtiesColor);
+    }
+
+    private void AddPopulationLossTextShort(long peopleDied)
+    {
+        string text = rotationCasualtiesTexts[Random.Range(0, rotationCasualtiesTexts.Length - 1)];
+
+        text = string.Format(text, peopleDied);
+
+        populationMessagesManager.Spawn(text, fadingMessageCasualtiesColor);
+
     }
 
     public void Death()
