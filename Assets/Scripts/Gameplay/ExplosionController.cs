@@ -4,6 +4,6 @@ public class ExplosionController : MonoBehaviour
 {
     public void OnAnimationFinished()
     {
-        GameManager.Instance.Player.DeathAnimationEnded();
+        GameplayManager.Instance.Player.DeathAnimationEnded();
     }
 }

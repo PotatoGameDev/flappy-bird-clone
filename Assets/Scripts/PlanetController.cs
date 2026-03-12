@@ -50,7 +50,7 @@ public class PlanetController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         rendr = GetComponentInChildren<SpriteRenderer>();
 
-        GameManager.Instance.Player = this;
+        GameplayManager.Instance.Player = this;
     }
 
     void Start()
@@ -84,7 +84,7 @@ public class PlanetController : MonoBehaviour
     {
         while (true)
         {
-            float rpm = GetRpm();
+            float rpm = Mathf.Abs(GetRpm());
             float penaltyRpm = 0f;
             if (rpm > RPM_PENALTY_THRESHOLD)
             {
@@ -96,8 +96,6 @@ public class PlanetController : MonoBehaviour
 
             var emission = peopleParticleSystem.emission;
             emission.rateOverTime = penaltyRpm;
-
-            Debug.Log("Emission: " + emission.rateOverTime + " " + peopleParticleSystem.emission.rateOverTime);
 
             yield return EVERY_SECOND;
         }
@@ -181,7 +179,7 @@ public class PlanetController : MonoBehaviour
         invincible = false;
     }
 
-    private void Death()
+    public void Death()
     {
         // Letting know other components that the player died
         alive = false;
