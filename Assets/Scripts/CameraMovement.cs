@@ -1,13 +1,44 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Camera))]
 public class CameraMovement : MonoBehaviour
 {
     public float speed = 10f;
+
+    [SerializeField] private BoxCollider2D topBoundary;
+    [SerializeField] private BoxCollider2D leftBoundary;
+    [SerializeField] private BoxCollider2D bottomBoundary;
+
+    private Camera cam;
+
+    void Awake()
+    {
+        cam = GetComponent<Camera>();
+    }
 
     void FixedUpdate()
     {
         Vector3 pos = transform.position;
         pos.x += speed * Time.deltaTime;
         transform.position = pos;
+    }
+
+    void Update()
+    {
+        float height = cam.orthographicSize * 2f;
+        float width = height * cam.aspect;
+
+        float thickness = 1f;
+
+        Vector3 camPos = cam.transform.position;
+
+        topBoundary.size = new Vector2(width, thickness);
+        topBoundary.transform.position = new Vector3(camPos.x, camPos.y + height / 2 + thickness / 2, 0f);
+
+        bottomBoundary.size = new Vector2(width, thickness);
+        bottomBoundary.transform.position = new Vector3(camPos.x, camPos.y - height / 2 - thickness / 2, 0f);
+
+        leftBoundary.size = new Vector2(thickness, height);
+        leftBoundary.transform.position = new Vector3(camPos.x - width / 2 - thickness / 2, camPos.y, 0f);
     }
 }
