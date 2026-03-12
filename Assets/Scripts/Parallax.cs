@@ -44,11 +44,12 @@ public class Parallax : MonoBehaviour
 
             pos.x += imageWidth;
         }
-
     }
 
     void Update()
     {
+        if (GameManager.Instance.Player.Dead()) return;
+
         ParallaxBackground leader = initialized[0];
 
         if (IsPassed(leader))

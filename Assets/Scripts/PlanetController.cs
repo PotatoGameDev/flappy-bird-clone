@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(AudioSource))]
 public class PlanetController : MonoBehaviour
 {
     [SerializeField]
@@ -26,15 +25,9 @@ public class PlanetController : MonoBehaviour
     [SerializeField]
     private float screamsVolume = 0.5f;
     [SerializeField]
-    private AudioSource screamsAudioSource;
-    [SerializeField]
     private float hitVolume = 1f;
     [SerializeField]
-    private AudioSource hitAudioSource;
-    [SerializeField]
     private float quakeVolume = 0.5f;
-    [SerializeField]
-    private AudioSource quakeAudioSource;
 
     [SerializeField]
     private AudioClip[] hitAudioClips;
@@ -54,6 +47,13 @@ public class PlanetController : MonoBehaviour
 
     void Update()
     {
+        if (!alive)
+        {
+            rb.linearVelocity = Vector2.zero;
+
+            return;
+        }
+
         if (currentJumpForce > 0f)
         {
             rb.linearVelocity = new Vector2(speed, currentJumpForce);
@@ -63,6 +63,15 @@ public class PlanetController : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(speed, rb.linearVelocity.y);
         }
+    }
+
+
+    // Life
+    private bool alive = true;
+
+    public bool Dead()
+    {
+        return !alive;
     }
 
     // Controls:
@@ -77,6 +86,7 @@ public class PlanetController : MonoBehaviour
 
     public void OnBack(InputAction.CallbackContext ctx)
     {
+        if (!alive) return;
         if (ctx.performed)
         {
             Death();
@@ -87,19 +97,21 @@ public class PlanetController : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
+        if (!alive) return;
         if (invincible) return;
 
         StartCoroutine(IFrames());
 
-        SoundManager.Instance.PlayScreams(screamsAudioSource, screamsVolume);
-        SoundManager.Instance.PlayRandom(quakeAudioSource, quakeAudioClips, quakeVolume);
-        SoundManager.Instance.PlayRandom(hitAudioSource, hitAudioClips, hitVolume);
+        SoundManager.Instance.PlayScreams(screamsVolume);
+        SoundManager.Instance.PlayRandomQuake(quakeAudioClips, quakeVolume);
+        SoundManager.Instance.PlayRandomHit(hitAudioClips, hitVolume);
 
         GameplayManager.Instance.TakeHit(collision.relativeVelocity.magnitude);
     }
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!alive) return;
         if (collision.gameObject.CompareTag("BoundaryBack"))
         {
             Death();
@@ -134,8 +146,21 @@ public class PlanetController : MonoBehaviour
 
     private void Death()
     {
+        // Letting know other components that the player died
+        alive = false;
+
+        // Hiding the player
+        rendr.enabled = false;
+
+        // Handling death logic
         GameplayManager.Instance.Death();
 
+        // Explosion animation for fun
         explosionAnimation.gameObject.SetActive(true);
+    }
+
+    public void DeathAnimationEnded()
+    {
+        Destroy(gameObject);
     }
 }
