@@ -28486,6 +28486,7 @@ MonoBehaviour:
   populationMessagesManager: {fileID: 1635798793}
   energyMessagesManager: {fileID: 1554403539}
   spinDoctorLevelSlider: {fileID: 452646792}
+  spinDoctorLevelSliderFill: {fileID: 1024300474}
 --- !u!4 &2009740623
 Transform:
   m_ObjectHideFlags: 0

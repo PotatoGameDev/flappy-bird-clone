@@ -30,6 +30,8 @@ public class GameplayManager : MonoBehaviour
     private readonly static WaitForSeconds EVERY_SECOND = new(1f);
 
     [SerializeField] private Slider spinDoctorLevelSlider;
+    [SerializeField] private GameObject spinDoctorLevelSliderFill;
+    public float SpinDoctorUsagePerSecond { get; private set; }
     private static readonly int SPIN_DOCTOR_RPM_PER_LEVEL = 100;
     private float spinDoctorLeft;
 
@@ -98,7 +100,7 @@ public class GameplayManager : MonoBehaviour
 
         if (spinDoctorLevel == 0)
         {
-            spinDoctorLevelSlider.gameObject.SetActive(false);
+            spinDoctorLevelSliderFill.SetActive(false);
         }
         else
         {
@@ -141,36 +143,46 @@ public class GameplayManager : MonoBehaviour
         }
     }
 
-    public float UseSpinDoctor()
+    void Update()
     {
-        if (spinDoctorLeft > 0)
+        if (Player.Dead()) return;
+
+        float rpm = Player.GetRpm();
+        float rpmAbs = Mathf.Abs(rpm);
+        if (rpmAbs > 0f)
         {
             // Here we calculate the max RPM we can damp with Spin Doctor, and if it's not 0 then we run the particles
             // We also decrease the available Spin Doctor level.
-            float rpm = Player.GetRpm();
-
-            float corrected = Mathf.Lerp(rpm, 0f, 0.5f);
-            float rpmDamped = Mathf.Abs(rpm) - Mathf.Abs(corrected);
+            float corrected = Mathf.Lerp(rpm, 0f, 0.5f * Time.deltaTime); // We correct half of the total rotation per second
+            float rpmDamped = rpmAbs - Mathf.Abs(corrected);
 
             rpmDamped = Mathf.Clamp(rpmDamped, 0f, spinDoctorLeft);
 
             spinDoctorLeft -= rpmDamped;
             spinDoctorLevelSlider.value = spinDoctorLeft;
+            if (spinDoctorLeft <= 0f)
+            {
+                spinDoctorLevelSliderFill.SetActive(false);
+            }
 
-            return rpmDamped;
-        }
-        else
-        {
-            return 0f;
+            Player.AddRpm(rpmDamped * Mathf.Sign(rpm) * -1);
+            UpdateRpmLabel();
+
+            SpinDoctorUsagePerSecond = rpmDamped / Time.deltaTime;
         }
     }
 
     private void UpdateLabels()
     {
         populationLabel.text = "POP: " + currentPopulation.ToString();
-        rpmLabel.text = "RPM: " + Mathf.Abs(Player.GetRpm());
         gateCounterLabel.text = gateCount.ToString();
         energyLabel.text = GameManager.Instance.CollectedEnergy + "GW";
+        UpdateRpmLabel();
+    }
+
+    private void UpdateRpmLabel()
+    {
+        rpmLabel.text = "RPM: " + Mathf.Abs(Player.GetRpm());
     }
 
     public void TakeHit(float force)
