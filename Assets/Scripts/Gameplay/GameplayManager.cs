@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using UnityEngine.UI;
 
 [DefaultExecutionOrder(-500)]
 public class GameplayManager : MonoBehaviour
@@ -28,6 +29,7 @@ public class GameplayManager : MonoBehaviour
 
     private readonly static WaitForSeconds EVERY_SECOND = new(1f);
 
+    [SerializeField] private Slider spinDoctorLevelSlider;
     private static readonly int SPIN_DOCTOR_RPM_PER_LEVEL = 100;
     private float spinDoctorLeft;
 
@@ -94,7 +96,17 @@ public class GameplayManager : MonoBehaviour
         // SpinDoctor
         int spinDoctorLevel = UpgradesManager.Instance.GetUpgrade(UpgradeId.SpinDoctor).Level;
 
-        spinDoctorLeft = spinDoctorLevel * SPIN_DOCTOR_RPM_PER_LEVEL;
+        if (spinDoctorLevel == 0)
+        {
+            spinDoctorLevelSlider.gameObject.SetActive(false);
+        }
+        else
+        {
+            spinDoctorLeft = spinDoctorLevel * SPIN_DOCTOR_RPM_PER_LEVEL;
+            spinDoctorLevelSlider.minValue = 0f;
+            spinDoctorLevelSlider.maxValue = spinDoctorLeft;
+            spinDoctorLevelSlider.value = spinDoctorLeft;
+        }
     }
 
     IEnumerator DoAndroidSlavery(int level)
@@ -143,6 +155,7 @@ public class GameplayManager : MonoBehaviour
             rpmDamped = Mathf.Clamp(rpmDamped, 0f, spinDoctorLeft);
 
             spinDoctorLeft -= rpmDamped;
+            spinDoctorLevelSlider.value = spinDoctorLeft;
 
             return rpmDamped;
         }
