@@ -110,16 +110,9 @@ public class PlanetController : MonoBehaviour
 
                     // for each rpmAbs above threshold we kill 100 people
                     GameplayManager.Instance.RotationalDamage((int)(penaltyRpm * 100));
-
                 }
 
-                // SpinDoctor.
-                // Maybe I should use it in GameplayManager.Update ?
-                // This way it would be constantly enabled and the Slider in the UI would nicely go down,
-                // not like now, jumping by degrees.
-
-                float rpmDamped = GameplayManager.Instance.UseSpinDoctor();
-                rb.angularVelocity += rpmDamped * 6f * Mathf.Sign(rb.angularVelocity) * -1;
+                float rpmDamped = GameplayManager.Instance.SpinDoctorUsagePerSecond;
                 if (rb.angularVelocity < 0f)
                 {
                     foreach (ParticleSystem psl in spinDoctorParticleSystemsLeft)
@@ -201,7 +194,12 @@ public class PlanetController : MonoBehaviour
 
     public int GetRpm()
     {
-        return (int)(rb.angularVelocity / 6);
+        return (int)(rb.angularVelocity / 6f);
+    }
+
+    public void AddRpm(float rpm)
+    {
+        rb.angularVelocity += rpm * 6f;
     }
 
     private IEnumerator IFrames()
