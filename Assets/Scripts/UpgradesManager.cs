@@ -71,8 +71,8 @@ public class UpgradesManager : MonoBehaviour
                 10,
                 2
                 ),
-        [UpgradeId.PopulationFactory] = new(
-                UpgradeId.PopulationFactory,
+        [UpgradeId.PopulationPrinting] = new(
+                UpgradeId.PopulationPrinting,
                 "Population Factory",
                 10
                 ),
@@ -91,8 +91,7 @@ public class UpgradesManager : MonoBehaviour
         [UpgradeId.SpinDoctor] = new(
                 UpgradeId.SpinDoctor,
                 "Spin Doctor",
-                10,
-                2
+                10
                 ),
     };
 
@@ -127,7 +126,7 @@ public class UpgradesManager : MonoBehaviour
     {
         switch (upgrade.Ident)
         {
-            case UpgradeId.PopulationFactory:
+            case UpgradeId.PopulationPrinting:
                 {
                     GameManager.Instance.AddBasePopulation(upgrade.Level * 1000);
                     break;
@@ -143,7 +142,7 @@ public enum UpgradeId
     StarLifting,
     AndroidSlavery,
     VyagraEnergizingTherapy,
-    PopulationFactory,
+    PopulationPrinting,
     ToorboBoost,
     EnergyShield,
     SpinDoctor

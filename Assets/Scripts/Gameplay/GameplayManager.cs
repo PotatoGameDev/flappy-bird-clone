@@ -28,6 +28,9 @@ public class GameplayManager : MonoBehaviour
 
     private readonly static WaitForSeconds EVERY_SECOND = new(1f);
 
+    private static readonly int SPIN_DOCTOR_RPM_PER_LEVEL = 100;
+    private float spinDoctorLeft;
+
 
     private readonly string[] casualtiesTexts = {
         "{0} died",
@@ -72,12 +75,14 @@ public class GameplayManager : MonoBehaviour
 
         UpdateLabels();
 
+        // AndroidSlavery
         int androidSlaveryLevel = UpgradesManager.Instance.GetUpgrade(UpgradeId.AndroidSlavery).Level;
         if (androidSlaveryLevel > 0)
         {
             StartCoroutine(DoAndroidSlavery(androidSlaveryLevel));
         }
 
+        // VyagraEnergizingTherapy
         int vyagraEnergizingTherapy = UpgradesManager.Instance.GetUpgrade(
                 UpgradeId.VyagraEnergizingTherapy
                 ).Level;
@@ -85,6 +90,11 @@ public class GameplayManager : MonoBehaviour
         {
             StartCoroutine(DoVyagraEnergizingTherapy(vyagraEnergizingTherapy));
         }
+
+        // SpinDoctor
+        int spinDoctorLevel = UpgradesManager.Instance.GetUpgrade(UpgradeId.SpinDoctor).Level;
+
+        spinDoctorLeft = spinDoctorLevel * SPIN_DOCTOR_RPM_PER_LEVEL;
     }
 
     IEnumerator DoAndroidSlavery(int level)
@@ -119,10 +129,33 @@ public class GameplayManager : MonoBehaviour
         }
     }
 
+    public float UseSpinDoctor()
+    {
+        if (spinDoctorLeft > 0)
+        {
+            // Here we calculate the max RPM we can damp with Spin Doctor, and if it's not 0 then we run the particles
+            // We also decrease the available Spin Doctor level.
+            float rpm = Player.GetRpm();
+
+            float corrected = Mathf.Lerp(rpm, 0f, 0.5f);
+            float rpmDamped = Mathf.Abs(rpm) - Mathf.Abs(corrected);
+
+            rpmDamped = Mathf.Clamp(rpmDamped, 0f, spinDoctorLeft);
+
+            spinDoctorLeft -= rpmDamped;
+
+            return rpmDamped;
+        }
+        else
+        {
+            return 0f;
+        }
+    }
+
     private void UpdateLabels()
     {
         populationLabel.text = "POP: " + currentPopulation.ToString();
-        rpmLabel.text = "RPM: " + Player.GetRpm();
+        rpmLabel.text = "RPM: " + Mathf.Abs(Player.GetRpm());
         gateCounterLabel.text = gateCount.ToString();
         energyLabel.text = GameManager.Instance.CollectedEnergy + "GW";
     }

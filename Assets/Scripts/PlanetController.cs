@@ -9,7 +9,6 @@ public class PlanetController : MonoBehaviour
 
     private readonly WaitForSeconds EVERY_SECOND = new(1);
 
-
     [SerializeField]
     private float speed = 10f;
 
@@ -45,6 +44,9 @@ public class PlanetController : MonoBehaviour
     // Particles
     [SerializeField] private ParticleSystem peopleParticleSystem;
 
+    [SerializeField] private ParticleSystem[] spinDoctorParticleSystemsLeft;
+    [SerializeField] private ParticleSystem[] spinDoctorParticleSystemsRight;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -57,6 +59,7 @@ public class PlanetController : MonoBehaviour
     {
         // Start updating rotational penalties
         StartCoroutine(UpdateRorationalPenalties());
+
     }
 
     void Update()
@@ -84,18 +87,56 @@ public class PlanetController : MonoBehaviour
     {
         while (true)
         {
-            float rpm = Mathf.Abs(GetRpm());
+            float rpmAbs = Mathf.Abs(GetRpm());
             float penaltyRpm = 0f;
-            if (rpm > RPM_PENALTY_THRESHOLD)
-            {
-                penaltyRpm = rpm - RPM_PENALTY_THRESHOLD;
 
-                // for each rpm above threshold we kill 100 people
-                GameplayManager.Instance.RotationalDamage((int)(penaltyRpm * 100));
+            foreach (ParticleSystem psl in spinDoctorParticleSystemsLeft)
+            {
+                var sdEmissionLeft = psl.emission;
+                sdEmissionLeft.rateOverTime = 0;
             }
+            foreach (ParticleSystem psr in spinDoctorParticleSystemsRight)
+            {
+                var sdEmissionRight = psr.emission;
+                sdEmissionRight.rateOverTime = 0;
+            }
+
+            if (rpmAbs > 0f)
+            {
+
+                if (rpmAbs > RPM_PENALTY_THRESHOLD)
+                {
+                    penaltyRpm = rpmAbs - RPM_PENALTY_THRESHOLD;
+
+                    // for each rpmAbs above threshold we kill 100 people
+                    GameplayManager.Instance.RotationalDamage((int)(penaltyRpm * 100));
+
+                }
+
+                float rpmDamped = GameplayManager.Instance.UseSpinDoctor();
+                rb.angularVelocity += rpmDamped * 6f * Mathf.Sign(rb.angularVelocity) * -1;
+                if (rb.angularVelocity < 0f)
+                {
+                    foreach (ParticleSystem psl in spinDoctorParticleSystemsLeft)
+                    {
+                        var sdEmission = psl.emission;
+                        sdEmission.rateOverTime = rpmDamped;
+                    }
+                }
+                else
+                {
+                    foreach (ParticleSystem psr in spinDoctorParticleSystemsRight)
+                    {
+                        var sdEmission = psr.emission;
+                        sdEmission.rateOverTime = rpmDamped;
+                    }
+                }
+            }
+
 
             var emission = peopleParticleSystem.emission;
             emission.rateOverTime = penaltyRpm;
+
 
             yield return EVERY_SECOND;
         }
@@ -155,7 +196,7 @@ public class PlanetController : MonoBehaviour
 
     public int GetRpm()
     {
-        return (int)Mathf.Abs(rb.angularVelocity / 6);
+        return (int)(rb.angularVelocity / 6);
     }
 
     private IEnumerator IFrames()
