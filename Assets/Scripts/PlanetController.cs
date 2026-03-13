@@ -113,6 +113,11 @@ public class PlanetController : MonoBehaviour
 
                 }
 
+                // SpinDoctor.
+                // Maybe I should use it in GameplayManager.Update ?
+                // This way it would be constantly enabled and the Slider in the UI would nicely go down,
+                // not like now, jumping by degrees.
+
                 float rpmDamped = GameplayManager.Instance.UseSpinDoctor();
                 rb.angularVelocity += rpmDamped * 6f * Mathf.Sign(rb.angularVelocity) * -1;
                 if (rb.angularVelocity < 0f)
