@@ -206,8 +206,14 @@ public class GameplayManager : MonoBehaviour
 
     private void KillPopulation(int dead)
     {
-
-        currentPopulation -= dead;
+        if (currentPopulation <= dead)
+        {
+            currentPopulation = 0;
+        }
+        else
+        {
+            currentPopulation -= dead;
+        }
 
         UpdateLabels();
 
