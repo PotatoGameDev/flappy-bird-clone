@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class ObstacleController : MonoBehaviour
 {
-    private bool passed;
+    public bool Passed { get; set; }
 
     void OnTriggerEnter2D(Collider2D collider)
     {
-        if (!passed && collider.CompareTag("Player"))
+        if (!Passed && collider.CompareTag("Player"))
         {
             GameplayManager.Instance.CollectEnergy();
-            passed = true;
+            Passed = true;
         }
     }
 }

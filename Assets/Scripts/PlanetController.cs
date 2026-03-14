@@ -9,8 +9,8 @@ public class PlanetController : MonoBehaviour
 
     private readonly WaitForSeconds EVERY_SECOND = new(1);
 
-    [SerializeField]
-    private float speed = 10f;
+    public float speed = 5f;
+    [SerializeField] private float speedIncrease = 0.1f;
 
     [SerializeField]
     private float jumpForce = 10f;
@@ -80,7 +80,6 @@ public class PlanetController : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(speed, rb.linearVelocity.y);
         }
-
     }
 
     private IEnumerator UpdateRorationalPenalties()
@@ -183,12 +182,21 @@ public class PlanetController : MonoBehaviour
         GameplayManager.Instance.TakeHit(collision.relativeVelocity.magnitude);
     }
 
-    public void OnTriggerEnter2D(Collider2D collision)
+    public void OnTriggerEnter2D(Collider2D collider)
     {
         if (!alive) return;
-        if (collision.gameObject.CompareTag("BoundaryBack"))
+        if (collider.gameObject.CompareTag("BoundaryBack"))
         {
             Death();
+        }
+    }
+
+    public void OnTriggerExit2D(Collider2D collider)
+    {
+        if (collider.CompareTag("Gate"))
+        {
+            GameplayManager.Instance.CollectEnergy();
+            speed += speedIncrease;
         }
     }
 

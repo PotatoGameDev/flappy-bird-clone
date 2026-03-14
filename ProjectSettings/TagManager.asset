@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - BoundaryBack
+  - Gate
   layers:
   - Default
   - TransparentFX
