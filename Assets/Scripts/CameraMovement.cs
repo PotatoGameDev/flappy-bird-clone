@@ -3,8 +3,6 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class CameraMovement : MonoBehaviour
 {
-    public float speed = 10f;
-
     [SerializeField] private BoxCollider2D topBoundary;
     [SerializeField] private BoxCollider2D leftBoundary;
     [SerializeField] private BoxCollider2D bottomBoundary;
@@ -23,7 +21,7 @@ public class CameraMovement : MonoBehaviour
             return;
         }
         Vector3 pos = transform.position;
-        pos.x += speed * Time.deltaTime;
+        pos.x += GameplayManager.Instance.Player.speed * Time.deltaTime;
         transform.position = pos;
     }
 

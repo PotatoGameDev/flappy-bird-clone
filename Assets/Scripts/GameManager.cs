@@ -11,9 +11,11 @@ public class GameManager : MonoBehaviour
 
     private readonly int[] energyToAdvance = { 1000, 10000, 100000 };
 
+
     // State things
     private GameState State;
     public event Action<GameState> OnGameStateChanged;
+
 
     public int CurrentLevel
     {
