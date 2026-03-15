@@ -115,13 +115,15 @@ public class GameplayManager : MonoBehaviour
     {
         while (true)
         {
+            if (Player.Dead()) break;
+
             long increase = level * 100;
             if (increase > 0)
             {
-
                 currentPopulation += increase;
                 string text = "+" + increase;
                 populationMessagesManager.Spawn(text, fadingMessagePopulationAddedColor);
+                UpdateLabels();
             }
             yield return EVERY_SECOND;
         }
@@ -132,13 +134,17 @@ public class GameplayManager : MonoBehaviour
         float percent = level / 100f;
         while (true)
         {
+            if (Player.Dead()) break;
+
             long increase = (long)(currentPopulation * percent);
             if (increase > 0)
             {
                 currentPopulation += increase;
                 string text = "+" + increase;
                 populationMessagesManager.Spawn(text, fadingMessagePopulationAddedColor);
+                UpdateLabels();
             }
+
             yield return EVERY_SECOND;
         }
     }
@@ -165,7 +171,7 @@ public class GameplayManager : MonoBehaviour
                 spinDoctorLevelSliderFill.SetActive(false);
             }
 
-            Player.AddRpm(rpmDamped * Mathf.Sign(rpm) * -1);
+            Player.AddRpm(rpmDamped * Mathf.Sign(rpm) * -1f);
             UpdateRpmLabel();
 
             SpinDoctorUsagePerSecond = rpmDamped / Time.deltaTime;
@@ -182,10 +188,10 @@ public class GameplayManager : MonoBehaviour
 
     private void UpdateRpmLabel()
     {
-        rpmLabel.text = "RPM: " + Mathf.Abs(Player.GetRpm());
+        rpmLabel.text = "RPM: " + (int)Mathf.Abs(Player.GetRpm());
     }
 
-    public void TakeHit(float force)
+    public long TakeHit(float force)
     {
         // Calculate casualties:
         float maxHitPercent = 100f;
@@ -202,6 +208,8 @@ public class GameplayManager : MonoBehaviour
         AddPopulationLossText(peopleDied);
 
         KillPopulation((int)peopleDied);
+
+        return peopleDied;
     }
 
     private void KillPopulation(int dead)
@@ -271,11 +279,16 @@ public class GameplayManager : MonoBehaviour
         gateCount++;
 
         // Initial level is 0, so we need to add 1.
-        int collectedEnergy = UpgradesManager.Instance.GetUpgrade(UpgradeId.ORing).Level + 1;
+        int collectedEnergy = EnergyPerGate();
 
         GameManager.Instance.CollectedEnergy += collectedEnergy;
         AddEnergyCollectedText(collectedEnergy);
         UpdateLabels();
+    }
+
+    public int EnergyPerGate()
+    {
+        return UpgradesManager.Instance.GetUpgrade(UpgradeId.ORing).Level + 1;
     }
 
     private void AddEnergyCollectedText(int energyAdded)
