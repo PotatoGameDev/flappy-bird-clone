@@ -17740,7 +17740,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1532080826655072651, guid: 213dfc47a71c5641eb44ce1ce20eea5e, type: 3}
       propertyPath: m_Pivot.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1532080826655072651, guid: 213dfc47a71c5641eb44ce1ce20eea5e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -17748,7 +17748,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1532080826655072651, guid: 213dfc47a71c5641eb44ce1ce20eea5e, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1532080826655072651, guid: 213dfc47a71c5641eb44ce1ce20eea5e, type: 3}
       propertyPath: m_AnchorMin.x
@@ -17756,7 +17756,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1532080826655072651, guid: 213dfc47a71c5641eb44ce1ce20eea5e, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1532080826655072651, guid: 213dfc47a71c5641eb44ce1ce20eea5e, type: 3}
       propertyPath: m_SizeDelta.x
@@ -17796,11 +17796,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1532080826655072651, guid: 213dfc47a71c5641eb44ce1ce20eea5e, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.00048828125
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1532080826655072651, guid: 213dfc47a71c5641eb44ce1ce20eea5e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -137.5
+      value: -100
       objectReference: {fileID: 0}
     - target: {fileID: 1532080826655072651, guid: 213dfc47a71c5641eb44ce1ce20eea5e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -27755,7 +27755,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlanetController
   speed: 5
   speedIncrease: 0.1
-  jumpForce: 8
+  jumpForce: 7
   invincibilityDurationSeconds: 2
   flashSpeed: 1
   screamsVolume: 0.1

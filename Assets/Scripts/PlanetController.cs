@@ -130,10 +130,8 @@ public class PlanetController : MonoBehaviour
                 }
             }
 
-
             var emission = peopleParticleSystem.emission;
             emission.rateOverTime = penaltyRpm;
-
 
             yield return EVERY_SECOND;
         }
@@ -179,7 +177,11 @@ public class PlanetController : MonoBehaviour
         SoundManager.Instance.PlayRandomQuake(quakeAudioClips, quakeVolume);
         SoundManager.Instance.PlayRandomHit(hitAudioClips, hitVolume);
 
-        GameplayManager.Instance.TakeHit(collision.relativeVelocity.magnitude);
+        long peopleDied = GameplayManager.Instance.TakeHit(collision.relativeVelocity.magnitude);
+
+        //var emission = peopleParticleSystem.emission;
+        peopleParticleSystem.Emit((int)Mathf.Log10(peopleDied));
+        //emission.rateOverTime = Mathf.Min(peopleDied / 1000, 50);
     }
 
     public void OnTriggerEnter2D(Collider2D collider)
@@ -200,9 +202,9 @@ public class PlanetController : MonoBehaviour
         }
     }
 
-    public int GetRpm()
+    public float GetRpm()
     {
-        return (int)(rb.angularVelocity / 6f);
+        return rb.angularVelocity / 6f;
     }
 
     public void AddRpm(float rpm)

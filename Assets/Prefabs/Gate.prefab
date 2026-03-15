@@ -33,6 +33,7 @@ Transform:
   - {fileID: 6827311108789829064}
   - {fileID: 4589019439278609481}
   - {fileID: 2065307932280240426}
+  - {fileID: 5242988345428566987}
   m_Father: {fileID: 8520416789643869658}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!61 &9117390740165013672
@@ -160,7 +161,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2070369471
   m_SortingLayer: 2
-  m_SortingOrder: 1
+  m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: 843629608526838009, guid: ace10a67090646594bcf40ba1cc221f6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -205,6 +206,7 @@ Transform:
   - {fileID: 4673680737286651448}
   - {fileID: 1134920227634004205}
   - {fileID: 6367646486106081689}
+  - {fileID: 8965463018589220296}
   m_Father: {fileID: 8520416789643869658}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &9135198728966011117
@@ -332,7 +334,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2070369471
   m_SortingLayer: 2
-  m_SortingOrder: 1
+  m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: -4943206277110449413, guid: 4269b34eb07e5c3059f7d4143ffd1c5a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -423,7 +425,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2070369471
   m_SortingLayer: 2
-  m_SortingOrder: 1
+  m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: -4943206277110449413, guid: 4269b34eb07e5c3059f7d4143ffd1c5a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -435,6 +437,37 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &3826345599681523333
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8965463018589220296}
+  m_Layer: 0
+  m_Name: EnergyBallGenerationPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8965463018589220296
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3826345599681523333}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.52, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7208978355929989724}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4385907510437537098
 GameObject:
   m_ObjectHideFlags: 0
@@ -514,7 +547,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2070369471
   m_SortingLayer: 2
-  m_SortingOrder: 1
+  m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: -4943206277110449413, guid: 4269b34eb07e5c3059f7d4143ffd1c5a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -605,7 +638,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2070369471
   m_SortingLayer: 2
-  m_SortingOrder: 1
+  m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: 843629608526838009, guid: ace10a67090646594bcf40ba1cc221f6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -627,6 +660,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8520416789643869658}
   - component: {fileID: 1842447415633045965}
+  - component: {fileID: 8028266045150266681}
   m_Layer: 0
   m_Name: Gate
   m_TagString: Gate
@@ -697,6 +731,21 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 10}
   m_EdgeRadius: 0
+--- !u!114 &8028266045150266681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6037163735289081218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5453bcb39a20a4cbe96c8ba49c378597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObstacleController
+  topEnergyBallSpaner: {fileID: 5242988345428566987}
+  bottomEnergyBallSpaner: {fileID: 8965463018589220296}
+  energyBallPrefab: {fileID: 2164918874062921971, guid: 8ef246984dd6b7b12b760712181df773, type: 3}
 --- !u!1 &6447914222976409509
 GameObject:
   m_ObjectHideFlags: 0
@@ -776,7 +825,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2070369471
   m_SortingLayer: 2
-  m_SortingOrder: 1
+  m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: -4943206277110449413, guid: 4269b34eb07e5c3059f7d4143ffd1c5a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -788,3 +837,34 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &7760560500270372167
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5242988345428566987}
+  m_Layer: 0
+  m_Name: EnergyBallGenerationPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5242988345428566987
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7760560500270372167}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -1, w: 0}
+  m_LocalPosition: {x: 0, y: 0.37, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8567531709423854898}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

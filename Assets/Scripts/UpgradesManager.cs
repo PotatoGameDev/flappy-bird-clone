@@ -62,14 +62,12 @@ public class UpgradesManager : MonoBehaviour
                 ),
         [UpgradeId.AndroidSlavery] = new(
                 UpgradeId.AndroidSlavery, "Android Slavery",
-                10,
-                2
+                10
                 ),
         [UpgradeId.VyagraEnergizingTherapy] = new(
                 UpgradeId.VyagraEnergizingTherapy,
                 "V'yag-ra Energizing Therapy",
-                10,
-                2
+                10
                 ),
         [UpgradeId.PopulationPrinting] = new(
                 UpgradeId.PopulationPrinting,
