@@ -21,8 +21,8 @@ public class PlanetController : MonoBehaviour
 
     [SerializeField]
     private float invincibilityDurationSeconds = 2f;
-    [SerializeField]
-    private float flashSpeed = 1f;
+
+    private readonly float flashSpeed = 0.2f;
     private bool invincible = false;
 
     // Audio sources
@@ -46,6 +46,9 @@ public class PlanetController : MonoBehaviour
 
     [SerializeField] private ParticleSystem[] spinDoctorParticleSystemsLeft;
     [SerializeField] private ParticleSystem[] spinDoctorParticleSystemsRight;
+
+    // Shield
+    [SerializeField] private SpriteRenderer shieldRenderer;
 
     void Awake()
     {
@@ -171,17 +174,25 @@ public class PlanetController : MonoBehaviour
         if (!alive) return;
         if (invincible) return;
 
-        StartCoroutine(IFrames());
 
-        SoundManager.Instance.PlayScreams(screamsVolume);
-        SoundManager.Instance.PlayRandomQuake(quakeAudioClips, quakeVolume);
         SoundManager.Instance.PlayRandomHit(hitAudioClips, hitVolume);
+
+        if (GameplayManager.Instance.ShieldAvailable())
+        {
+            StartCoroutine(IFramesShield(shieldRenderer));
+        }
 
         long peopleDied = GameplayManager.Instance.TakeHit(collision.relativeVelocity.magnitude);
 
-        //var emission = peopleParticleSystem.emission;
-        peopleParticleSystem.Emit((int)Mathf.Log10(peopleDied));
-        //emission.rateOverTime = Mathf.Min(peopleDied / 1000, 50);
+        if (peopleDied > 0)
+        {
+            SoundManager.Instance.PlayScreams(screamsVolume);
+            SoundManager.Instance.PlayRandomQuake(quakeAudioClips, quakeVolume);
+
+            StartCoroutine(IFrames(rendr));
+
+            peopleParticleSystem.Emit((int)Mathf.Log10(peopleDied));
+        }
     }
 
     public void OnTriggerEnter2D(Collider2D collider)
@@ -212,24 +223,43 @@ public class PlanetController : MonoBehaviour
         rb.angularVelocity += rpm * 6f;
     }
 
-    private IEnumerator IFrames()
+    private IEnumerator IFrames(SpriteRenderer r)
+    {
+        invincible = true;
+        Color originalColor = r.color;
+        float flashSpeed = 8f;
+        float elapsed = 0f;
+
+        while (elapsed < invincibilityDurationSeconds)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.PingPong(elapsed * flashSpeed, 1f);
+            r.color = Color.Lerp(originalColor, Color.Lerp(originalColor, Color.red, 0.5f), t);
+            yield return null;
+        }
+
+        r.color = originalColor;
+        invincible = false;
+    }
+
+    private IEnumerator IFramesShield(SpriteRenderer r)
     {
         invincible = true;
         float elapsed = 0f;
-        Color originalColor = rendr.color;
+        Color originalColor = r.color;
 
         while (elapsed < invincibilityDurationSeconds)
         {
             elapsed += Time.deltaTime;
 
-            Color color = rendr.color;
+            Color color = r.color;
             color.a = Mathf.PingPong(Time.time * flashSpeed, 1f);
 
-            rendr.color = color;
+            r.color = color;
             yield return null;
         }
 
-        rendr.color = originalColor;
+        r.color = originalColor;
         invincible = false;
     }
 
