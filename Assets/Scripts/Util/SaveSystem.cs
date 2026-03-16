@@ -1,35 +1,33 @@
 using UnityEngine;
-using System.IO;
 
 public static class SaveSystem
 {
-    private static string SavePath => Path.Combine(Application.persistentDataPath, "save.json");
+    private const string SaveKey = "SaveData";
 
     public static void Save(GameState gameState)
     {
         string json = JsonUtility.ToJson(gameState);
-        File.WriteAllText(SavePath, json);
+        PlayerPrefs.SetString(SaveKey, json);
+        PlayerPrefs.Save();
     }
 
     public static GameState Load()
     {
         if (!StateExists())
-        {
             return new GameState();
-        }
-        string json = File.ReadAllText(SavePath);
-        GameState state = JsonUtility.FromJson<GameState>(json);
 
-        return state;
+        string json = PlayerPrefs.GetString(SaveKey);
+        return JsonUtility.FromJson<GameState>(json);
     }
 
     public static bool StateExists()
     {
-        return File.Exists(SavePath);
+        return PlayerPrefs.HasKey(SaveKey);
     }
 
     public static void Reset()
     {
-        File.Delete(SavePath);
+        PlayerPrefs.DeleteKey(SaveKey);
+        PlayerPrefs.Save();
     }
 }
