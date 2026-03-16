@@ -1,22 +1,26 @@
 using UnityEditor;
-using System.Reflection;
+using UnityEngine;
 
-public static class RegenerateProjectFiles
+[InitializeOnLoad]
+public class RegenerateProjectFiles
 {
     [MenuItem("Tools/Regenerate Project Files")]
     public static void Regenerate()
     {
-        // TODO: this doesn't work:(
-        var editorAssembly = typeof(Editor).Assembly;
-
-        var syncVsType = editorAssembly.GetType("UnityEditor.SyncVS");
-        var method = syncVsType.GetMethod(
+        var syncVS = System.Type.GetType("UnityEditor.SyncVS,UnityEditor");
+        var syncSolution = syncVS?.GetMethod(
             "SyncSolution",
-            BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static
+            System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static
         );
 
-        method.Invoke(null, null);
-
-        UnityEngine.Debug.Log("Project files regenerated.");
+        if (syncSolution != null)
+        {
+            syncSolution.Invoke(null, null);
+            Debug.Log("Project files regenerated.");
+        }
+        else
+        {
+            Debug.LogError("Could not find SyncVS.SyncSolution method.");
+        }
     }
 }

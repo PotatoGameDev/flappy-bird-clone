@@ -39,6 +39,7 @@ public class EnergyBallController : PooledInstance
     {
         if (collider.CompareTag("Player"))
         {
+            SoundManager.Instance.PlayCollect();
             Release();
         }
     }

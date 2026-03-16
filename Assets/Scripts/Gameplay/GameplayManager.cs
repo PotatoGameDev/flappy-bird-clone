@@ -11,6 +11,8 @@ public class GameplayManager : MonoBehaviour
 
     public PlanetController Player { get; set; }
 
+    private static readonly WaitForSeconds WAIT_2_SECONDS = new(2f);
+
     [SerializeField] private TextMeshProUGUI populationLabel;
     [SerializeField] private TextMeshProUGUI rpmLabel;
     [SerializeField] private TextMeshProUGUI gateCounterLabel;
@@ -270,7 +272,7 @@ public class GameplayManager : MonoBehaviour
 
     private IEnumerator DeathSequence()
     {
-        yield return new WaitForSeconds(2f);
+        yield return WAIT_2_SECONDS;
         SceneManager.LoadScene("NewMenu");
     }
 

@@ -18,6 +18,9 @@ public class SoundManager : MonoBehaviour
     [SerializeField]
     private AudioSource screamAudioSource;
 
+    [SerializeField]
+    private AudioSource collectAudioSource;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -35,6 +38,11 @@ public class SoundManager : MonoBehaviour
         {
             StartCoroutine(PlaySliceCoroutine(screamAudioSource, volume));
         }
+    }
+
+    public void PlayCollect()
+    {
+        collectAudioSource.Play();
     }
 
     IEnumerator PlaySliceCoroutine(AudioSource source, float volume = 1f)
