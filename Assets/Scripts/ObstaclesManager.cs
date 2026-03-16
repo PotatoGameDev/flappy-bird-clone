@@ -1,15 +1,23 @@
 using UnityEngine;
 using System.Collections.Generic;
+using PotatoGamedev.Pool;
 
 public class ObstaclesManager : MonoBehaviour
 {
     public float minGap;
     public float verticalSpan;
-    public GameObject obstaclePrefab;
+    public GateController obstaclePrefab;
 
     public float vanishingDistance;
 
-    private readonly List<GameObject> obstacles = new();
+    private readonly List<GateController> obstacles = new();
+
+    private InstancePool<GateController> pool;
+
+    void Awake()
+    {
+        pool = new InstancePool<GateController>(obstaclePrefab, 3, transform);
+    }
 
     void FixedUpdate()
     {
@@ -29,9 +37,11 @@ public class ObstaclesManager : MonoBehaviour
             Vector3 pos = Camera.main.ViewportToWorldPoint(new Vector3(1.1f, 0.5f, 1f));
             pos.z = 0f;
             pos.y = Random.Range(-verticalSpan, verticalSpan);
-            GameObject obj = Instantiate(obstaclePrefab, pos, Quaternion.identity, transform);
 
-            obstacles.Add(obj);
+            GateController gateInst = pool.Get();
+            gateInst.transform.position = pos;
+
+            obstacles.Add(gateInst);
         }
     }
 
@@ -44,12 +54,12 @@ public class ObstaclesManager : MonoBehaviour
         // Cleanup:
         for (int i = 0; i < obstacles.Count; i++)
         {
-            GameObject obj = obstacles[i];
+            GateController obj = obstacles[i];
             if (obj.transform.position.x + vanishingDistance
                     < GameplayManager.Instance.Player.transform.position.x)
             {
                 obstacles.RemoveAt(i);
-                Destroy(obj);
+                obj.Release();
             }
         }
     }

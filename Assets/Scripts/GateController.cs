@@ -1,7 +1,8 @@
 using UnityEngine;
 using System.Collections;
+using PotatoGamedev.Pool;
 
-public class GateController : MonoBehaviour
+public class GateController : PooledInstance
 {
     [SerializeField] private Transform topEnergyBallSpaner;
     [SerializeField] private Transform bottomEnergyBallSpaner;
