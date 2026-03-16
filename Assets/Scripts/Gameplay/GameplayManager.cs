@@ -26,6 +26,7 @@ public class GameplayManager : MonoBehaviour
 
     [SerializeField] private FadingMessagesManager populationMessagesManager;
     [SerializeField] private FadingMessagesManager energyMessagesManager;
+    [SerializeField] private FadingMessagesManager rpmMessagesManager;
 
     private long currentPopulation = 0;
 
@@ -37,6 +38,10 @@ public class GameplayManager : MonoBehaviour
     private static readonly int SPIN_DOCTOR_RPM_PER_LEVEL = 100;
     private float spinDoctorLeft;
 
+    [SerializeField] private Slider shieldLevelSlider;
+    [SerializeField] private GameObject shieldLevelSliderFill;
+    private static readonly long SHIELD_AMOUNT_PER_LEVEL = 1000;
+    private long shieldLeft;
 
     private readonly string[] casualtiesTexts = {
         "{0} died",
@@ -111,6 +116,25 @@ public class GameplayManager : MonoBehaviour
             spinDoctorLevelSlider.maxValue = spinDoctorLeft;
             spinDoctorLevelSlider.value = spinDoctorLeft;
         }
+
+        // EnergyShield
+        int shieldLevel = UpgradesManager.Instance.GetUpgrade(UpgradeId.EnergyShield).Level;
+        if (shieldLevel == 0)
+        {
+            shieldLevelSliderFill.SetActive(false);
+        }
+        else
+        {
+            shieldLeft = shieldLevel * SHIELD_AMOUNT_PER_LEVEL;
+            shieldLevelSlider.minValue = 0f;
+            shieldLevelSlider.maxValue = shieldLeft;
+            shieldLevelSlider.value = shieldLeft;
+        }
+    }
+
+    public bool ShieldAvailable()
+    {
+        return shieldLeft > 0;
     }
 
     IEnumerator DoAndroidSlavery(int level)
@@ -205,7 +229,17 @@ public class GameplayManager : MonoBehaviour
         long peopleDied = (long)(currentPopulation * (hitPercent / 100f));
 
         if (peopleDied < minCasualties) peopleDied = minCasualties;
+
+
         if (peopleDied > currentPopulation) peopleDied = currentPopulation;
+
+        peopleDied = peopleDied > shieldLeft ? (peopleDied - shieldLeft) : 0;
+        shieldLeft = shieldLeft > peopleDied ? (shieldLeft - peopleDied) : 0;
+        shieldLevelSlider.value = shieldLeft;
+        if (shieldLeft <= 0f)
+        {
+            shieldLevelSliderFill.SetActive(false);
+        }
 
         AddPopulationLossText(peopleDied);
 
@@ -259,8 +293,7 @@ public class GameplayManager : MonoBehaviour
 
         text = string.Format(text, peopleDied);
 
-        populationMessagesManager.Spawn(text, fadingMessageCasualtiesColor);
-
+        rpmMessagesManager.Spawn(text, fadingMessageCasualtiesColor);
     }
 
     public void Death()

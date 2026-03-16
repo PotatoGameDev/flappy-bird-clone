@@ -83,8 +83,7 @@ public class UpgradesManager : MonoBehaviour
         [UpgradeId.EnergyShield] = new(
                 UpgradeId.EnergyShield,
                 "Energy Shield",
-                10,
-                2
+                10
                 ),
         [UpgradeId.SpinDoctor] = new(
                 UpgradeId.SpinDoctor,
