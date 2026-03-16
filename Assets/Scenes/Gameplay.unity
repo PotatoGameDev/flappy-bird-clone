@@ -18436,6 +18436,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1532080826655072651, guid: 213dfc47a71c5641eb44ce1ce20eea5e, type: 3}
   m_PrefabInstance: {fileID: 1715773007}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1715773009 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2666682404529119464, guid: 213dfc47a71c5641eb44ce1ce20eea5e, type: 3}
+  m_PrefabInstance: {fileID: 1715773007}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bda12be675e3a51ca9d2bd414be4fdb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FadingMessagesManager
 --- !u!1 &1723715674
 GameObject:
   m_ObjectHideFlags: 0
@@ -29107,7 +29118,7 @@ MonoBehaviour:
   fadingMessagePopulationAddedColor: {r: 0.101784915, g: 0.7364445, b: 0, a: 1}
   populationMessagesManager: {fileID: 1635798793}
   energyMessagesManager: {fileID: 1554403539}
-  rpmMessagesManager: {fileID: 0}
+  rpmMessagesManager: {fileID: 1715773009}
   spinDoctorLevelSlider: {fileID: 452646792}
   spinDoctorLevelSliderFill: {fileID: 1024300474}
   shieldLevelSlider: {fileID: 774652047}
