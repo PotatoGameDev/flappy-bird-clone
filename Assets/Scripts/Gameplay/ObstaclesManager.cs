@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-using PotatoGamedev.Pool;
+using PotatoGameDev.Pool;
 
 public class ObstaclesManager : MonoBehaviour
 {
