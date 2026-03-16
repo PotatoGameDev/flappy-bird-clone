@@ -6,6 +6,7 @@ public static class RegenerateProjectFiles
     [MenuItem("Tools/Regenerate Project Files")]
     public static void Regenerate()
     {
+        // TODO: this doesn't work:(
         var editorAssembly = typeof(Editor).Assembly;
 
         var syncVsType = editorAssembly.GetType("UnityEditor.SyncVS");

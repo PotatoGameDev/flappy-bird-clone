@@ -1,7 +1,8 @@
 using UnityEngine;
+using PotatoGameDev.Pool;
 
 [RequireComponent(typeof(Animator))]
-public class EnergyBallController : MonoBehaviour
+public class EnergyBallController : PooledInstance
 {
     private readonly float SHRINKING_DISTANCE = 2f;
 
@@ -38,11 +39,11 @@ public class EnergyBallController : MonoBehaviour
     {
         if (collider.CompareTag("Player"))
         {
-            Destroy(gameObject);
+            Release();
         }
     }
 
-    public void Init()
+    public new void Init()
     {
         // Start the looped animation from random frame:
         anim.Play(0, 0, Random.value);

@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-using PotatoGamedev.Pool;
+using PotatoGameDev.Pool;
 
 public class GateController : PooledInstance
 {
@@ -41,10 +41,10 @@ public class GateController : PooledInstance
 
     private void CreateBall(Transform source)
     {
-        EnergyBallController ball = Instantiate(energyBallPrefab);
+        EnergyBallController ball = InstancePoolsManager.Instance.EnergyBallControllerPool.Get();
+        ball.Init();
 
         ball.transform.position = source.position + new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0f);
         ball.FollowPlayer = true;
-        ball.Init();
     }
 }
