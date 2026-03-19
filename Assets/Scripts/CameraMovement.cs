@@ -35,9 +35,11 @@ public class CameraMovement : MonoBehaviour
         Vector3 camPos = cam.transform.position;
 
         topBoundary.size = new Vector2(width, thickness);
+        topBoundary.offset = new Vector2(0f, 1f);
         topBoundary.transform.position = new Vector3(camPos.x, camPos.y + height / 2 + thickness / 2, 0f);
 
         bottomBoundary.size = new Vector2(width, thickness);
+        bottomBoundary.offset = new Vector2(0f, -1f);
         bottomBoundary.transform.position = new Vector3(camPos.x, camPos.y - height / 2 - thickness / 2, 0f);
 
         leftBoundary.size = new Vector2(thickness, height);

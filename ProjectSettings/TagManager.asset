@@ -6,6 +6,8 @@ TagManager:
   tags:
   - BoundaryBack
   - Gate
+  - SunStarBoundary
+  - BlackHoleBoundary
   layers:
   - Default
   - TransparentFX
