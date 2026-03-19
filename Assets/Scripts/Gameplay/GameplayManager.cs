@@ -206,15 +206,15 @@ public class GameplayManager : MonoBehaviour
 
     private void UpdateLabels()
     {
-        populationLabel.text = "POP: " + currentPopulation.ToString();
-        gateCounterLabel.text = gateCount.ToString();
-        energyLabel.text = GameManager.Instance.CollectedEnergy + "GW";
+        populationLabel.SetText("POP: {0}", currentPopulation);
+        gateCounterLabel.SetText("{0}", gateCount);
+        energyLabel.SetText(" {0} GW", GameManager.Instance.CollectedEnergy);
         UpdateRpmLabel();
     }
 
     private void UpdateRpmLabel()
     {
-        rpmLabel.text = "RPM: " + (int)Mathf.Abs(Player.GetRpm());
+        rpmLabel.SetText("RPM: {0}", (int)Mathf.Abs(Player.GetRpm()));
     }
 
     public long TakeHit(float force)
