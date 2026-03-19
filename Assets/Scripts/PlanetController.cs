@@ -25,6 +25,9 @@ public class PlanetController : MonoBehaviour
     private readonly float flashSpeed = 0.2f;
     private bool invincible = false;
 
+
+    Color originalColor;
+
     // Audio sources
     [SerializeField]
     private float screamsVolume = 0.5f;
@@ -50,19 +53,31 @@ public class PlanetController : MonoBehaviour
     // Shield
     [SerializeField] private SpriteRenderer shieldRenderer;
 
+    // Burning Damage
+    [SerializeField] private GameObject burningEffect;
+    [SerializeField] private float borderDangerMargin = 1.0f;
+
+    private float currentSunStarCasualties = 0f;
+    private float currentBlackHoleCasualties = 0f;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         rendr = GetComponentInChildren<SpriteRenderer>();
+        originalColor = rendr.color;
 
         GameplayManager.Instance.Player = this;
     }
 
     void Start()
     {
+        burningEffect.SetActive(false);
+
         // Start updating rotational penalties
         StartCoroutine(UpdateRorationalPenalties());
 
+        // Damage for getting too close to the sun or to the black hole
+        StartCoroutine(UpdateOutOfBoundsDamage());
     }
 
     void Update()
@@ -83,7 +98,76 @@ public class PlanetController : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(speed, rb.linearVelocity.y);
         }
+
+
+        // Calculating casualties due to being too close to the boundary
+        float height = Camera.main.orthographicSize * 2f;
+
+        // TODO If i switch to moving camera (that follows the player) then there might be a problem
+        float deathHeightTop = Camera.main.transform.position.y + height / 2;
+        float dangerHeightTop = deathHeightTop - borderDangerMargin;
+
+        float deathHeightBottom = Camera.main.transform.position.y - height / 2;
+        float dangerHeightBottom = deathHeightBottom + borderDangerMargin;
+
+        /*
+        if (transform.position.y <= deathHeightBottom || transform.position.y >= deathHeightTop)
+        {
+            // The planet is below death threshold, game over
+            Death();
+            return;
+        }
+        */
+
+        float outOfBoundsDamagePerSecond = 0f;
+        bool blackHoleDamage = false;
+        if (transform.position.y <= dangerHeightBottom)
+        {
+            // The planet is below damage threshold, should start getting damage
+            //
+            float distance = Mathf.Abs(transform.position.y - dangerHeightBottom);
+            outOfBoundsDamagePerSecond = distance / borderDangerMargin;
+            blackHoleDamage = false;
+        }
+        else if (transform.position.y >= dangerHeightTop)
+        {
+            // The planet is above danger threshold, should start getting damage
+            //
+            float distance = Mathf.Abs(transform.position.y - dangerHeightTop);
+
+            outOfBoundsDamagePerSecond = distance / borderDangerMargin;
+            blackHoleDamage = true;
+        }
+
+        if (outOfBoundsDamagePerSecond > 0f)
+        {
+            // We lerp from the original color to the half of the red (so not so much red)
+            rendr.color = Color.Lerp(originalColor, Color.Lerp(originalColor, Color.red, 0.5f), outOfBoundsDamagePerSecond);
+
+            long casualties = GameplayManager.Instance.TakeHit(outOfBoundsDamagePerSecond * Time.deltaTime, 1, false);
+
+            if (casualties > 0)
+            {
+                if (blackHoleDamage)
+                {
+                    currentBlackHoleCasualties += casualties;
+                }
+                else
+                {
+                    currentSunStarCasualties += casualties;
+                }
+
+                SoundManager.Instance.PlayScreams(screamsVolume);
+            }
+            burningEffect.SetActive(true);
+        }
+        else
+        {
+            burningEffect.SetActive(false);
+            rendr.color = originalColor;
+        }
     }
+
 
     private IEnumerator UpdateRorationalPenalties()
     {
@@ -140,6 +224,24 @@ public class PlanetController : MonoBehaviour
         }
     }
 
+    private IEnumerator UpdateOutOfBoundsDamage()
+    {
+        while (true)
+        {
+            if (currentSunStarCasualties > 0)
+            {
+                GameplayManager.Instance.AddPopulationLossText((long)currentSunStarCasualties, "{0} fried ({1}%)");
+                currentSunStarCasualties = 0;
+            }
+            if (currentBlackHoleCasualties > 0)
+            {
+                GameplayManager.Instance.AddPopulationLossText((long)currentBlackHoleCasualties, "{0} spaghettified ({1}%)");
+                currentBlackHoleCasualties = 0;
+            }
+            yield return EVERY_SECOND;
+        }
+    }
+
     // Life
     public bool Dead { get; set; }
 
@@ -177,7 +279,14 @@ public class PlanetController : MonoBehaviour
             StartCoroutine(IFramesShield(shieldRenderer));
         }
 
-        long peopleDied = GameplayManager.Instance.TakeHit(collision.relativeVelocity.magnitude);
+
+        // Calculate hit fraction:
+        float maxHitPercent = 100f;
+        float maxHitForce = 20f;
+        float hitPercent = maxHitPercent * Mathf.Clamp01(collision.relativeVelocity.magnitude / maxHitForce);
+        float hitFraction = hitPercent / 100f;
+
+        long peopleDied = GameplayManager.Instance.TakeHit(hitFraction, 1000);
 
         if (peopleDied > 0)
         {
@@ -193,9 +302,10 @@ public class PlanetController : MonoBehaviour
     public void OnTriggerEnter2D(Collider2D collider)
     {
         if (Dead) return;
-        if (collider.gameObject.CompareTag("BoundaryBack"))
+        if (collider.CompareTag("BoundaryBack") || collider.CompareTag("BlackHoleBoundary") || collider.CompareTag("SunStarBoundary"))
         {
             Death();
+            return;
         }
     }
 
@@ -221,7 +331,6 @@ public class PlanetController : MonoBehaviour
     private IEnumerator IFrames(SpriteRenderer r)
     {
         invincible = true;
-        Color originalColor = r.color;
         float flashSpeed = 8f;
         float elapsed = 0f;
 
@@ -229,6 +338,8 @@ public class PlanetController : MonoBehaviour
         {
             elapsed += Time.deltaTime;
             float t = Mathf.PingPong(elapsed * flashSpeed, 1f);
+
+            // We lerp from the original color to the half of the red (so not so much red)
             r.color = Color.Lerp(originalColor, Color.Lerp(originalColor, Color.red, 0.5f), t);
             yield return null;
         }
@@ -262,6 +373,8 @@ public class PlanetController : MonoBehaviour
     {
         // Letting know other components that the player died
         Dead = true;
+
+        burningEffect.SetActive(true);
 
         // Hiding the player
         rendr.enabled = false;

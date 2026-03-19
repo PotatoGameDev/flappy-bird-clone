@@ -224,19 +224,11 @@ public class GameplayManager : MonoBehaviour
         rpmLabel.SetText("RPM: {0}", (int)Mathf.Abs(Player.GetRpm()));
     }
 
-    public long TakeHit(float force)
+    // Kills <hitFraction> of the population, considers shield and min casualties. Returns the actual number of dead people.
+    public long TakeHit(float hitFraction, long minCasualties, bool addLossText = true)
     {
-        // Calculate casualties:
-        float maxHitPercent = 100f;
-        float maxHitForce = 20f;
-
-        int minCasualties = 1000;
-
-        float hitPercent = maxHitPercent * Mathf.Clamp01(force / maxHitForce);
-        long peopleDied = (long)(currentPopulation * (hitPercent / 100f));
-
+        long peopleDied = (long)(currentPopulation * hitFraction);
         if (peopleDied < minCasualties) peopleDied = minCasualties;
-
 
         if (peopleDied > currentPopulation) peopleDied = currentPopulation;
 
@@ -248,7 +240,11 @@ public class GameplayManager : MonoBehaviour
             shieldLevelSliderFill.SetActive(false);
         }
 
-        AddPopulationLossText(peopleDied);
+        if (addLossText)
+        {
+            // TODO Move this to something higher, it should not be generated here
+            AddPopulationLossText(peopleDied);
+        }
 
         KillPopulation(peopleDied);
 
@@ -281,11 +277,11 @@ public class GameplayManager : MonoBehaviour
         KillPopulation(dead);
     }
 
-    private void AddPopulationLossText(long peopleDied)
+    public void AddPopulationLossText(long peopleDied, string textFormatOverride = null)
     {
         float diedPercent = Mathf.Floor(peopleDied / (float)(peopleDied + currentPopulation) * 100f);
 
-        string text = casualtiesTexts[Random.Range(0, casualtiesTexts.Length)];
+        string text = textFormatOverride ?? casualtiesTexts[Random.Range(0, casualtiesTexts.Length)];
 
         text = string.Format(text, peopleDied, diedPercent);
 
