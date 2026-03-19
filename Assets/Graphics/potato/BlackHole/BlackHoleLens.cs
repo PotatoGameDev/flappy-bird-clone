@@ -13,7 +13,7 @@ using UnityEngine.Rendering;
 /// LensStrength and LensFalloff are tweaked in the Material Inspector.
 ///
 /// </summary>
-[ExecuteAlways]
+//[ExecuteAlways]
 public class BlackHoleLens : MonoBehaviour
 {
     [Tooltip("Material using Custom/BlackHole/GravitationalLens")]

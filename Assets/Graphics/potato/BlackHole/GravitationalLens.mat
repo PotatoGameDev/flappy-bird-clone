@@ -45,16 +45,16 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _DeadzoneRadius: 0.00006383797
+    - _DeadzoneRadius: 0.000100000005
     - _EnableExternalAlpha: 0
-    - _FadeRadius: 0.45771822
+    - _FadeRadius: 0.717
     - _HorizonRadius: 0.0833
     - _LensFalloff: 2.85
     - _LensRadius: 0.62446034
     - _LensStrength: 0.5
     - _ZWrite: 0
     m_Colors:
-    - _BlackHolePos: {r: 0.431569, g: 0.83571506, b: 0, a: 0}
+    - _BlackHolePos: {r: -9, g: -9, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

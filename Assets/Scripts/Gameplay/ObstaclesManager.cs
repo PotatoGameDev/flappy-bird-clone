@@ -21,7 +21,7 @@ public class ObstaclesManager : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (GameplayManager.Instance.Player.Dead())
+        if (GameplayManager.Instance.Player.Dead)
         {
             return;
         }
@@ -47,7 +47,7 @@ public class ObstaclesManager : MonoBehaviour
 
     void Update()
     {
-        if (GameplayManager.Instance.Player.Dead())
+        if (GameplayManager.Instance.Player.Dead)
         {
             return;
         }

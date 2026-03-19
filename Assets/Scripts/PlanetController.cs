@@ -67,7 +67,7 @@ public class PlanetController : MonoBehaviour
 
     void Update()
     {
-        if (!alive)
+        if (Dead)
         {
             rb.linearVelocity = Vector2.zero;
 
@@ -141,12 +141,7 @@ public class PlanetController : MonoBehaviour
     }
 
     // Life
-    private bool alive = true;
-
-    public bool Dead()
-    {
-        return !alive;
-    }
+    public bool Dead { get; set; }
 
     // Controls:
 
@@ -160,7 +155,7 @@ public class PlanetController : MonoBehaviour
 
     public void OnBack(InputAction.CallbackContext ctx)
     {
-        if (!alive) return;
+        if (Dead) return;
         if (ctx.performed)
         {
             Death();
@@ -171,7 +166,7 @@ public class PlanetController : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        if (!alive) return;
+        if (Dead) return;
         if (invincible) return;
 
 
@@ -197,7 +192,7 @@ public class PlanetController : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collider)
     {
-        if (!alive) return;
+        if (Dead) return;
         if (collider.gameObject.CompareTag("BoundaryBack"))
         {
             Death();
@@ -266,7 +261,7 @@ public class PlanetController : MonoBehaviour
     public void Death()
     {
         // Letting know other components that the player died
-        alive = false;
+        Dead = true;
 
         // Hiding the player
         rendr.enabled = false;
