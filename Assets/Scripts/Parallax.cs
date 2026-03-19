@@ -48,7 +48,7 @@ public class Parallax : MonoBehaviour
 
     void Update()
     {
-        if (GameplayManager.Instance.Player.Dead()) return;
+        if (GameplayManager.Instance.Player.Dead) return;
 
         ParallaxBackground leader = initialized[0];
 

@@ -44,20 +44,20 @@ public class GameplayManager : MonoBehaviour
     private long shieldLeft;
 
     private readonly string[] casualtiesTexts = {
-        "{0} died",
-        "{0} killed",
-        "{0} squashed",
-        "{0} evaporated",
-        "{0} lost",
-        "{0} are no more",
-        "{0} are now ex-people",
-        "{0} are poorly",
-        "{0} need some milk",
-        "{0} have a bad feeling about this",
-        "{0} did redeem, ma'am",
-        "{0} have no fun",
-        "{0} perished",
-        "{0} don't get no respect",
+        "{0} died ({1:0}%)",
+        "{0} killed ({1:0}%)",
+        "{0} squashed ({1:0}%)",
+        "{0} evaporated ({1:0}%)",
+        "{0} lost ({1:0}%)",
+        "{0} are no more ({1:0}%)",
+        "{0} are now ex-people ({1:0}%)",
+        "{0} are poorly ({1:0}%)",
+        "{0} need some milk ({1:0}%)",
+        "{0} have a bad feeling about this ({1:0}%)",
+        "{0} did redeem, ma'am ({1:0}%)",
+        "{0} have no fun ({1:0}%)",
+        "{0} perished ({1:0}%)",
+        "{0} don't get no respect ({1:0}%)",
     };
 
     private readonly string[] rotationCasualtiesTexts = {
@@ -141,13 +141,13 @@ public class GameplayManager : MonoBehaviour
     {
         while (true)
         {
-            if (Player.Dead()) break;
+            if (Player.Dead) break;
 
             long increase = level * 100;
             if (increase > 0)
             {
                 currentPopulation += increase;
-                string text = "+" + increase;
+                string text = string.Format("+{0}", increase);
                 populationMessagesManager.Spawn(text, fadingMessagePopulationAddedColor);
                 UpdateLabels();
             }
@@ -160,7 +160,7 @@ public class GameplayManager : MonoBehaviour
         float percent = level / 100f;
         while (true)
         {
-            if (Player.Dead()) break;
+            if (Player.Dead) break;
 
             long increase = (long)(currentPopulation * percent);
             if (increase > 0)
@@ -177,7 +177,7 @@ public class GameplayManager : MonoBehaviour
 
     void Update()
     {
-        if (Player.Dead()) return;
+        if (Player.Dead) return;
 
         float rpm = Player.GetRpm();
         float rpmAbs = Mathf.Abs(rpm);
@@ -191,7 +191,14 @@ public class GameplayManager : MonoBehaviour
             rpmDamped = Mathf.Clamp(rpmDamped, 0f, spinDoctorLeft);
 
             spinDoctorLeft -= rpmDamped;
-            spinDoctorLevelSlider.value = spinDoctorLeft;
+
+            if (!Mathf.Approximately(spinDoctorLevelSlider.value, spinDoctorLeft))
+            {
+                // this is in "if" because we don't want to reset the value every frame, maybe causing 
+                // canvas rebuild
+                spinDoctorLevelSlider.value = spinDoctorLeft;
+            }
+
             if (spinDoctorLeft <= 0f)
             {
                 spinDoctorLevelSliderFill.SetActive(false);
@@ -243,12 +250,12 @@ public class GameplayManager : MonoBehaviour
 
         AddPopulationLossText(peopleDied);
 
-        KillPopulation((int)peopleDied);
+        KillPopulation(peopleDied);
 
         return peopleDied;
     }
 
-    private void KillPopulation(int dead)
+    private void KillPopulation(long dead)
     {
         if (currentPopulation <= dead)
         {
@@ -267,7 +274,7 @@ public class GameplayManager : MonoBehaviour
         }
     }
 
-    public void RotationalDamage(int dead)
+    public void RotationalDamage(long dead)
     {
         AddPopulationLossTextShort(dead);
 
@@ -278,18 +285,16 @@ public class GameplayManager : MonoBehaviour
     {
         float diedPercent = Mathf.Floor(peopleDied / (float)(peopleDied + currentPopulation) * 100f);
 
-        string text = casualtiesTexts[Random.Range(0, casualtiesTexts.Length - 1)];
+        string text = casualtiesTexts[Random.Range(0, casualtiesTexts.Length)];
 
-        text += " (" + diedPercent.ToString("0") + "%)"; // "0" removes the decimal part
-
-        text = string.Format(text, peopleDied);
+        text = string.Format(text, peopleDied, diedPercent);
 
         populationMessagesManager.Spawn(text, fadingMessageCasualtiesColor);
     }
 
     private void AddPopulationLossTextShort(long peopleDied)
     {
-        string text = rotationCasualtiesTexts[Random.Range(0, rotationCasualtiesTexts.Length - 1)];
+        string text = rotationCasualtiesTexts[Random.Range(0, rotationCasualtiesTexts.Length)];
 
         text = string.Format(text, peopleDied);
 
@@ -328,8 +333,7 @@ public class GameplayManager : MonoBehaviour
 
     private void AddEnergyCollectedText(int energyAdded)
     {
-        string text = "+" + energyAdded + "GW";
-
+        string text = string.Format("+{0}GW", energyAdded);
         energyMessagesManager.Spawn(text, fadingMessageEnergyColor);
     }
 

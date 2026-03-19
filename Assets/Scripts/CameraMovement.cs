@@ -16,7 +16,7 @@ public class CameraMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (GameplayManager.Instance.Player.Dead())
+        if (GameplayManager.Instance.Player.Dead)
         {
             return;
         }

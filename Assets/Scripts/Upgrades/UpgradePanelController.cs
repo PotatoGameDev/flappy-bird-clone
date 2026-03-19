@@ -63,7 +63,7 @@ public class UpgradePanelController : MonoBehaviour
         levelLabel.text = u.Level.ToString();
 
         // TODO: remove when upgrades are ready:
-        if (u.Ident == UpgradeId.AccretioSuction || u.Ident == UpgradeId.StarLifting || u.Ident == UpgradeId.ToorboBoost)
+        if (u.Ident == UpgradeId.ToorboBoost)
         {
             upgradeButton.interactable = false;
             buttonLabel.text = "UNAVAILABLE";
