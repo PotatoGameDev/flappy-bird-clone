@@ -40,8 +40,9 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    public void PlayCollect()
+    public void PlayCollect(float pitch)
     {
+        collectAudioSource.pitch = pitch;
         collectAudioSource.Play();
     }
 
