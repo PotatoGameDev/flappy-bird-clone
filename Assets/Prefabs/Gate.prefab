@@ -681,8 +681,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7208978355929989724}
   - {fileID: 8567531709423854898}
+  - {fileID: 7208978355929989724}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1842447415633045965
@@ -743,8 +743,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5453bcb39a20a4cbe96c8ba49c378597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObstacleController
-  topEnergyBallSpaner: {fileID: 5242988345428566987}
-  bottomEnergyBallSpaner: {fileID: 8965463018589220296}
+  topEnergyBallSpawner: {fileID: 8567531709423854898}
+  bottomEnergyBallSpawner: {fileID: 7208978355929989724}
   energyBallPrefab: {fileID: 2164918874062921971, guid: 8ef246984dd6b7b12b760712181df773, type: 3}
 --- !u!1 &6447914222976409509
 GameObject:

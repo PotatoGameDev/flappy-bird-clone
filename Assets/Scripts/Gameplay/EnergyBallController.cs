@@ -1,11 +1,14 @@
 using UnityEngine;
 using PotatoGameDev.Pool;
+using System.Collections;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(CircleCollider2D))]
+[RequireComponent(typeof(SpriteRenderer))]
 public class EnergyBallController : PooledInstance
 {
     private readonly float SHRINKING_DISTANCE = 2f;
+    private readonly WaitForSeconds TIMEOUT = new(5);
 
     public EnergyType Type { get; set; }
     public Vector2? Target { get; set; }
@@ -17,6 +20,9 @@ public class EnergyBallController : PooledInstance
     public int energyValue = 1;
 
     private CircleCollider2D col;
+    private SpriteRenderer rendr;
+
+    private Coroutine timeout;
 
     void Awake()
     {
@@ -24,6 +30,7 @@ public class EnergyBallController : PooledInstance
         initialScale = transform.localScale;
 
         col = GetComponent<CircleCollider2D>();
+        rendr = GetComponent<SpriteRenderer>();
     }
 
     void FixedUpdate()
@@ -65,6 +72,12 @@ public class EnergyBallController : PooledInstance
         }
     }
 
+    public new void Release()
+    {
+        StopCoroutine(timeout);
+        base.Release();
+    }
+
     public new void Init()
     {
         // Start the looped animation from random frame:
@@ -73,11 +86,25 @@ public class EnergyBallController : PooledInstance
         anim.Play(0, 0, Random.value);
         Target = null;
         Type = EnergyType.CollectEnergy;
+
+        timeout = StartCoroutine(Timeout());
+    }
+
+    IEnumerator Timeout()
+    {
+        yield return TIMEOUT;
+        Release();
     }
 
     public bool CanPlace(Vector2 position, LayerMask blockingLayer)
     {
         return Physics2D.OverlapBox(position + col.offset, Vector2.one * col.radius, 0f, blockingLayer) == null;
+    }
+
+    public void SetColor(Color color, int value)
+    {
+        rendr.color = color;
+        energyValue = value;
     }
 }
 
