@@ -7,13 +7,14 @@ public class EnergyBallController : PooledInstance
 {
     private readonly float SHRINKING_DISTANCE = 2f;
 
-    public bool FollowPlayer { get; set; }
-    public bool FollowTarget { get; set; }
-    public Vector2 Target { get; set; }
+    public EnergyType Type { get; set; }
+    public Vector2? Target { get; set; }
     private Animator anim;
     private Vector3 initialScale;
     private float speed = 0.1f;
     private static readonly float initialSpeed = 0.1f;
+
+    public int energyValue = 1;
 
     private CircleCollider2D col;
 
@@ -27,9 +28,7 @@ public class EnergyBallController : PooledInstance
 
     void FixedUpdate()
     {
-        Debug.Assert(!FollowPlayer || !FollowTarget, "Cannot follow both player and target, check the logic");
-
-        if (FollowPlayer && !GameplayManager.Instance.Player.Dead)
+        if (Type == EnergyType.PipeEnergy && !GameplayManager.Instance.Player.Dead)
         {
             transform.position = Vector2.Lerp(transform.position, GameplayManager.Instance.Player.transform.position, speed);
             speed += 0.1f * Time.deltaTime; // This makes the energy ball always catch up to the planet, no matter of it's speed.
@@ -43,10 +42,13 @@ public class EnergyBallController : PooledInstance
             return;
         }
 
-        if (FollowTarget)
+        if (Type == EnergyType.CollectEnergy && Target != null)
         {
-            transform.position = Vector2.Lerp(transform.position, Target, speed);
-            return;
+            if (Target is Vector2 target)
+            {
+                transform.position = Vector2.Lerp(transform.position, target, speed);
+                return;
+            }
         }
     }
 
@@ -54,6 +56,10 @@ public class EnergyBallController : PooledInstance
     {
         if (collider.CompareTag("Player") && !GameplayManager.Instance.Player.Dead)
         {
+            if (Type == EnergyType.CollectEnergy)
+            {
+                GameplayManager.Instance.scoopedEnergy += energyValue;
+            }
             SoundManager.Instance.PlayCollect();
             Release();
         }
@@ -65,12 +71,17 @@ public class EnergyBallController : PooledInstance
         speed = initialSpeed;
         transform.localScale = initialScale;
         anim.Play(0, 0, Random.value);
-        FollowPlayer = false;
-        FollowTarget = false;
+        Target = null;
+        Type = EnergyType.CollectEnergy;
     }
 
     public bool CanPlace(Vector2 position, LayerMask blockingLayer)
     {
         return Physics2D.OverlapBox(position + col.offset, Vector2.one * col.radius, 0f, blockingLayer) == null;
     }
+}
+
+public enum EnergyType
+{
+    PipeEnergy, CollectEnergy
 }
