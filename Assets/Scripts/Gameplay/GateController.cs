@@ -1,11 +1,12 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using PotatoGameDev.Pool;
 
 public class GateController : PooledInstance
 {
-    [SerializeField] private Transform topEnergyBallSpaner;
-    [SerializeField] private Transform bottomEnergyBallSpaner;
+    [SerializeField] private Transform topEnergyBallSpawner;
+    [SerializeField] private Transform bottomEnergyBallSpawner;
 
     [SerializeField] private EnergyBallController energyBallPrefab;
 
@@ -24,27 +25,33 @@ public class GateController : PooledInstance
 
         float timePerEnergy = 0.5f /* sec */ / energyPerGate;
 
-        for (int i = 0; i < energyPerGate; i++)
+        Stack<EnergyBallController> energyPortions = EnergyBallManager.Instance.GetForTotal(energyPerGate);
+
+        int i = 0;
+        while (energyPortions.Count > 0)
         {
             if (i % 2 == 0)
             {
-                CreateBall(topEnergyBallSpaner);
+                EnergyBallController ball = energyPortions.Pop();
+                ball.Init();
+
+                ball.transform.position = topEnergyBallSpawner.position + new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0f);
+                ball.Type = EnergyType.PipeEnergy;
                 yield return new WaitForSeconds(timePerEnergy / 2f);
             }
             else
             {
-                CreateBall(bottomEnergyBallSpaner);
+                EnergyBallController ball = energyPortions.Pop();
+                ball.Init();
+                ball.transform.position = bottomEnergyBallSpawner.position + new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0f);
+                ball.Type = EnergyType.PipeEnergy;
                 yield return new WaitForSeconds(timePerEnergy / 2f);
             }
+            i++;
         }
     }
 
     private void CreateBall(Transform source)
     {
-        EnergyBallController ball = InstancePoolsManager.Instance.EnergyBallControllerPool.Get();
-        ball.Init();
-
-        ball.transform.position = source.position + new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0f);
-        ball.Type = EnergyType.PipeEnergy;
     }
 }

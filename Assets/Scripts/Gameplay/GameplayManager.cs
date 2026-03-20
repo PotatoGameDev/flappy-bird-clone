@@ -18,7 +18,7 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI gateCounterLabel;
     [SerializeField] private TextMeshProUGUI energyLabel;
 
-    private int gateCount = 0;
+    public int GateCount { get; set; } = 0;
 
     [SerializeField] private Color fadingMessageCasualtiesColor;
     [SerializeField] private Color fadingMessageEnergyColor;
@@ -212,7 +212,7 @@ public class GameplayManager : MonoBehaviour
     private void UpdateLabels()
     {
         populationLabel.SetText("POP: {0}", currentPopulation);
-        gateCounterLabel.SetText("{0}", gateCount);
+        gateCounterLabel.SetText("{0}", GateCount);
         energyLabel.SetText(" {0} GW", GameManager.Instance.CollectedEnergy);
         UpdateRpmLabel();
     }
@@ -310,7 +310,7 @@ public class GameplayManager : MonoBehaviour
 
     public void CollectEnergy()
     {
-        gateCount++;
+        GateCount++;
 
         // Initial level is 0, so we need to add 1.
         int collectedEnergy = EnergyPerGate();

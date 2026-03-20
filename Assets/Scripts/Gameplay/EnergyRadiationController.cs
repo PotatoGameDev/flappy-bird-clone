@@ -30,7 +30,9 @@ public class EnergyRadiationController : MonoBehaviour
 
             for (int i = 0; i < energyCount; i++)
             {
-                EnergyBallController ball = InstancePoolsManager.Instance.EnergyBallControllerPool.Get();
+                EnergyBallController ball = EnergyBallManager.Instance.GetRandom(
+                        GameplayManager.Instance.GateCount
+                );
                 ball.Init();
                 ball.transform.position = spawnPosition.position
                     + new Vector3(Random.Range(-1, 2), Random.Range(-1, 2), 0f);
