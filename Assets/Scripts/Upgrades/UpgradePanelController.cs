@@ -61,13 +61,6 @@ public class UpgradePanelController : MonoBehaviour
 
         // Update the level label
         levelLabel.text = u.Level.ToString();
-
-        // TODO: remove when upgrades are ready:
-        if (u.Ident == UpgradeId.ToorboBoost)
-        {
-            upgradeButton.interactable = false;
-            buttonLabel.text = "UNAVAILABLE";
-        }
     }
 
     void HandleUpgrade(Upgrade upgrade)

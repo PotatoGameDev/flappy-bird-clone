@@ -77,8 +77,7 @@ public class UpgradesManager : MonoBehaviour
         [UpgradeId.ToorboBoost] = new(
                 UpgradeId.ToorboBoost,
                 "Toorbo Boost",
-                10,
-                2
+                10
                 ),
         [UpgradeId.EnergyShield] = new(
                 UpgradeId.EnergyShield,

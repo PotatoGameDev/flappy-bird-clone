@@ -9,8 +9,12 @@ public class PlanetController : MonoBehaviour
 
     private readonly WaitForSeconds EVERY_SECOND = new(1);
 
-    public float speed = 5f;
+    // This is the speed param that influences camera movement and other items. That's why it's internal, not private - other code has to know.
+    internal float speed = 0f;
+    [SerializeField] private float initialSpeed = 5f;
+
     [SerializeField] private float speedIncrease = 0.1f;
+    internal float ToorboBoost { get; set; }
 
     [SerializeField]
     private float jumpForce = 10f;
@@ -71,6 +75,8 @@ public class PlanetController : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("Planet start");
+
         burningEffect.SetActive(false);
 
         // Start updating rotational penalties
@@ -78,10 +84,12 @@ public class PlanetController : MonoBehaviour
 
         // Damage for getting too close to the sun or to the black hole
         StartCoroutine(UpdateOutOfBoundsDamage());
+
     }
 
     void Update()
     {
+        Debug.Log("Planet update");
         if (Dead)
         {
             rb.linearVelocity = Vector2.zero;
@@ -89,14 +97,24 @@ public class PlanetController : MonoBehaviour
             return;
         }
 
+        if (speed == 0f)
+        {
+            // This is to manage the problem of FixedUpdate in camera script running before this method.
+            // That caused camera to be initially slightly faster than the planet... 
+            // This way, the camera starts with 0 speed.
+            speed = initialSpeed;
+        }
+
+        float effectiveSpeed = speed + ToorboBoost;
+
         if (currentJumpForce > 0f)
         {
-            rb.linearVelocity = new Vector2(speed, currentJumpForce);
+            rb.linearVelocity = new Vector2(effectiveSpeed, currentJumpForce);
             currentJumpForce = 0f;
         }
         else
         {
-            rb.linearVelocity = new Vector2(speed, rb.linearVelocity.y);
+            rb.linearVelocity = new Vector2(effectiveSpeed, rb.linearVelocity.y);
         }
 
 
@@ -109,15 +127,6 @@ public class PlanetController : MonoBehaviour
 
         float deathHeightBottom = Camera.main.transform.position.y - height / 2;
         float dangerHeightBottom = deathHeightBottom + borderDangerMargin;
-
-        /*
-        if (transform.position.y <= deathHeightBottom || transform.position.y >= deathHeightTop)
-        {
-            // The planet is below death threshold, game over
-            Death();
-            return;
-        }
-        */
 
         float outOfBoundsDamagePerSecond = 0f;
         bool blackHoleDamage = false;
@@ -166,8 +175,8 @@ public class PlanetController : MonoBehaviour
             burningEffect.SetActive(false);
             rendr.color = originalColor;
         }
-    }
 
+    }
 
     private IEnumerator UpdateRorationalPenalties()
     {
@@ -390,4 +399,5 @@ public class PlanetController : MonoBehaviour
     {
         Destroy(gameObject);
     }
+
 }
