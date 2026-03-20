@@ -67,9 +67,21 @@ public class EnergyBallController : PooledInstance
             {
                 GameplayManager.Instance.scoopedEnergy += energyValue;
             }
-            SoundManager.Instance.PlayCollect();
+            SoundManager.Instance.PlayCollect(GetPitch());
             Release();
         }
+    }
+
+    private float GetPitch()
+    {
+        return energyValue switch
+        {
+            1000 => 3f,
+            100 => 2f,
+            10 => 1.5f,
+            1 => 1f,
+            _ => 1f,
+        };
     }
 
     public new void Release()
