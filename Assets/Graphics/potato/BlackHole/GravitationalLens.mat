@@ -45,9 +45,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _DeadzoneRadius: 0.000100000005
+    - _DeadzoneRadius: 0.00008333334
     - _EnableExternalAlpha: 0
-    - _FadeRadius: 0.717
+    - _FadeRadius: 0.5975
     - _HorizonRadius: 0.0833
     - _LensFalloff: 2.85
     - _LensRadius: 0.62446034

@@ -45,6 +45,6 @@ public class GateController : PooledInstance
         ball.Init();
 
         ball.transform.position = source.position + new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0f);
-        ball.FollowPlayer = true;
+        ball.Type = EnergyType.PipeEnergy;
     }
 }

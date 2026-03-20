@@ -64,6 +64,10 @@ public class PlanetController : MonoBehaviour
     private float currentSunStarCasualties = 0f;
     private float currentBlackHoleCasualties = 0f;
 
+    private float rotationShake = 0f;
+    private float boundaryDamageShake = 0f;
+    private float speedShake = 0f;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -75,8 +79,6 @@ public class PlanetController : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("Planet start");
-
         burningEffect.SetActive(false);
 
         // Start updating rotational penalties
@@ -89,7 +91,6 @@ public class PlanetController : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("Planet update");
         if (Dead)
         {
             rb.linearVelocity = Vector2.zero;
@@ -107,6 +108,9 @@ public class PlanetController : MonoBehaviour
 
         float effectiveSpeed = speed + ToorboBoost;
 
+        // Shake for speed, max 1.0 for speed 30. start with 7.
+        speedShake = Mathf.Lerp(0f, 1f, (effectiveSpeed - 7f) / 30f);
+
         if (currentJumpForce > 0f)
         {
             rb.linearVelocity = new Vector2(effectiveSpeed, currentJumpForce);
@@ -120,6 +124,7 @@ public class PlanetController : MonoBehaviour
 
         // Calculating casualties due to being too close to the boundary
         float height = Camera.main.orthographicSize * 2f;
+        boundaryDamageShake = 0f;
 
         // TODO If i switch to moving camera (that follows the player) then there might be a problem
         float deathHeightTop = Camera.main.transform.position.y + height / 2;
@@ -130,6 +135,7 @@ public class PlanetController : MonoBehaviour
 
         float outOfBoundsDamagePerSecond = 0f;
         bool blackHoleDamage = false;
+
         if (transform.position.y <= dangerHeightBottom)
         {
             // The planet is below damage threshold, should start getting damage
@@ -166,6 +172,14 @@ public class PlanetController : MonoBehaviour
                     currentSunStarCasualties += casualties;
                 }
 
+                // Adding sustained shake, up to 1.0 for 5000 casualties
+                // We add it here to simplify ifs, one of them will be 0f.
+                boundaryDamageShake = Mathf.Lerp(
+                        0,
+                        1,
+                        (currentSunStarCasualties + currentBlackHoleCasualties) / 5000
+                );
+
                 SoundManager.Instance.PlayScreams(screamsVolume);
             }
             burningEffect.SetActive(true);
@@ -176,6 +190,16 @@ public class PlanetController : MonoBehaviour
             rendr.color = originalColor;
         }
 
+        float totalShake = boundaryDamageShake + rotationShake + speedShake;
+        totalShake = Mathf.Clamp(totalShake, 0f, 2f);
+        if (totalShake > 0f)
+        {
+            EffectsManager.Instance.StartSustainedShake(totalShake);
+        }
+        else
+        {
+            EffectsManager.Instance.StopSustainedShake();
+        }
     }
 
     private IEnumerator UpdateRorationalPenalties()
@@ -184,6 +208,7 @@ public class PlanetController : MonoBehaviour
         {
             float rpmAbs = Mathf.Abs(GetRpm());
             float penaltyRpm = 0f;
+            rotationShake = 0f;
 
             foreach (ParticleSystem psl in spinDoctorParticleSystemsLeft)
             {
@@ -205,6 +230,9 @@ public class PlanetController : MonoBehaviour
 
                     // for each rpmAbs above threshold we kill 100 people
                     GameplayManager.Instance.RotationalDamage((int)(penaltyRpm * 100));
+
+                    // Add shake, max 1 for 50RPM, starting with 10 RPM 
+                    rotationShake = Mathf.Lerp(0, 1, (penaltyRpm - 10) / 50f);
                 }
 
                 float rpmDamped = GameplayManager.Instance.SpinDoctorUsagePerSecond;
@@ -296,6 +324,9 @@ public class PlanetController : MonoBehaviour
         float hitFraction = hitPercent / 100f;
 
         long peopleDied = GameplayManager.Instance.TakeHit(hitFraction, 1000);
+
+        // Shaking the screen in direction of the collision
+        EffectsManager.Instance.Shake(collision.relativeVelocity);
 
         if (peopleDied > 0)
         {

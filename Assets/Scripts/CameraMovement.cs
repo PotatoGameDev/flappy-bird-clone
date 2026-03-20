@@ -14,6 +14,7 @@ public class CameraMovement : MonoBehaviour
         cam = GetComponent<Camera>();
     }
 
+    /*
     void FixedUpdate()
     {
         if (GameplayManager.Instance.Player.Dead)
@@ -25,6 +26,7 @@ public class CameraMovement : MonoBehaviour
         pos.x += GameplayManager.Instance.Player.speed * Time.deltaTime;
         transform.position = pos;
     }
+    */
 
     void Update()
     {

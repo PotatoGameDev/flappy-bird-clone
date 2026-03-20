@@ -43,6 +43,8 @@ public class GameplayManager : MonoBehaviour
     private static readonly long SHIELD_AMOUNT_PER_LEVEL = 1000;
     private long shieldLeft;
 
+    public int scoopedEnergy = 0;
+
     private readonly string[] casualtiesTexts = {
         "{0} died ({1:0}%)",
         "{0} killed ({1:0}%)",
@@ -86,21 +88,7 @@ public class GameplayManager : MonoBehaviour
 
         UpdateLabels();
 
-        // AndroidSlavery
-        int androidSlaveryLevel = UpgradesManager.Instance.GetUpgrade(UpgradeId.AndroidSlavery).Level;
-        if (androidSlaveryLevel > 0)
-        {
-            StartCoroutine(DoAndroidSlavery(androidSlaveryLevel));
-        }
-
-        // VyagraEnergizingTherapy
-        int vyagraEnergizingTherapy = UpgradesManager.Instance.GetUpgrade(
-                UpgradeId.VyagraEnergizingTherapy
-                ).Level;
-        if (vyagraEnergizingTherapy > 0)
-        {
-            StartCoroutine(DoVyagraEnergizingTherapy(vyagraEnergizingTherapy));
-        }
+        StartCoroutine(DoEverySecondActions());
 
         // SpinDoctor
         int spinDoctorLevel = UpgradesManager.Instance.GetUpgrade(UpgradeId.SpinDoctor).Level;
@@ -137,43 +125,53 @@ public class GameplayManager : MonoBehaviour
         return shieldLeft > 0;
     }
 
-    IEnumerator DoAndroidSlavery(int level)
+    IEnumerator DoEverySecondActions()
     {
+
+        int androidSlaveryLevel = UpgradesManager.Instance.GetUpgrade(UpgradeId.AndroidSlavery).Level;
+        long slaveryIncrease = androidSlaveryLevel * 100;
+
+        int vyagraEnergizingTherapyLevel = UpgradesManager.Instance.GetUpgrade(UpgradeId.VyagraEnergizingTherapy).Level;
+        float vyagraEnergizingTherapyPercent = vyagraEnergizingTherapyLevel / 100f;
+
         while (true)
         {
             if (Player.Dead) break;
 
-            long increase = level * 100;
-            if (increase > 0)
-            {
-                currentPopulation += increase;
-                string text = string.Format("+{0}", increase);
-                populationMessagesManager.Spawn(text, fadingMessagePopulationAddedColor);
-                UpdateLabels();
-            }
-            yield return EVERY_SECOND;
-        }
-    }
+            // AndroidSlavery
 
-    IEnumerator DoVyagraEnergizingTherapy(int level)
-    {
-        float percent = level / 100f;
-        while (true)
-        {
-            if (Player.Dead) break;
-
-            long increase = (long)(currentPopulation * percent);
-            if (increase > 0)
+            if (slaveryIncrease > 0)
             {
-                currentPopulation += increase;
-                string text = "+" + increase;
+                currentPopulation += slaveryIncrease;
+                string text = string.Format("+{0}", slaveryIncrease);
                 populationMessagesManager.Spawn(text, fadingMessagePopulationAddedColor);
                 UpdateLabels();
             }
 
+            // VyagraEnergizingTherapy
+
+            long vyagraIncrease = (long)(currentPopulation * vyagraEnergizingTherapyPercent);
+            if (vyagraIncrease > 0)
+            {
+                currentPopulation += vyagraIncrease;
+                string text = "+" + vyagraIncrease;
+                populationMessagesManager.Spawn(text, fadingMessagePopulationAddedColor);
+                UpdateLabels();
+            }
+
+            // Add scooped energy
+            if (scoopedEnergy > 0)
+            {
+                GameManager.Instance.CollectedEnergy += scoopedEnergy;
+                AddEnergyCollectedText(scoopedEnergy);
+                UpdateLabels();
+                scoopedEnergy = 0;
+            }
+
             yield return EVERY_SECOND;
         }
     }
+
 
     void Update()
     {
