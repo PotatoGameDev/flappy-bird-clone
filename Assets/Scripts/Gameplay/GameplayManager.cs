@@ -196,7 +196,7 @@ public class GameplayManager : MonoBehaviour
             {
                 // this is in "if" because we don't want to reset the value every frame, maybe causing 
                 // canvas rebuild
-                spinDoctorLevelSlider.value = spinDoctorLeft;
+                spinDoctorLevelSlider.SetValueWithoutNotify(spinDoctorLeft);
             }
 
             if (spinDoctorLeft <= 0f)
@@ -234,7 +234,7 @@ public class GameplayManager : MonoBehaviour
 
         peopleDied = peopleDied > shieldLeft ? (peopleDied - shieldLeft) : 0;
         shieldLeft = shieldLeft > peopleDied ? (shieldLeft - peopleDied) : 0;
-        shieldLevelSlider.value = shieldLeft;
+        shieldLevelSlider.SetValueWithoutNotify(shieldLeft);
         if (shieldLeft <= 0f)
         {
             shieldLevelSliderFill.SetActive(false);
