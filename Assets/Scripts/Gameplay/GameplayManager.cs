@@ -40,7 +40,7 @@ public class GameplayManager : MonoBehaviour
 
     [SerializeField] private Slider shieldLevelSlider;
     [SerializeField] private GameObject shieldLevelSliderFill;
-    private static readonly long SHIELD_AMOUNT_PER_LEVEL = 1000;
+    private static readonly long SHIELD_AMOUNT_PER_LEVEL = 1000000;
     private long shieldLeft;
 
     public int scoopedEnergy = 0;
@@ -230,15 +230,19 @@ public class GameplayManager : MonoBehaviour
 
         if (peopleDied > currentPopulation) peopleDied = currentPopulation;
 
-        peopleDied = peopleDied > shieldLeft ? (peopleDied - shieldLeft) : 0;
-        shieldLeft = shieldLeft > peopleDied ? (shieldLeft - peopleDied) : 0;
+        long newPeopleDied = peopleDied > shieldLeft ? (peopleDied - shieldLeft) : 0;
+        long newShieldLeft = shieldLeft > peopleDied ? (shieldLeft - peopleDied) : 0;
+
+        peopleDied = newPeopleDied;
+        shieldLeft = newShieldLeft;
+
         shieldLevelSlider.SetValueWithoutNotify(shieldLeft);
         if (shieldLeft <= 0f)
         {
             shieldLevelSliderFill.SetActive(false);
         }
 
-        if (addLossText)
+        if (addLossText && peopleDied > 0)
         {
             // TODO Move this to something higher, it should not be generated here
             AddPopulationLossText(peopleDied);
