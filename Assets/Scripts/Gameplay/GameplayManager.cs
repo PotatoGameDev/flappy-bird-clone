@@ -43,7 +43,7 @@ public class GameplayManager : MonoBehaviour
     private static readonly long SHIELD_AMOUNT_PER_LEVEL = 1000000;
     private long shieldLeft;
 
-    public int scoopedEnergy = 0;
+    public int ScoopedEnergy { get; set; } = 0;
 
     private readonly string[] casualtiesTexts = {
         "{0} died ({1:0}%)",
@@ -134,6 +134,8 @@ public class GameplayManager : MonoBehaviour
         int vyagraEnergizingTherapyLevel = UpgradesManager.Instance.GetUpgrade(UpgradeId.VyagraEnergizingTherapy).Level;
         float vyagraEnergizingTherapyPercent = vyagraEnergizingTherapyLevel / 100f;
 
+        int previousScoopedEnergy = ScoopedEnergy;
+
         while (true)
         {
             if (Player.Dead) break;
@@ -159,14 +161,15 @@ public class GameplayManager : MonoBehaviour
                 UpdateLabels();
             }
 
-            // Add scooped energy
-            if (scoopedEnergy > 0)
+            // Add scooped energy if it is still the same as previous, to debounce
+            if (ScoopedEnergy > 0 && ScoopedEnergy == previousScoopedEnergy)
             {
-                GameManager.Instance.CollectedEnergy += scoopedEnergy;
-                AddEnergyCollectedText(scoopedEnergy);
+                AddEnergyCollectedText(ScoopedEnergy);
                 UpdateLabels();
-                scoopedEnergy = 0;
+                ScoopedEnergy = 0;
             }
+
+            previousScoopedEnergy = ScoopedEnergy;
 
             yield return EVERY_SECOND;
         }

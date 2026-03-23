@@ -10,11 +10,14 @@ namespace PotatoGameDev.Pool
         private readonly Queue<T> pool = new();
         private readonly Transform parent;
 
-        public InstancePool(T prefab, int prewarm, Transform parent = null)
+        public InstancePool(T prefab, Transform parent = null)
         {
             this.prefab = prefab;
             this.parent = parent;
+        }
 
+        public void Preheat(int prewarm)
+        {
             for (int i = 0; i < prewarm; i++)
             {
                 pool.Enqueue(Create());
