@@ -109,7 +109,8 @@ public class PlanetController : MonoBehaviour
         float effectiveSpeed = speed + ToorboBoost;
 
         // Shake for speed, max 1.0 for speed 30. start with 7.
-        speedShake = Mathf.Lerp(0f, 1f, (effectiveSpeed - 7f) / 30f);
+        // Actually lets not add speed shake:
+        //speedShake = Mathf.Lerp(0f, 1f, (effectiveSpeed - 7f) / 30f);
 
         if (currentJumpForce > 0f)
         {

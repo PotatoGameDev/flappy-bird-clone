@@ -16,7 +16,7 @@ public class ObstaclesManager : MonoBehaviour
 
     void Awake()
     {
-        pool = new InstancePool<GateController>(obstaclePrefab, 3, transform);
+        pool = new InstancePool<GateController>(obstaclePrefab, transform);
     }
 
     void FixedUpdate()

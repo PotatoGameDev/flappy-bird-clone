@@ -18,15 +18,12 @@ public class InstancePoolsManager : MonoBehaviour
 
         Instance = this;
 
-        // Non singleton stuff
-        EnergyBallControllerPool = new(energyBallControllerPrefab, 20);
-    }
+        DontDestroyOnLoad(gameObject);
 
-    void OnDestroy()
-    {
-        if (Instance == this)
-        {
-            Instance = null;
-        }
+        // Non singleton stuff
+
+        // Create the new pool, setting this transform as a parent for the pooled instances,
+        // otherwise they will be erased when the scene unloads
+        EnergyBallControllerPool = new(energyBallControllerPrefab, transform);
     }
 }

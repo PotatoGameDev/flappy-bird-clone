@@ -18,6 +18,8 @@ public class LoadingManager : MonoBehaviour
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneToLoad);
         operation.allowSceneActivation = false;
 
+        InstancePoolsManager.Instance.EnergyBallControllerPool.Preheat(50);
+
         while (!operation.isDone)
         {
             float progress = Mathf.Clamp01(operation.progress / 0.9f);
