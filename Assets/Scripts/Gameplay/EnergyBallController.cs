@@ -38,8 +38,8 @@ public class EnergyBallController : PooledInstance
         if (Type == EnergyType.PipeEnergy && !GameplayManager.Instance.Player.Dead)
         {
             transform.position = Vector2.Lerp(transform.position, GameplayManager.Instance.Player.transform.position, speed);
-            speed += 0.1f * Time.deltaTime; // This makes the energy ball always catch up to the planet, no matter of it's speed.
-                                            // The energy ball will keep accelerating, eventually going faster than the planet.
+            speed += 0.1f * Time.fixedDeltaTime; // This makes the energy ball always catch up to the planet, no matter of it's speed.
+                                                 // The energy ball will keep accelerating, eventually going faster than the planet.
 
             float distToPlayer = Vector2.Distance(transform.position, GameplayManager.Instance.Player.transform.position);
             if (distToPlayer < SHRINKING_DISTANCE)

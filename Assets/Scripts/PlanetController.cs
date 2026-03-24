@@ -9,6 +9,8 @@ public class PlanetController : MonoBehaviour
 
     private readonly WaitForSeconds EVERY_SECOND = new(1);
 
+    [SerializeField] private bool god;
+
     // This is the speed param that influences camera movement and other items. That's why it's internal, not private - other code has to know.
     internal float speed = 0f;
     [SerializeField] private float initialSpeed = 5f;
@@ -87,6 +89,12 @@ public class PlanetController : MonoBehaviour
         // Damage for getting too close to the sun or to the black hole
         StartCoroutine(UpdateOutOfBoundsDamage());
 
+        if (god)
+        {
+            rb.gravityScale = 0f;
+            speed = 0f;
+        }
+
     }
 
     void Update()
@@ -97,6 +105,9 @@ public class PlanetController : MonoBehaviour
 
             return;
         }
+
+        if (god)
+            return;
 
         if (speed == 0f)
         {

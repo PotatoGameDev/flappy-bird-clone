@@ -4,8 +4,17 @@ public class Follow : MonoBehaviour
 {
     public Transform target;
 
-    void Update()
+    void FixedUpdate()
     {
-        transform.position = new Vector3(target.position.x, transform.position.y, transform.position.z);
+        if (GameplayManager.Instance.Player.Dead)
+        {
+            return;
+        }
+
+        Vector3 pos = transform.position;
+        pos.x += GameplayManager.Instance.Player.speed * Time.fixedDeltaTime;
+        transform.position = pos;
     }
 }
+
+
