@@ -14,19 +14,7 @@ public class CameraMovement : MonoBehaviour
         cam = GetComponent<Camera>();
     }
 
-    /*
-    void FixedUpdate()
-    {
-        if (GameplayManager.Instance.Player.Dead)
-        {
-            return;
-        }
 
-        Vector3 pos = transform.position;
-        pos.x += GameplayManager.Instance.Player.speed * Time.deltaTime;
-        transform.position = pos;
-    }
-    */
 
     void Update()
     {

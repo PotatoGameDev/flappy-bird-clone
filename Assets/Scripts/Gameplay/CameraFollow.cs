@@ -8,7 +8,7 @@ public class CameraTarget : MonoBehaviour
             return;
 
         Vector3 pos = transform.position;
-        pos.x += GameplayManager.Instance.Player.speed * Time.deltaTime;
+        pos.x += GameplayManager.Instance.Player.speed * Time.fixedDeltaTime;
         transform.position = pos;
     }
 }
