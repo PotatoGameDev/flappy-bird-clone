@@ -52,6 +52,7 @@ public class SwarmController : MonoBehaviour
     void FixedUpdate()
     {
         Debug.Assert(boids.Length > 0, "Add SwarmFollow children");
+
         foreach (SwarmFollow boid in boids)
         {
             // --- Accumulate steering forces as *desired directions*, not displacements ---
@@ -140,6 +141,10 @@ public class SwarmController : MonoBehaviour
         int count = 0;
         foreach (Transform n in obstacles)
         {
+            if (n == null)
+            {
+                continue;
+            }
             float dist = Vector2.Distance(boid.Position, n.position);
             if (dist < obstacleRadius && dist > 0.0001f)
             {
