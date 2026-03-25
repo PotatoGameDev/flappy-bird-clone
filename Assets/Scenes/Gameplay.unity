@@ -5040,6 +5040,23 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 148050846}
+  - {fileID: 1794899974}
+  - {fileID: 1423467451}
+  - {fileID: 1034116018}
+  - {fileID: 1120001657}
+  - {fileID: 1012685399}
+  - {fileID: 1083114693}
+  - {fileID: 1302876978}
+  - {fileID: 512173945}
+  - {fileID: 1157912085}
+  - {fileID: 672824662}
+  - {fileID: 1730147033}
+  - {fileID: 1406046908}
+  - {fileID: 845891725}
+  - {fileID: 782278899}
+  - {fileID: 2033965514}
+  - {fileID: 173166249}
   - {fileID: 335913718}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5910,6 +5927,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
   m_PrefabInstance: {fileID: 205403695}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &173166250 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8720525069952324729, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
+  m_PrefabInstance: {fileID: 205403695}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cdd68670385fae5c8de64be657e7eb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SwarmFollow
 --- !u!1 &201407213
 GameObject:
   m_ObjectHideFlags: 0
@@ -5935,7 +5963,7 @@ Transform:
   m_GameObject: {fileID: 201407213}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.37, y: -4.69, z: 0}
+  m_LocalPosition: {x: 3.99, y: -3.98, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5947,7 +5975,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 335913718}
+    m_TransformParent: {fileID: 45899576}
     m_Modifications:
     - target: {fileID: 3590842243289261481, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Mass
@@ -5996,6 +6024,10 @@ PrefabInstance:
     - target: {fileID: 5648954649541628055, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: offsetNoiseAmount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6511210190730210200, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
+      propertyPath: bulletSpeed
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 7983938652923724378, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Name
@@ -6052,7 +6084,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 335913718}
+    m_TransformParent: {fileID: 45899576}
     m_Modifications:
     - target: {fileID: 3590842243289261481, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Mass
@@ -6102,17 +6134,21 @@ PrefabInstance:
       propertyPath: offsetNoiseAmount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6511210190730210200, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
+      propertyPath: bulletSpeed
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 7983938652923724378, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Name
       value: FlyingSaucer (8)
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.72
+      value: 1.53
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.01
+      value: 1.0899999
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.z
@@ -16199,23 +16235,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1794899974}
-  - {fileID: 1423467451}
-  - {fileID: 148050846}
-  - {fileID: 1034116018}
-  - {fileID: 1120001657}
-  - {fileID: 1012685399}
-  - {fileID: 1083114693}
-  - {fileID: 1302876978}
-  - {fileID: 512173945}
-  - {fileID: 1157912085}
-  - {fileID: 672824662}
-  - {fileID: 1730147033}
-  - {fileID: 1406046908}
-  - {fileID: 845891725}
-  - {fileID: 782278899}
-  - {fileID: 2033965514}
-  - {fileID: 173166249}
   - {fileID: 462873170}
   - {fileID: 201407214}
   - {fileID: 2042204074}
@@ -16249,9 +16268,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwarmController
   boids:
+  - {fileID: 1736984963}
   - {fileID: 1662571480965669415}
   - {fileID: 1761123398}
-  - {fileID: 1736984963}
   - {fileID: 221607709}
   - {fileID: 1136211542}
   - {fileID: 1389082241}
@@ -16259,16 +16278,33 @@ MonoBehaviour:
   - {fileID: 400241446}
   - {fileID: 1944863206}
   - {fileID: 544667630}
+  - {fileID: 672824663}
+  - {fileID: 1730147034}
+  - {fileID: 1406046909}
+  - {fileID: 845891726}
+  - {fileID: 782278900}
+  - {fileID: 2033965515}
+  - {fileID: 173166250}
   target: {fileID: 1143819637}
   neighborRadius: 0.6
   separationRadius: 2
   separationWeight: 20
   alignmentWeight: 0.6
   cohesionWeight: 1
-  leaderWeight: 2
   offsetNoiseSpeed: 0
   offsetNoiseAmount: 0
-  followSpeed: 10
+  followSpeed: 14
+  leaderWeight: 2
+  obstacleRadius: 5
+  obstacleWeight: 20
+  obstacles:
+  - {fileID: 1789969906}
+  topBorder: {fileID: 327377120}
+  bottomBorder: {fileID: 1135915059}
+  leftBorder: {fileID: 1387378448}
+  rightBorder: {fileID: 0}
+  borderDistance: 3
+  borderWeight: 20
   steeringSmoothing: 0.98
 --- !u!1001 &366141437
 PrefabInstance:
@@ -16276,7 +16312,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 335913718}
+    m_TransformParent: {fileID: 45899576}
     m_Modifications:
     - target: {fileID: 3590842243289261481, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Mass
@@ -16325,6 +16361,10 @@ PrefabInstance:
     - target: {fileID: 5648954649541628055, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: offsetNoiseAmount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6511210190730210200, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
+      propertyPath: bulletSpeed
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 7983938652923724378, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Name
@@ -16381,7 +16421,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 335913718}
+    m_TransformParent: {fileID: 45899576}
     m_Modifications:
     - target: {fileID: 3590842243289261481, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Mass
@@ -16431,17 +16471,21 @@ PrefabInstance:
       propertyPath: offsetNoiseAmount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6511210190730210200, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
+      propertyPath: bulletSpeed
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 7983938652923724378, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Name
       value: FlyingSaucer (4)
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.68000007
+      value: 1.45
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.1
+      value: 1.0899999
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.z
@@ -16696,7 +16740,7 @@ Transform:
   m_GameObject: {fileID: 462873169}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.16, y: 3.78, z: 0}
+  m_LocalPosition: {x: 4, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -21949,7 +21993,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 335913718}
+    m_TransformParent: {fileID: 45899576}
     m_Modifications:
     - target: {fileID: 3590842243289261481, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Mass
@@ -21998,6 +22042,10 @@ PrefabInstance:
     - target: {fileID: 5648954649541628055, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: offsetNoiseAmount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6511210190730210200, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
+      propertyPath: bulletSpeed
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 7983938652923724378, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Name
@@ -22145,7 +22193,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 335913718}
+    m_TransformParent: {fileID: 45899576}
     m_Modifications:
     - target: {fileID: 3590842243289261481, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Mass
@@ -22194,6 +22242,10 @@ PrefabInstance:
     - target: {fileID: 5648954649541628055, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: offsetNoiseAmount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6511210190730210200, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
+      propertyPath: bulletSpeed
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 7983938652923724378, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Name
@@ -22422,6 +22474,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
   m_PrefabInstance: {fileID: 1643749480}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &672824663 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8720525069952324729, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
+  m_PrefabInstance: {fileID: 1643749480}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cdd68670385fae5c8de64be657e7eb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SwarmFollow
 --- !u!1 &756719334
 GameObject:
   m_ObjectHideFlags: 0
@@ -22708,6 +22771,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
   m_PrefabInstance: {fileID: 366141437}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &782278900 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8720525069952324729, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
+  m_PrefabInstance: {fileID: 366141437}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cdd68670385fae5c8de64be657e7eb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SwarmFollow
 --- !u!1 &797911950
 GameObject:
   m_ObjectHideFlags: 0
@@ -22733,7 +22807,7 @@ Transform:
   m_GameObject: {fileID: 797911950}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -11.71, y: 3.78, z: 0}
+  m_LocalPosition: {x: -10.01, y: 2.98, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -22744,6 +22818,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
   m_PrefabInstance: {fileID: 973049819}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &845891726 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8720525069952324729, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
+  m_PrefabInstance: {fileID: 973049819}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cdd68670385fae5c8de64be657e7eb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SwarmFollow
 --- !u!1 &857888256
 GameObject:
   m_ObjectHideFlags: 0
@@ -23320,7 +23405,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 335913718}
+    m_TransformParent: {fileID: 45899576}
     m_Modifications:
     - target: {fileID: 3590842243289261481, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Mass
@@ -23369,6 +23454,10 @@ PrefabInstance:
     - target: {fileID: 5648954649541628055, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: offsetNoiseAmount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6511210190730210200, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
+      propertyPath: bulletSpeed
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 7983938652923724378, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Name
@@ -23715,7 +23804,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 335913718}
+    m_TransformParent: {fileID: 45899576}
     m_Modifications:
     - target: {fileID: 3590842243289261481, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Mass
@@ -23765,17 +23854,21 @@ PrefabInstance:
       propertyPath: offsetNoiseAmount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6511210190730210200, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
+      propertyPath: bulletSpeed
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 7983938652923724378, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Name
       value: FlyingSaucer (9)
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.39
+      value: 1.45
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.58
+      value: 1.0899999
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.z
@@ -23947,7 +24040,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 335913718}
+    m_TransformParent: {fileID: 45899576}
     m_Modifications:
     - target: {fileID: 3590842243289261481, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Mass
@@ -23996,6 +24089,10 @@ PrefabInstance:
     - target: {fileID: 5648954649541628055, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: offsetNoiseAmount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6511210190730210200, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
+      propertyPath: bulletSpeed
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 7983938652923724378, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Name
@@ -24057,7 +24154,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 335913718}
+    m_TransformParent: {fileID: 45899576}
     m_Modifications:
     - target: {fileID: 3590842243289261481, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Mass
@@ -24103,17 +24200,21 @@ PrefabInstance:
       propertyPath: offsetNoiseAmount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6511210190730210200, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
+      propertyPath: bulletSpeed
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 7983938652923724378, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Name
       value: FlyingSaucer (1)
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.41
+      value: 1.45
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.54
+      value: 1.0899999
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.z
@@ -24497,7 +24598,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 335913718}
+    m_TransformParent: {fileID: 45899576}
     m_Modifications:
     - target: {fileID: 3590842243289261481, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Mass
@@ -24543,17 +24644,21 @@ PrefabInstance:
       propertyPath: offsetNoiseAmount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6511210190730210200, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
+      propertyPath: bulletSpeed
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 7983938652923724378, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Name
       value: FlyingSaucer (3)
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.09
+      value: 1.45
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.56
+      value: 1.0899999
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.z
@@ -24683,6 +24788,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
   m_PrefabInstance: {fileID: 1150114181}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1406046909 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8720525069952324729, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
+  m_PrefabInstance: {fileID: 1150114181}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cdd68670385fae5c8de64be657e7eb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SwarmFollow
 --- !u!1 &1409101954
 GameObject:
   m_ObjectHideFlags: 0
@@ -30429,7 +30545,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 335913718}
+    m_TransformParent: {fileID: 45899576}
     m_Modifications:
     - target: {fileID: 3590842243289261481, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Mass
@@ -30478,6 +30594,10 @@ PrefabInstance:
     - target: {fileID: 5648954649541628055, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: offsetNoiseAmount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6511210190730210200, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
+      propertyPath: bulletSpeed
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 7983938652923724378, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Name
@@ -30534,7 +30654,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 335913718}
+    m_TransformParent: {fileID: 45899576}
     m_Modifications:
     - target: {fileID: 3590842243289261481, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Mass
@@ -30583,6 +30703,10 @@ PrefabInstance:
     - target: {fileID: 5648954649541628055, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: offsetNoiseAmount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6511210190730210200, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
+      propertyPath: bulletSpeed
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 7983938652923724378, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Name
@@ -35638,6 +35762,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
   m_PrefabInstance: {fileID: 1649911528}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1730147034 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8720525069952324729, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
+  m_PrefabInstance: {fileID: 1649911528}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cdd68670385fae5c8de64be657e7eb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SwarmFollow
 --- !u!1 &1731755089
 GameObject:
   m_ObjectHideFlags: 0
@@ -40480,7 +40615,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 335913718}
+    m_TransformParent: {fileID: 45899576}
     m_Modifications:
     - target: {fileID: 3590842243289261481, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Mass
@@ -40530,17 +40665,21 @@ PrefabInstance:
       propertyPath: offsetNoiseAmount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6511210190730210200, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
+      propertyPath: bulletSpeed
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 7983938652923724378, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Name
       value: FlyingSaucer (7)
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.76
+      value: 1.37
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.18
+      value: 1.0899999
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.z
@@ -40596,7 +40735,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 335913718}
+    m_TransformParent: {fileID: 45899576}
     m_Modifications:
     - target: {fileID: 3590842243289261481, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Mass
@@ -40646,17 +40785,21 @@ PrefabInstance:
       propertyPath: offsetNoiseAmount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6511210190730210200, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
+      propertyPath: bulletSpeed
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 7983938652923724378, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Name
       value: FlyingSaucer (6)
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 1.45
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.13
+      value: 0.97
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.z
@@ -41721,7 +41864,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 335913718}
+    m_TransformParent: {fileID: 45899576}
     m_Modifications:
     - target: {fileID: 3590842243289261481, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Mass
@@ -41771,17 +41914,21 @@ PrefabInstance:
       propertyPath: offsetNoiseAmount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6511210190730210200, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
+      propertyPath: bulletSpeed
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 7983938652923724378, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Name
       value: FlyingSaucer (2)
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.36
+      value: 1.45
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.53
+      value: 1.0899999
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.z
@@ -42046,6 +42193,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
   m_PrefabInstance: {fileID: 535245687}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2033965515 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8720525069952324729, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
+  m_PrefabInstance: {fileID: 535245687}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cdd68670385fae5c8de64be657e7eb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SwarmFollow
 --- !u!1 &2042204073
 GameObject:
   m_ObjectHideFlags: 0
@@ -42071,7 +42229,7 @@ Transform:
   m_GameObject: {fileID: 2042204073}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -10.86, y: -4.61, z: 0}
+  m_LocalPosition: {x: -9.97, y: -4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -42083,7 +42241,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 335913718}
+    m_TransformParent: {fileID: 45899576}
     m_Modifications:
     - target: {fileID: 3590842243289261481, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Mass
@@ -42137,17 +42295,21 @@ PrefabInstance:
       propertyPath: offsetFromLeader.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6511210190730210200, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
+      propertyPath: bulletSpeed
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 7983938652923724378, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_Name
       value: FlyingSaucer
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 1.45
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.14
       objectReference: {fileID: 0}
     - target: {fileID: 8505191027241216152, guid: eb0508dc943803e478ac5388101d2c66, type: 3}
       propertyPath: m_LocalPosition.z
@@ -42407,6 +42569,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: InstancePoolsManager
       objectReference: {fileID: 0}
+    - target: {fileID: 9138722143102967130, guid: ab4cc410dfe2aa964b2579d7b7c4d4b7, type: 3}
+      propertyPath: bulletControllerPrefab
+      value: 
+      objectReference: {fileID: 2213680125840268772, guid: 0d6f9e4dbe5691cdda2a28875cfdc73f, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

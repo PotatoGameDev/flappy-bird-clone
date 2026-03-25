@@ -77,55 +77,33 @@ public class PathFollow : MonoBehaviour
     void OnDrawGizmos()
     {
         if (waypoints == null || waypoints.Count < 2) return;
-
         Gizmos.color = pathColor;
 
         for (int i = 0; i < waypoints.Count; i++)
         {
-
             if (waypoints[i] == null) continue;
-
             Gizmos.DrawSphere(waypoints[i].position, waypointGizmoRadius);
-
             UnityEditor.Handles.Label(
-                    waypoints[i].position + Vector3.up * 0.3f,
-                    $"WP {i}"
-                    );
+                waypoints[i].position + Vector3.up * 0.3f,
+                $"WP {i}"
+            );
         }
 
-        for (int i = 0; i < waypoints.Count - 1; i++)
-        {
+        int count = waypoints.Count;
+        // How many segments to draw: all loops back to start if loopPath, otherwise stop before last
+        int segmentCount = loopPath ? count : count - 1;
 
-            Vector3 p0 = waypoints[Mathf.Max(i - 1, 0)].position;
+        for (int i = 0; i < segmentCount; i++)
+        {
+            // Wrap all four control points around the waypoint list
+            Vector3 p0 = waypoints[loopPath ? (i - 1 + count) % count : Mathf.Max(i - 1, 0)].position;
             Vector3 p1 = waypoints[i].position;
-            Vector3 p2 = waypoints[i + 1].position;
-            Vector3 p3 = waypoints[Mathf.Min(i + 2, waypoints.Count - 1)].position;
+            Vector3 p2 = waypoints[(i + 1) % count].position;
+            Vector3 p3 = waypoints[loopPath ? (i + 2) % count : Mathf.Min(i + 2, count - 1)].position;
 
             Vector3 prev = CatmullRom(p0, p1, p2, p3, 0f);
-
-
             for (int step = 1; step <= curveResolution; step++)
             {
-                float t = step / (float)curveResolution;
-                Vector3 next = CatmullRom(p0, p1, p2, p3, t);
-                Gizmos.DrawLine(prev, next);
-                prev = next;
-            }
-        }
-
-        if (loopPath && waypoints.Count >= 3)
-        {
-            int last = waypoints.Count - 1;
-            Vector3 p0 = waypoints[last - 1].position;
-            Vector3 p1 = waypoints[last].position;
-            Vector3 p2 = waypoints[0].position;
-            Vector3 p3 = waypoints[1].position;
-
-            Vector3 prev = CatmullRom(p0, p1, p2, p3, 0f);
-
-            for (int step = 1; step <= curveResolution; step++)
-            {
-
                 float t = step / (float)curveResolution;
                 Vector3 next = CatmullRom(p0, p1, p2, p3, t);
                 Gizmos.DrawLine(prev, next);

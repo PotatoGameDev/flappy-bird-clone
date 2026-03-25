@@ -11,6 +11,8 @@ public class GameplayManager : MonoBehaviour
 
     public PlanetController Player { get; set; }
 
+    public LevelType LevelType { get; set; }
+
     private static readonly WaitForSeconds WAIT_2_SECONDS = new(2f);
 
     [SerializeField] private TextMeshProUGUI populationLabel;
@@ -338,7 +340,10 @@ public class GameplayManager : MonoBehaviour
         energyMessagesManager.Spawn(text, fadingMessageEnergyColor);
     }
 
-
 }
 
+public enum LevelType
+{
+    Regular, UfoSwarm
+}
 

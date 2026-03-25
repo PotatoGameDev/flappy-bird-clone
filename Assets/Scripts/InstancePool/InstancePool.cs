@@ -44,6 +44,7 @@ namespace PotatoGameDev.Pool
             }
 
             var obj = pool.Dequeue();
+            // TODO I think init should go here... Not called in the user code.
             obj.gameObject.SetActive(true);
             return obj;
         }

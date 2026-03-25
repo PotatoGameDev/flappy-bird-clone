@@ -20,6 +20,11 @@ public class LoadingManager : MonoBehaviour
 
         InstancePoolsManager.Instance.EnergyBallControllerPool.Preheat(50);
 
+        if (GameplayManager.Instance.LevelType == LevelType.UfoSwarm)
+        {
+            InstancePoolsManager.Instance.BulletControllerPool.Preheat(50);
+        }
+
         while (!operation.isDone)
         {
             float progress = Mathf.Clamp01(operation.progress / 0.9f);
