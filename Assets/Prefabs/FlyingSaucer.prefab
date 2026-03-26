@@ -269,7 +269,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   spriteRenderer: {fileID: 1286779154052855072}
-  bulletCooldown: 0.5
+  bulletCooldown: 1
   bulletSpeed: 25
   maxLife: 100
   damageFlashingDurationSeconds: 1
@@ -528,8 +528,8 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 2
-      minScalar: 1
+      scalar: 1
+      minScalar: 0.5
       maxCurve:
         serializedVersion: 2
         m_Curve:

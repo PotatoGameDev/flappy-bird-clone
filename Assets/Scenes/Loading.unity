@@ -886,6 +886,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: InstancePoolsManager
       objectReference: {fileID: 0}
+    - target: {fileID: 9138722143102967130, guid: ab4cc410dfe2aa964b2579d7b7c4d4b7, type: 3}
+      propertyPath: bulletControllerPrefab
+      value: 
+      objectReference: {fileID: 2213680125840268772, guid: 0d6f9e4dbe5691cdda2a28875cfdc73f, type: 3}
+    - target: {fileID: 9138722143102967130, guid: ab4cc410dfe2aa964b2579d7b7c4d4b7, type: 3}
+      propertyPath: explosionControllerPrefab
+      value: 
+      objectReference: {fileID: 5031233750074755619, guid: ac50d638a172b04bc9587466e5248ade, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
