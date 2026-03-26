@@ -3,6 +3,7 @@ using System.Collections;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(SwarmFollow))]
+[RequireComponent(typeof(AudioSource))]
 public class FlyingSaucerController : MonoBehaviour
 {
     private static readonly WaitForSeconds DEATH_SEQUENCE_WAIT = new(1f);
@@ -25,6 +26,9 @@ public class FlyingSaucerController : MonoBehaviour
 
     [SerializeField] private ParticleSystem smokeEmitter;
 
+    private AudioSource audioSource;
+    [SerializeField] private AudioClip[] laserSoundClips;
+
     /*
     [Header("Border Damage")]
     [SerializeField] private float borderDangerMargin = 2f;
@@ -35,6 +39,7 @@ public class FlyingSaucerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         swarmFollow = GetComponent<SwarmFollow>();
+        audioSource = GetComponent<AudioSource>();
 
         originalColor = spriteRenderer.color;
     }
@@ -97,6 +102,11 @@ public class FlyingSaucerController : MonoBehaviour
                 bullet.transform.position = transform.position;
                 bullet.FromTo(transform.position, collider.transform.position);
                 bullet.speed = bulletSpeed;
+
+                AudioClip clip = laserSoundClips[Random.Range(0, laserSoundClips.Length)];
+                audioSource.pitch = Random.Range(1f, 2f);
+                audioSource.PlayOneShot(clip);
+
 
                 currentCooldown = bulletCooldown;
             }
