@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class SwarmController : MonoBehaviour
 {
-    [SerializeField] private SwarmFollow[] boids;
+    [SerializeField] private List<SwarmFollow> boids;
     [SerializeField] private Transform target;
     [SerializeField] private float neighborRadius = 2f;
 
@@ -51,7 +51,13 @@ public class SwarmController : MonoBehaviour
 
     void FixedUpdate()
     {
-        Debug.Assert(boids.Length > 0, "Add SwarmFollow children");
+        boids.RemoveAll(boid => boid == null || !boid.Active);
+
+        if (boids.Count == 0)
+        {
+            // Player Won! 
+            // TODO
+        }
 
         foreach (SwarmFollow boid in boids)
         {

@@ -3,6 +3,7 @@ using System.Collections;
 using PotatoGameDev.Pool;
 
 [RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(Collider2D))]
 public class BulletController : PooledInstance
 {
     [SerializeField] private Sprite[] sprites;
@@ -34,6 +35,7 @@ public class BulletController : PooledInstance
     public new void Init()
     {
         rendr.sprite = sprites[Random.Range(0, sprites.Length)];
+        rendr.enabled = true;
         timeoutCoroutine = StartCoroutine(SelfDestruct());
     }
 
@@ -56,4 +58,11 @@ public class BulletController : PooledInstance
         // TODO maybe stop all coroutines in base?
     }
 
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.CompareTag("Player"))
+        {
+            Release();
+        }
+    }
 }

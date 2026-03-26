@@ -9,6 +9,8 @@ TagManager:
   - SunStarBoundary
   - BlackHoleBoundary
   - GatePipe
+  - Bullet
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -51,6 +53,9 @@ TagManager:
     locked: 0
   - name: Objects
     uniqueID: 2070369471
+    locked: 0
+  - name: Explosions
+    uniqueID: 3487374935
     locked: 0
   m_RenderingLayers:
   - Default

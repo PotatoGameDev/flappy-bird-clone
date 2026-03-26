@@ -11,6 +11,9 @@ public class InstancePoolsManager : MonoBehaviour
     [SerializeField] private BulletController bulletControllerPrefab;
     public InstancePool<BulletController> BulletControllerPool { get; private set; }
 
+    [SerializeField] private ExplosionController explosionControllerPrefab;
+    public InstancePool<ExplosionController> ExplosionControllerPool { get; private set; }
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -30,5 +33,7 @@ public class InstancePoolsManager : MonoBehaviour
         EnergyBallControllerPool = new(energyBallControllerPrefab, transform);
 
         BulletControllerPool = new(bulletControllerPrefab, transform);
+
+        ExplosionControllerPool = new(explosionControllerPrefab, transform);
     }
 }

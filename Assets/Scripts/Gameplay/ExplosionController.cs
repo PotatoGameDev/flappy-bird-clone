@@ -1,9 +1,25 @@
 using UnityEngine;
+using UnityEngine.Events;
+using PotatoGameDev.Pool;
 
-public class ExplosionController : MonoBehaviour
+public class ExplosionController : PooledInstance
 {
+    public UnityEvent OnFinished;
+
+    public new void Init()
+    {
+        transform.localScale = Vector2.one;
+    }
+
     public void OnAnimationFinished()
     {
-        GameplayManager.Instance.Player.DeathAnimationEnded();
+        OnFinished?.Invoke();
+        Release();
+    }
+
+    public new void Release()
+    {
+        OnFinished.RemoveAllListeners();
+        base.Release();
     }
 }
