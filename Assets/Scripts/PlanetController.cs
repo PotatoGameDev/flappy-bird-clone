@@ -18,35 +18,28 @@ public class PlanetController : MonoBehaviour
     [SerializeField] private float speedIncrease = 0.1f;
     internal float ToorboBoost { get; set; }
 
-    [SerializeField]
-    private float jumpForce = 10f;
+    [SerializeField] private float jumpForce = 10f;
     private float currentJumpForce = 0f;
 
     private Rigidbody2D rb;
     private SpriteRenderer rendr;
 
-    [SerializeField]
-    private float invincibilityDurationSeconds = 2f;
+    [SerializeField] private float damageFlashingDurationSeconds = 1f;
+    [SerializeField] private float shieldFlashingDurationSeconds = 1f;
 
     private readonly float flashSpeed = 0.2f;
-    private bool invincible = false;
 
     public Transform SpriteHolder { get; private set; }
 
-    Color originalColor;
+    private Color originalColor;
 
     // Audio sources
-    [SerializeField]
-    private float screamsVolume = 0.5f;
-    [SerializeField]
-    private float hitVolume = 1f;
-    [SerializeField]
-    private float quakeVolume = 0.5f;
+    [SerializeField] private float screamsVolume = 0.5f;
+    [SerializeField] private float hitVolume = 1f;
+    [SerializeField] private float quakeVolume = 0.5f;
 
-    [SerializeField]
-    private AudioClip[] hitAudioClips;
-    [SerializeField]
-    private AudioClip[] quakeAudioClips;
+    [SerializeField] private AudioClip[] hitAudioClips;
+    [SerializeField] private AudioClip[] quakeAudioClips;
 
     // Particles
     [SerializeField] private ParticleSystem peopleParticleSystem;
@@ -75,6 +68,8 @@ public class PlanetController : MonoBehaviour
         "{0} got LASIK",
         "{0} smoked",
     };
+    private float timeToLaserDamageSummary;
+    private long totalLaserDamage = 0;
 
     void Awake()
     {
@@ -219,6 +214,14 @@ public class PlanetController : MonoBehaviour
         {
             EffectsManager.Instance.StopSustainedShake();
         }
+
+        // Ufo Swarm Damage:
+        if (totalLaserDamage > 0 && timeToLaserDamageSummary <= 0f)
+        {
+            GameplayManager.Instance.AddPopulationLossText(totalLaserDamage, laserHitTexts, false);
+            totalLaserDamage = 0;
+        }
+        timeToLaserDamageSummary -= Time.deltaTime;
     }
 
     private IEnumerator UpdateRorationalPenalties()
@@ -325,8 +328,6 @@ public class PlanetController : MonoBehaviour
     public void OnCollisionEnter2D(Collision2D collision)
     {
         if (Dead) return;
-        if (invincible) return;
-
 
         SoundManager.Instance.PlayRandomHit(hitAudioClips, hitVolume);
 
@@ -348,7 +349,7 @@ public class PlanetController : MonoBehaviour
             SoundManager.Instance.PlayScreams(screamsVolume);
             SoundManager.Instance.PlayRandomQuake(quakeAudioClips, quakeVolume);
 
-            StartCoroutine(IFrames(rendr));
+            StartCoroutine(DamageFlashing(rendr));
 
             peopleParticleSystem.Emit((int)Mathf.Log10(peopleDied));
         }
@@ -358,7 +359,7 @@ public class PlanetController : MonoBehaviour
     {
         if (shieldCoroutine == null && GameplayManager.Instance.ShieldAvailable())
         {
-            shieldCoroutine = StartCoroutine(IFramesShield(shieldRenderer));
+            shieldCoroutine = StartCoroutine(ShieldFlashing(shieldRenderer));
         }
     }
 
@@ -375,7 +376,7 @@ public class PlanetController : MonoBehaviour
         {
             ShowShieldIfAvailable();
 
-            long killed = GameplayManager.Instance.TakeHit(0.01f, 1000);
+            long killed = GameplayManager.Instance.TakeHit(0.01f, 1000, false);
 
             if (killed > 0f)
             {
@@ -384,7 +385,8 @@ public class PlanetController : MonoBehaviour
                 explosion.transform.position = collider.transform.position;
                 explosion.transform.localScale = Vector2.one * Random.Range(0.2f, 0.4f);
 
-                GameplayManager.Instance.AddPopulationLossText(killed, laserHitTexts, false);
+                totalLaserDamage += killed;
+                timeToLaserDamageSummary = 1; // one second after last damage
             }
         }
     }
@@ -408,13 +410,12 @@ public class PlanetController : MonoBehaviour
         rb.angularVelocity += rpm * 6f;
     }
 
-    private IEnumerator IFrames(SpriteRenderer r)
+    private IEnumerator DamageFlashing(SpriteRenderer r)
     {
-        invincible = true;
         float flashSpeed = 8f;
         float elapsed = 0f;
 
-        while (elapsed < invincibilityDurationSeconds)
+        while (elapsed < damageFlashingDurationSeconds)
         {
             elapsed += Time.deltaTime;
             float t = Mathf.PingPong(elapsed * flashSpeed, 1f);
@@ -425,16 +426,14 @@ public class PlanetController : MonoBehaviour
         }
 
         r.color = originalColor;
-        invincible = false;
     }
 
-    private IEnumerator IFramesShield(SpriteRenderer r)
+    private IEnumerator ShieldFlashing(SpriteRenderer r)
     {
-        invincible = true;
         float elapsed = 0f;
         Color originalColor = r.color;
 
-        while (elapsed < invincibilityDurationSeconds)
+        while (elapsed < shieldFlashingDurationSeconds)
         {
             elapsed += Time.deltaTime;
 
@@ -446,7 +445,7 @@ public class PlanetController : MonoBehaviour
         }
 
         r.color = originalColor;
-        invincible = false;
+        shieldCoroutine = null;
     }
 
     public void Death()
