@@ -54,6 +54,7 @@ namespace PotatoGameDev.Pool
         public void Release(T inst)
         {
             inst.gameObject.SetActive(false);
+            inst.transform.SetParent(parent);
             pool.Enqueue(inst);
         }
     }

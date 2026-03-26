@@ -3,14 +3,13 @@ using System.Collections;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(SwarmFollow))]
-[RequireComponent(typeof(SpriteRenderer))]
 public class FlyingSaucerController : MonoBehaviour
 {
     private static readonly WaitForSeconds DEATH_SEQUENCE_WAIT = new(1f);
 
     private Rigidbody2D rb;
     private SwarmFollow swarmFollow;
-    private SpriteRenderer rendr;
+    [SerializeField] private SpriteRenderer spriteRenderer;
 
     [SerializeField] private float bulletCooldown = 0.5f;
     [SerializeField] private float bulletSpeed = 15f;
@@ -18,6 +17,13 @@ public class FlyingSaucerController : MonoBehaviour
 
     [SerializeField] private float maxLife = 100f;
     private float currentLife;
+
+    [SerializeField] private float damageFlashingDurationSeconds = 1f;
+    private Color originalColor;
+    private Coroutine flashingCoroutine;
+
+
+    [SerializeField] private ParticleSystem smokeEmitter;
 
     /*
     [Header("Border Damage")]
@@ -29,7 +35,8 @@ public class FlyingSaucerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         swarmFollow = GetComponent<SwarmFollow>();
-        rendr = GetComponent<SpriteRenderer>();
+
+        originalColor = spriteRenderer.color;
     }
 
 
@@ -80,20 +87,19 @@ public class FlyingSaucerController : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D collider)
     {
-        if (!collider.CompareTag("Player"))
+        if (collider.CompareTag("Player"))
         {
-            return;
-        }
-        if (currentCooldown <= 0)
-        {
-            BulletController bullet = InstancePoolsManager.Instance.BulletControllerPool.Get();
-            bullet.Init();
+            if (currentCooldown <= 0)
+            {
+                BulletController bullet = InstancePoolsManager.Instance.BulletControllerPool.Get();
+                bullet.Init();
 
-            bullet.transform.position = transform.position;
-            bullet.FromTo(transform.position, collider.transform.position);
-            bullet.speed = bulletSpeed;
+                bullet.transform.position = transform.position;
+                bullet.FromTo(transform.position, collider.transform.position);
+                bullet.speed = bulletSpeed;
 
-            currentCooldown = bulletCooldown;
+                currentCooldown = bulletCooldown;
+            }
         }
     }
 
@@ -104,11 +110,10 @@ public class FlyingSaucerController : MonoBehaviour
 
         yield return DEATH_SEQUENCE_WAIT;
 
-        rendr.enabled = false;
+        spriteRenderer.enabled = false;
 
         ExplosionController explosion = InstancePoolsManager.Instance.ExplosionControllerPool.Get();
         explosion.Init();
-        explosion.transform.SetParent(transform);
         explosion.transform.localScale = Vector2.one * 0.5f;
         explosion.transform.localPosition = Vector2.zero;
 
@@ -138,6 +143,11 @@ public class FlyingSaucerController : MonoBehaviour
             return;
         }
 
+        if (flashingCoroutine == null)
+        {
+            flashingCoroutine = StartCoroutine(DamageFlashing());
+        }
+
         currentLife -= hit;
 
         // Post
@@ -147,8 +157,27 @@ public class FlyingSaucerController : MonoBehaviour
         }
         else if (currentLife < maxLife * 0.5f)
         {
-            // start smoke
+            smokeEmitter.Play();
         }
+    }
+
+    private IEnumerator DamageFlashing()
+    {
+        float flashSpeed = 8f;
+        float elapsed = 0f;
+
+        while (elapsed < damageFlashingDurationSeconds)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.PingPong(elapsed * flashSpeed, 1f);
+
+            // We lerp from the original color to the half of the red (so not so much red)
+            spriteRenderer.color = Color.Lerp(originalColor, Color.red, t);
+            yield return null;
+        }
+
+        spriteRenderer.color = originalColor;
+        flashingCoroutine = null;
     }
 
     private bool Alive()
