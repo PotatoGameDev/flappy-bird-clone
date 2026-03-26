@@ -11,8 +11,6 @@ public class GameplayManager : MonoBehaviour
 
     public PlanetController Player { get; set; }
 
-    public LevelType LevelType { get; set; }
-
     private static readonly WaitForSeconds WAIT_2_SECONDS = new(2f);
 
     [SerializeField] private TextMeshProUGUI populationLabel;
@@ -84,7 +82,6 @@ public class GameplayManager : MonoBehaviour
 
     void Start()
     {
-
         // TODO: might be replaying previous level, have to pass the current civ type from menu to here
         currentPopulation = GameManager.Instance.GetBasePopulation();
 
@@ -348,10 +345,5 @@ public class GameplayManager : MonoBehaviour
         energyMessagesManager.Spawn(text, fadingMessageEnergyColor);
     }
 
-}
-
-public enum LevelType
-{
-    Regular, UfoSwarm
 }
 

@@ -193,6 +193,7 @@ public class MenusController : MonoBehaviour
 
     public void OnLevelSelectStartClicked()
     {
+        GameManager.Instance.levelSettings.levelType = LevelType.Normal;
         SceneManager.LoadScene("Loading");
     }
 
@@ -200,9 +201,12 @@ public class MenusController : MonoBehaviour
     {
         if (CurrentLevelSelection == levelSelectionContents.Length - 1) return;
 
-        GameManager.Instance.UnlockNextPhase();
+        // TODO This will happen when Player defeats the boss.
+        // GameManager.Instance.UnlockNextPhase();
+        //UpdateLevelSelectionMenus();
 
-        UpdateLevelSelectionMenus();
+        GameManager.Instance.levelSettings.levelType = LevelType.BossFight;
+        SceneManager.LoadScene("Loading");
     }
 
     // Upgrades Selection

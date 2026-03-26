@@ -335,13 +335,33 @@ public class PlanetController : MonoBehaviour
 
         // Calculate hit fraction:
         float maxHitPercent = 100f;
-        float maxHitForce = 20f;
-        float hitPercent = maxHitPercent * Mathf.Clamp01(collision.relativeVelocity.magnitude / maxHitForce);
+        float maxHitForce = 10f;
+
+        if (collision.gameObject.CompareTag("GatePipe"))
+        {
+            maxHitForce = 20f;
+        }
+        else if (collision.gameObject.CompareTag("Enemy"))
+        {
+            // Nerfing damage, because UFOs seem lighter than the pipes, also it was hard to beat them.
+            maxHitForce = 5f;
+            maxHitPercent = 10f;
+        }
+
+        // Here we get the magnitude clamped by our max:
+        float hitForce = Mathf.Clamp(collision.relativeVelocity.magnitude, 0f, maxHitForce);
+        // Here we calculate how much of the maxHitPercent we get.
+        // If we hit with the maxHitForce we get 1 * maxHitPercent:
+        float hitPercent = maxHitPercent * Mathf.Clamp01(hitForce / maxHitForce);
+        //This means, that if maxHitPercent is 20, and we hit full force, we get 1 * 20 / 100, meaning 0.2.
         float hitFraction = hitPercent / 100f;
 
+        // This hit fraction will calculate the percent of population, that died.
         long peopleDied = GameplayManager.Instance.TakeHit(hitFraction, 1000);
 
         // Shaking the screen in direction of the collision
+        // TODO: We should pass the shake in percent actually! RelativeVelocity means nothing to shake.
+        // % means everything, like 100% means crazy shake, meanwhile 20% is mid.:w
         EffectsManager.Instance.Shake(collision.relativeVelocity);
 
         if (peopleDied > 0)

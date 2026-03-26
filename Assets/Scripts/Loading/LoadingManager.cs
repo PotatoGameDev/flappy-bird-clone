@@ -20,7 +20,7 @@ public class LoadingManager : MonoBehaviour
 
         InstancePoolsManager.Instance.EnergyBallControllerPool.Preheat(50);
 
-        if (GameplayManager.Instance.LevelType == LevelType.UfoSwarm)
+        if (GameManager.Instance.levelSettings.levelType == LevelType.BossFight)
         {
             InstancePoolsManager.Instance.BulletControllerPool.Preheat(50);
         }

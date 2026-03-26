@@ -16,6 +16,10 @@ public class GameManager : MonoBehaviour
     private GameState State;
     public event Action<GameState> OnGameStateChanged;
 
+    public LevelSettings levelSettings = new()
+    {
+        levelType = LevelType.Normal
+    };
 
     public int CurrentLevel
     {
@@ -169,4 +173,14 @@ public class UpgradeState
         Ident = ident;
         Level = level;
     }
+}
+
+public class LevelSettings
+{
+    public LevelType levelType = LevelType.Normal;
+}
+
+public enum LevelType
+{
+    Normal, BossFight
 }

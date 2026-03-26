@@ -18,6 +18,7 @@ public class FlyingSaucerController : MonoBehaviour
 
     [SerializeField] private float maxLife = 100f;
     private float currentLife;
+    private bool dead;
 
     [SerializeField] private float damageFlashingDurationSeconds = 1f;
     private Color originalColor;
@@ -52,11 +53,27 @@ public class FlyingSaucerController : MonoBehaviour
 
     void Update()
     {
-        if (!Alive()) return;
+        if (dead) return;
 
         if (currentCooldown > 0f)
         {
             currentCooldown -= Time.deltaTime;
+        }
+
+        if (currentLife < 0.5f * maxLife)
+        {
+            // UFO will bleed, which will make more of them fall and die.
+            currentLife -= Time.deltaTime; // 1 HP per second
+        }
+
+        // Post
+        if (currentLife <= 0f)
+        {
+            StartCoroutine(DeathSequence());
+        }
+        else if (currentLife < maxLife * 0.5f)
+        {
+            smokeEmitter.Play();
         }
 
         /*
@@ -107,7 +124,6 @@ public class FlyingSaucerController : MonoBehaviour
                 audioSource.pitch = Random.Range(1f, 2f);
                 audioSource.PlayOneShot(clip);
 
-
                 currentCooldown = bulletCooldown;
             }
         }
@@ -115,15 +131,15 @@ public class FlyingSaucerController : MonoBehaviour
 
     IEnumerator DeathSequence()
     {
+        dead = true;
         rb.gravityScale = 1f;
         swarmFollow.Active = false;
 
         yield return DEATH_SEQUENCE_WAIT;
 
-        spriteRenderer.enabled = false;
-
         ExplosionController explosion = InstancePoolsManager.Instance.ExplosionControllerPool.Get();
         explosion.Init();
+        explosion.transform.SetParent(transform);
         explosion.transform.localScale = Vector2.one * 0.5f;
         explosion.transform.localPosition = Vector2.zero;
 
@@ -132,6 +148,7 @@ public class FlyingSaucerController : MonoBehaviour
 
     public void DeathAnimationEnded()
     {
+        spriteRenderer.enabled = false;
         Destroy(gameObject);
     }
 
@@ -148,7 +165,7 @@ public class FlyingSaucerController : MonoBehaviour
 
     private void TakeHit(float hit)
     {
-        if (!Alive())
+        if (dead)
         {
             return;
         }
@@ -160,15 +177,6 @@ public class FlyingSaucerController : MonoBehaviour
 
         currentLife -= hit;
 
-        // Post
-        if (currentLife <= 0f)
-        {
-            StartCoroutine(DeathSequence());
-        }
-        else if (currentLife < maxLife * 0.5f)
-        {
-            smokeEmitter.Play();
-        }
     }
 
     private IEnumerator DamageFlashing()
@@ -190,8 +198,4 @@ public class FlyingSaucerController : MonoBehaviour
         flashingCoroutine = null;
     }
 
-    private bool Alive()
-    {
-        return currentLife > 0f;
-    }
 }
