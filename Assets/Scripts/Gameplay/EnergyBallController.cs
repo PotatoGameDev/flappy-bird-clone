@@ -70,6 +70,13 @@ public class EnergyBallController : PooledInstance
             }
             SoundManager.Instance.PlayCollect(GetPitch());
             Release();
+            return;
+        }
+
+        if (!collider.isTrigger && Type == EnergyType.CollectEnergy && collider.CompareTag("Enemy"))
+        {
+            Release();
+            return;
         }
     }
 

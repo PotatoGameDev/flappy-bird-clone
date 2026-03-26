@@ -31,6 +31,7 @@ public class PlanetController : MonoBehaviour
     private readonly float flashSpeed = 0.2f;
     private bool invincible = false;
 
+    public Transform SpriteHolder { get; private set; }
 
     Color originalColor;
 
@@ -47,9 +48,6 @@ public class PlanetController : MonoBehaviour
     [SerializeField]
     private AudioClip[] quakeAudioClips;
 
-    // Animations
-    [SerializeField] private Animator explosionAnimation;
-
     // Particles
     [SerializeField] private ParticleSystem peopleParticleSystem;
 
@@ -58,6 +56,7 @@ public class PlanetController : MonoBehaviour
 
     // Shield
     [SerializeField] private SpriteRenderer shieldRenderer;
+    private Coroutine shieldCoroutine;
 
     // Burning Damage
     [SerializeField] private GameObject burningEffect;
@@ -68,7 +67,14 @@ public class PlanetController : MonoBehaviour
 
     private float rotationShake = 0f;
     private float boundaryDamageShake = 0f;
-    private float speedShake = 0f;
+    //private float speedShake = 0f;
+    //
+    private string[] laserHitTexts = {
+        "{0} burned",
+        "{0} barbequed",
+        "{0} got LASIK",
+        "{0} smoked",
+    };
 
     void Awake()
     {
@@ -77,6 +83,8 @@ public class PlanetController : MonoBehaviour
         originalColor = rendr.color;
 
         GameplayManager.Instance.Player = this;
+
+        SpriteHolder = transform.Find("Sprite");
     }
 
     void Start()
@@ -94,7 +102,6 @@ public class PlanetController : MonoBehaviour
             rb.gravityScale = 0f;
             speed = 0f;
         }
-
     }
 
     void Update()
@@ -202,7 +209,7 @@ public class PlanetController : MonoBehaviour
             rendr.color = originalColor;
         }
 
-        float totalShake = boundaryDamageShake + rotationShake + speedShake;
+        float totalShake = boundaryDamageShake + rotationShake; // + speedShake;
         totalShake = Mathf.Clamp(totalShake, 0f, 2f);
         if (totalShake > 0f)
         {
@@ -279,12 +286,12 @@ public class PlanetController : MonoBehaviour
         {
             if (currentSunStarCasualties > 0)
             {
-                GameplayManager.Instance.AddPopulationLossText((long)currentSunStarCasualties, "{0} fried ({1}%)");
+                GameplayManager.Instance.AddPopulationLossText((long)currentSunStarCasualties, new string[] { "{0} deep fried" });
                 currentSunStarCasualties = 0;
             }
             if (currentBlackHoleCasualties > 0)
             {
-                GameplayManager.Instance.AddPopulationLossText((long)currentBlackHoleCasualties, "{0} spaghettified ({1}%)");
+                GameplayManager.Instance.AddPopulationLossText((long)currentBlackHoleCasualties, new string[] { "{0} spaghettified" });
                 currentBlackHoleCasualties = 0;
             }
             yield return EVERY_SECOND;
@@ -323,11 +330,7 @@ public class PlanetController : MonoBehaviour
 
         SoundManager.Instance.PlayRandomHit(hitAudioClips, hitVolume);
 
-        if (GameplayManager.Instance.ShieldAvailable())
-        {
-            StartCoroutine(IFramesShield(shieldRenderer));
-        }
-
+        ShowShieldIfAvailable();
 
         // Calculate hit fraction:
         float maxHitPercent = 100f;
@@ -351,6 +354,14 @@ public class PlanetController : MonoBehaviour
         }
     }
 
+    private void ShowShieldIfAvailable()
+    {
+        if (shieldCoroutine == null && GameplayManager.Instance.ShieldAvailable())
+        {
+            shieldCoroutine = StartCoroutine(IFramesShield(shieldRenderer));
+        }
+    }
+
     public void OnTriggerEnter2D(Collider2D collider)
     {
         if (Dead) return;
@@ -358,6 +369,23 @@ public class PlanetController : MonoBehaviour
         {
             Death();
             return;
+        }
+
+        if (collider.CompareTag("Bullet"))
+        {
+            ShowShieldIfAvailable();
+
+            long killed = GameplayManager.Instance.TakeHit(0.01f, 1000);
+
+            if (killed > 0f)
+            {
+                ExplosionController explosion = InstancePoolsManager.Instance.ExplosionControllerPool.Get();
+                explosion.transform.SetParent(SpriteHolder);
+                explosion.transform.position = collider.transform.position;
+                explosion.transform.localScale = Vector2.one * Random.Range(0.2f, 0.4f);
+
+                GameplayManager.Instance.AddPopulationLossText(killed, laserHitTexts, false);
+            }
         }
     }
 
@@ -435,12 +463,16 @@ public class PlanetController : MonoBehaviour
         GameplayManager.Instance.Death();
 
         // Explosion animation for fun
-        explosionAnimation.gameObject.SetActive(true);
+        ExplosionController explosion = InstancePoolsManager.Instance.ExplosionControllerPool.Get();
+        explosion.transform.SetParent(transform);
+        explosion.transform.localPosition = Vector2.zero;
+        explosion.transform.localScale = Vector2.one * 2f;
+        explosion.OnFinished.AddListener(DeathAnimationEnded);
     }
 
     public void DeathAnimationEnded()
     {
-        Destroy(gameObject);
+        //Destroy(gameObject);
     }
 
 }

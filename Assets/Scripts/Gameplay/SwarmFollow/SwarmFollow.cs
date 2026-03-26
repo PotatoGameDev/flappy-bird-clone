@@ -7,6 +7,7 @@ public class SwarmFollow : MonoBehaviour
 
     public Vector2 LinearVelocity => rb.linearVelocity;
     public Vector2 Position => rb.position;
+    public bool Active { get; set; } = true;
 
     void Awake()
     {

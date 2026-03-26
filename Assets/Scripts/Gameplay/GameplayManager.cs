@@ -284,13 +284,21 @@ public class GameplayManager : MonoBehaviour
         KillPopulation(dead);
     }
 
-    public void AddPopulationLossText(long peopleDied, string textFormatOverride = null)
+    public void AddPopulationLossText(long peopleDied, string[] textFormatOverrides = null, bool showPercent = true)
     {
         float diedPercent = Mathf.Floor(peopleDied / (float)(peopleDied + currentPopulation) * 100f);
 
-        string text = textFormatOverride ?? casualtiesTexts[Random.Range(0, casualtiesTexts.Length)];
+        string[] texts = textFormatOverrides ?? casualtiesTexts;
+        string text = texts[Random.Range(0, texts.Length)];
 
-        text = string.Format(text, peopleDied, diedPercent);
+        if (showPercent)
+        {
+            text = string.Format(text, peopleDied, diedPercent);
+        }
+        else
+        {
+            text = string.Format(text, peopleDied);
+        }
 
         populationMessagesManager.Spawn(text, fadingMessageCasualtiesColor);
     }
