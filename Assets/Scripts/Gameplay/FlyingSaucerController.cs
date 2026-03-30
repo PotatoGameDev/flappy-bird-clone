@@ -1,14 +1,15 @@
 using UnityEngine;
 using System.Collections;
+using System;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(SwarmFollow))]
 [RequireComponent(typeof(AudioSource))]
 public class FlyingSaucerController : MonoBehaviour
 {
-    private static readonly WaitForSeconds DEATH_SEQUENCE_WAIT = new(1f);
+    private static readonly WaitForSeconds WAIT_ONE_SECOND = new(1f);
 
-    private Rigidbody2D rb;
     private SwarmFollow swarmFollow;
     [SerializeField] private SpriteRenderer spriteRenderer;
 
@@ -17,8 +18,15 @@ public class FlyingSaucerController : MonoBehaviour
     private float currentCooldown = 0f;
 
     [SerializeField] private float maxLife = 100f;
-    private float currentLife;
+    private float halfLife;
+    public float CurrentLife { get; private set; }
     private bool dead;
+
+    public bool Active
+    {
+        get => swarmFollow.Active;
+        set => swarmFollow.Active = value;
+    }
 
     [SerializeField] private float damageFlashingDurationSeconds = 1f;
     private Color originalColor;
@@ -27,8 +35,15 @@ public class FlyingSaucerController : MonoBehaviour
 
     [SerializeField] private ParticleSystem smokeEmitter;
 
-    private AudioSource audioSource;
+    [Header("Audio")]
+    [SerializeField] private AudioSource laserAudioSource;
     [SerializeField] private AudioClip[] laserSoundClips;
+
+    public event Action DamageTaken;
+
+    private float accruedDamage = 0f;
+
+    [SerializeField] private float maxSmokeEmission = 50f;
 
     /*
     [Header("Border Damage")]
@@ -36,19 +51,20 @@ public class FlyingSaucerController : MonoBehaviour
     [SerializeField] private float borderDangerMultiplier = 100f;
     */
 
+    [SerializeField] private float maxDistanceFromCamera = 30f;
+
     void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
         swarmFollow = GetComponent<SwarmFollow>();
-        audioSource = GetComponent<AudioSource>();
-
         originalColor = spriteRenderer.color;
+        CurrentLife = maxLife;
     }
 
 
     void Start()
     {
-        currentLife = maxLife;
+        CurrentLife = maxLife;
+        halfLife = maxLife * 0.5f;
     }
 
     void Update()
@@ -60,21 +76,35 @@ public class FlyingSaucerController : MonoBehaviour
             currentCooldown -= Time.deltaTime;
         }
 
-        if (currentLife < 0.5f * maxLife)
+        if (CurrentLife < halfLife)
         {
             // UFO will bleed, which will make more of them fall and die.
-            currentLife -= Time.deltaTime; // 1 HP per second
+            accruedDamage += Time.deltaTime;
+            if (accruedDamage > 1f)
+            {
+                // This whole accruedDamage logic is so that we don't send damage event to UI every frame
+                accruedDamage -= 1f;
+                TakeHit(1f);// 1 HP per second
+            }
+
+            if (!smokeEmitter.isPlaying)
+            {
+                smokeEmitter.Play();
+            }
+            ParticleSystem.EmissionModule emission = smokeEmitter.emission;
+            emission.rateOverTime = maxSmokeEmission * CurrentLife / halfLife;
         }
 
-        // Post
-        if (currentLife <= 0f)
+        if (CurrentLife <= 0f)
         {
             StartCoroutine(DeathSequence());
         }
-        else if (currentLife < maxLife * 0.5f)
+
+        if (!Active)
         {
-            smokeEmitter.Play();
+            return;
         }
+
 
         /*
          * This would actually make the whole event much too easy :(
@@ -107,8 +137,36 @@ public class FlyingSaucerController : MonoBehaviour
 
     }
 
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (dead || !Active)
+        {
+            return;
+        }
+        if (collider.CompareTag("Energy"))
+        {
+            EnergyBallController energy = collider.GetComponent<EnergyBallController>();
+
+            // The UFOs repair with energy!
+            if (energy.Type == EnergyType.CollectEnergy && energy.energyValue > 0 && CurrentLife < maxLife)
+            {
+                CurrentLife += energy.energyValue;
+                energy.energyValue = 0;
+
+                CurrentLife = Mathf.Clamp(CurrentLife, 0f, maxLife);
+
+                energy.TargetTransform = transform;
+            }
+
+        }
+    }
+
     void OnTriggerStay2D(Collider2D collider)
     {
+        if (dead || !Active)
+        {
+            return;
+        }
         if (collider.CompareTag("Player"))
         {
             if (currentCooldown <= 0)
@@ -117,33 +175,50 @@ public class FlyingSaucerController : MonoBehaviour
                 bullet.Init();
 
                 bullet.transform.position = transform.position;
-                bullet.FromTo(transform.position, collider.transform.position);
+
+                // Adding spread when the UFO is dying
+                Vector2 to = collider.transform.position;
+                if (CurrentLife <= halfLife)
+                {
+                    to += Random.insideUnitCircle * (5f * (CurrentLife / halfLife));
+                }
+
+                bullet.FromTo(transform.position, to);
                 bullet.speed = bulletSpeed;
 
                 AudioClip clip = laserSoundClips[Random.Range(0, laserSoundClips.Length)];
-                audioSource.pitch = Random.Range(1f, 2f);
-                audioSource.PlayOneShot(clip);
+                laserAudioSource.pitch = Random.Range(1f, 2f);
+                laserAudioSource.PlayOneShot(clip);
 
                 currentCooldown = bulletCooldown;
             }
         }
     }
 
+    IEnumerator HitStun()
+    {
+        Active = false;
+        yield return WAIT_ONE_SECOND;
+
+        Active = true;
+    }
+
     IEnumerator DeathSequence()
     {
         dead = true;
-        rb.gravityScale = 1f;
-        swarmFollow.Active = false;
+        Active = false;
 
-        yield return DEATH_SEQUENCE_WAIT;
+        yield return WAIT_ONE_SECOND;
 
         ExplosionController explosion = InstancePoolsManager.Instance.ExplosionControllerPool.Get();
         explosion.Init();
+        explosion.OnFinished.AddListener(DeathAnimationEnded);
+
         explosion.transform.SetParent(transform);
         explosion.transform.localScale = Vector2.one * 0.5f;
         explosion.transform.localPosition = Vector2.zero;
 
-        explosion.OnFinished.AddListener(DeathAnimationEnded);
+        SoundManager.Instance.PlayExplosion();
     }
 
     public void DeathAnimationEnded()
@@ -154,29 +229,41 @@ public class FlyingSaucerController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        if (dead || !Active)
+        {
+            return;
+        }
         if (!collision.gameObject.CompareTag("Player"))
         {
             return;
         }
 
-        TakeHit(5 * collision.relativeVelocity.magnitude);
+        TakeHit(5 * collision.relativeVelocity.magnitude, true);
     }
 
 
-    private void TakeHit(float hit)
+    private void TakeHit(float hit, bool stun = false)
     {
         if (dead)
         {
+            // Don't check for swarmFollow.Active, because we want to do accrued damage even when not.
             return;
         }
 
-        if (flashingCoroutine == null)
+        if (flashingCoroutine != null)
         {
-            flashingCoroutine = StartCoroutine(DamageFlashing());
+            StopCoroutine(flashingCoroutine);
+        }
+        flashingCoroutine = StartCoroutine(DamageFlashing());
+
+        CurrentLife -= hit;
+
+        if (stun)
+        {
+            StartCoroutine(HitStun());
         }
 
-        currentLife -= hit;
-
+        DamageTaken?.Invoke();
     }
 
     private IEnumerator DamageFlashing()

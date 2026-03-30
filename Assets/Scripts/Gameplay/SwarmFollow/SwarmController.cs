@@ -1,9 +1,10 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class SwarmController : MonoBehaviour
 {
-    [SerializeField] private List<SwarmFollow> boids;
+    [SerializeField] internal List<SwarmFollow> Boids;
     [SerializeField] private Transform target;
     [SerializeField] private float neighborRadius = 2f;
 
@@ -14,107 +15,106 @@ public class SwarmController : MonoBehaviour
     [Header("Alignment")]
     [SerializeField] private float alignmentWeight = 1f;
 
-
     [Header("Cohesion")]
     [SerializeField] private float cohesionWeight = 1f;
 
-    [Header("Noise")]
-    [SerializeField] private float offsetNoiseSpeed = 0f;
-    [SerializeField] private float offsetNoiseAmount = 0f;
-
     [Header("Follow")]
-    [SerializeField] private float followSpeed = 5f;
     [SerializeField] private float leaderWeight = 3f;
+
+    [Header("Speed")]
+    [SerializeField] private float minSpeed = 2f;
+    [SerializeField] private float maxSpeed = 15f;
+    [SerializeField] private float maxSpeedDistance = 10f;
 
     [Header("Obstacles")]
     [SerializeField] private float obstacleRadius = 5f;
     [SerializeField] private float obstacleWeight = 1f;
-
     [SerializeField] private Transform[] obstacles;
 
-
-    [Header("Border Avoidance")]
-    [SerializeField] private Transform topBorder;
-    [SerializeField] private Transform bottomBorder;
-    [SerializeField] private Transform leftBorder;
-    [SerializeField] private Transform rightBorder;
-
-    [SerializeField] private float borderDistance = 2f;
-    [SerializeField] private float borderWeight = 1f;
-
-
     [Header("Smoothing")]
-    // Smoothing factor: 0 = no smoothing, 1 = never moves.
-    [SerializeField] private float steeringSmoothing = 0.85f;
+    [SerializeField] private float smoothingMax = 0.85f;
 
-    private readonly Dictionary<SwarmFollow, Vector2> _smoothedVelocities = new();
+    public event Action SwarmBoidDied;
+
+    private readonly Dictionary<SwarmFollow, Vector2> smoothedVelocities = new();
+
+    private readonly List<Vector2> pendingPositions = new();
 
     void FixedUpdate()
     {
-        boids.RemoveAll(boid => boid == null || !boid.Active);
+        if (Boids.Count == 0) return;
 
-        if (boids.Count == 0)
-        {
-            // Player Won! 
-            // TODO
-        }
+        int removed = Boids.RemoveAll(boid => boid == null || !boid.enabled || !boid.gameObject.activeInHierarchy);
+        if (removed > 0)
+            SwarmBoidDied?.Invoke();
 
-        foreach (SwarmFollow boid in boids)
+        // --- Pass 1: compute all new positions, store them ---
+        pendingPositions.Clear();
+        foreach (SwarmFollow boid in Boids)
         {
-            // --- Accumulate steering forces as *desired directions*, not displacements ---
+            if (!boid.Active)
+            {
+                // Push a sentinel so indices stay aligned with Boids list
+                pendingPositions.Add(boid.Position);
+                continue;
+            }
+
             Vector2 steering = Vector2.zero;
 
-            // Leader: pull toward target
-            Vector2 toTarget = ((Vector2)target.position - boid.Position).normalized;
-            steering += toTarget * leaderWeight;
+            Vector2 toTarget = (Vector2)target.position - boid.Position;
+            float distToTarget = toTarget.magnitude;
+            steering += toTarget.normalized * leaderWeight;
 
-            // Flocking
             List<SwarmFollow> neighbors = GetNeighbors(boid);
             if (neighbors.Count > 0)
             {
                 steering += Separation(boid, neighbors) * separationWeight;
                 steering += Alignment(neighbors) * alignmentWeight;
                 steering += Cohesion(boid, neighbors) * cohesionWeight;
-
-                steering += SeparationObstacle(boid, obstacles) * obstacleWeight;
-
-                steering += SeparationBorder(boid, topBorder, true) * borderWeight;
-                steering += SeparationBorder(boid, bottomBorder, true) * borderWeight;
-                steering += SeparationBorder(boid, leftBorder, false) * borderWeight;
-                steering += SeparationBorder(boid, rightBorder, false) * borderWeight;
             }
 
-            // Noise
-            if (offsetNoiseAmount > 0f)
-            {
-                float nx = (Mathf.PerlinNoise(boid.Position.x + Time.time * offsetNoiseSpeed, 0f) - 0.5f) * offsetNoiseAmount;
-                float ny = (Mathf.PerlinNoise(0f, boid.Position.y + Time.time * offsetNoiseSpeed) - 0.5f) * offsetNoiseAmount;
-                steering += new Vector2(nx, ny);
-            }
+            steering += SeparationObstacle(boid, obstacles) * obstacleWeight;
 
-            // Convert steering direction into a desired velocity
-            Vector2 desiredVelocity = steering.normalized * followSpeed;
+            // Speed ramp: 0 at target, maxSpeed at maxSpeedDistance
+            float speed = Mathf.Lerp(minSpeed, maxSpeed, Mathf.Clamp01(distToTarget / maxSpeedDistance));
 
-            // Smooth the velocity over time to prevent jitter
-            if (!_smoothedVelocities.TryGetValue(boid, out Vector2 smoothed))
+            Vector2 desiredVelocity = steering.normalized * speed;
+
+            // Smoothing: more smoothing when close (avoids jitter), less when far
+            float smoothing = Mathf.Lerp(smoothingMax, 0f, Mathf.Clamp01(distToTarget / maxSpeedDistance));
+
+            if (!smoothedVelocities.TryGetValue(boid, out Vector2 smoothed))
                 smoothed = desiredVelocity;
 
-            smoothed = Vector2.Lerp(desiredVelocity, smoothed, steeringSmoothing);
-            _smoothedVelocities[boid] = smoothed;
+            // Isolated and far: reset stale momentum so boid can turn around
+            if (neighbors.Count == 0 && distToTarget > maxSpeedDistance)
+                smoothed = desiredVelocity;
+            else
+                smoothed = Vector2.Lerp(desiredVelocity, smoothed, smoothing);
 
-            // Move by the smoothed velocity
-            Vector2 newPosition = boid.Position + smoothed * Time.fixedDeltaTime;
-            //boid.MovePositionDirect(newPosition);
-            boid.MovePositionDirect(newPosition);
+            smoothedVelocities[boid] = smoothed;
+
+            pendingPositions.Add(boid.Position + smoothed * Time.fixedDeltaTime);
+        }
+
+        // --- Pass 2: apply all positions at once ---
+        for (int i = 0; i < Boids.Count; i++)
+        {
+            if (!Boids[i].Active)
+            {
+                continue;
+            }
+            Boids[i].MovePosition(pendingPositions[i]);
         }
     }
 
     private List<SwarmFollow> GetNeighbors(SwarmFollow boid)
     {
         List<SwarmFollow> neighbors = new();
-        foreach (SwarmFollow n in boids)
+        foreach (SwarmFollow n in Boids)
         {
             if (boid == n) continue;
+            if (!n.Active) continue;  // was checking boid.Active instead of n.Active - bug fix
             if (boid.Distance(n) < neighborRadius)
                 neighbors.Add(n);
         }
@@ -130,9 +130,8 @@ public class SwarmController : MonoBehaviour
             float dist = boid.Distance(n);
             if (dist < separationRadius && dist > 0.0001f)
             {
-                // Normalize so a single close neighbor can't dominate
                 Vector2 away = (boid.Position - n.Position).normalized;
-                steer += away * (1f - dist / separationRadius); // stronger when closer
+                steer += away * (1f - dist / separationRadius);
                 count++;
             }
         }
@@ -140,65 +139,22 @@ public class SwarmController : MonoBehaviour
         return steer;
     }
 
-    // Allows to add separation from a single obstacle, like avoiding a static element or the player.
     private Vector2 SeparationObstacle(SwarmFollow boid, Transform[] obstacles)
     {
         Vector2 steer = Vector2.zero;
         int count = 0;
         foreach (Transform n in obstacles)
         {
-            if (n == null)
-            {
-                continue;
-            }
+            if (n == null) continue;
             float dist = Vector2.Distance(boid.Position, n.position);
             if (dist < obstacleRadius && dist > 0.0001f)
             {
-                // Normalize so a single close neighbor can't dominate
                 Vector2 away = (boid.Position - (Vector2)n.position).normalized;
-                steer += away * (1f - dist / obstacleRadius); // stronger when closer
+                steer += away * (1f - dist / obstacleRadius);
                 count++;
             }
         }
         if (count > 0) steer /= count;
-        return steer;
-    }
-
-    // Allows to add separation from custom borders
-    // This does not check on which side the boid is, it will just avoid that line, one way or the other.
-    private Vector2 SeparationBorder(SwarmFollow boid, Transform border, bool horizontal)
-    {
-        if (border == null)
-        {
-            return Vector2.zero;
-        }
-
-        Vector2 steer = Vector2.zero;
-
-        float dist;
-        if (horizontal)
-        {
-            dist = Mathf.Abs(boid.Position.y - border.position.y);
-        }
-        else
-        {
-            dist = Mathf.Abs(boid.Position.x - border.position.x);
-        }
-
-        if (dist < borderDistance && dist > 0.0001f)
-        {
-            Vector2 away;
-            if (horizontal)
-            {
-                away = new Vector2(0f, boid.Position.y - border.position.y).normalized;
-            }
-            else
-            {
-                away = new Vector2(boid.Position.y - border.position.y, 0f).normalized;
-            }
-            steer += away * (1f - dist / borderDistance); // stronger when closer
-        }
-
         return steer;
     }
 

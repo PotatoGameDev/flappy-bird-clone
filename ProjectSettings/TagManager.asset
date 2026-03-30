@@ -11,6 +11,7 @@ TagManager:
   - GatePipe
   - Bullet
   - Enemy
+  - Energy
   layers:
   - Default
   - TransparentFX

@@ -329,10 +329,6 @@ public class PlanetController : MonoBehaviour
     {
         if (Dead) return;
 
-        SoundManager.Instance.PlayRandomHit(hitAudioClips, hitVolume);
-
-        ShowShieldIfAvailable();
-
         // Calculate hit fraction:
         float maxHitPercent = 100f;
         float maxHitForce = 10f;
@@ -343,10 +339,19 @@ public class PlanetController : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Enemy"))
         {
+            if (collision.gameObject.GetComponent<FlyingSaucerController>().Active)
+            {
+                return;
+            }
             // Nerfing damage, because UFOs seem lighter than the pipes, also it was hard to beat them.
             maxHitForce = 5f;
             maxHitPercent = 10f;
         }
+
+        SoundManager.Instance.PlayRandomHit(hitAudioClips, hitVolume);
+
+        ShowShieldIfAvailable();
+
 
         // Here we get the magnitude clamped by our max:
         float hitForce = Mathf.Clamp(collision.relativeVelocity.magnitude, 0f, maxHitForce);

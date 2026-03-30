@@ -12,6 +12,7 @@ public class EnergyBallController : PooledInstance
 
     public EnergyType Type { get; set; }
     public Vector2? Target { get; set; }
+    public Transform TargetTransform { get; set; }
     private Animator anim;
     private Vector3 initialScale;
     private float speed = 0.1f;
@@ -57,6 +58,17 @@ public class EnergyBallController : PooledInstance
                 return;
             }
         }
+
+        if (Type == EnergyType.CollectEnergy && TargetTransform != null)
+        {
+            transform.position = Vector2.Lerp(transform.position, TargetTransform.position, speed);
+
+            if (transform.position == TargetTransform.position)
+            {
+                Release();
+            }
+            return;
+        }
     }
 
     void OnTriggerEnter2D(Collider2D collider)
@@ -69,12 +81,6 @@ public class EnergyBallController : PooledInstance
                 GameplayManager.Instance.ScoopedEnergy += energyValue;
             }
             SoundManager.Instance.PlayCollect(GetPitch());
-            Release();
-            return;
-        }
-
-        if (!collider.isTrigger && Type == EnergyType.CollectEnergy && collider.CompareTag("Enemy"))
-        {
             Release();
             return;
         }
@@ -104,8 +110,9 @@ public class EnergyBallController : PooledInstance
         speed = initialSpeed;
         transform.localScale = initialScale;
         anim.Play(0, 0, Random.value);
-        Target = null;
         Type = EnergyType.CollectEnergy;
+        Target = null;
+        TargetTransform = null;
 
         timeout = StartCoroutine(Timeout());
     }
