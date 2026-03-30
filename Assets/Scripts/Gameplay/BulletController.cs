@@ -36,6 +36,7 @@ public class BulletController : PooledInstance
     {
         rendr.sprite = sprites[Random.Range(0, sprites.Length)];
         rendr.enabled = true;
+        transform.localScale = Vector2.one * 0.1f;
         timeoutCoroutine = StartCoroutine(SelfDestruct());
     }
 
@@ -43,6 +44,11 @@ public class BulletController : PooledInstance
     {
         Vector2 translation = direction * (speed * Time.fixedDeltaTime);
         transform.Translate(translation, Space.World);
+
+        if (transform.localScale != Vector3.one)
+        {
+            transform.localScale = Vector2.Lerp(transform.localScale, Vector2.one, Time.fixedDeltaTime * 10);
+        }
     }
 
     IEnumerator SelfDestruct()

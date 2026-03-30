@@ -39,7 +39,7 @@ public class ShrinkWhenColliding : MonoBehaviour
         {
             // The ufos will pass the obstacles from the front on the bottom of the screen,
             // and from the back on the top of the screen, like they are circling
-            float direction = Mathf.Sign(collider.transform.position.y);
+            float direction = GetDirection(collider);
             rendr.sortingOrder = originalSortingOrder + (int)(direction * 5);
         }
     }
@@ -48,10 +48,15 @@ public class ShrinkWhenColliding : MonoBehaviour
     {
         if (collider.CompareTag("GatePipe"))
         {
-            float direction = Mathf.Sign(collider.transform.position.y);
+            float direction = GetDirection(collider);
             float dist = Mathf.Abs(transform.position.x - collider.transform.position.x);
             targetScale = Vector2.Lerp(originalScale + (direction * addedScale), originalScale, dist / circleCollider.radius);
         }
+    }
+
+    private float GetDirection(Collider2D collider)
+    {
+        return -Mathf.Sign(collider.transform.position.y);
     }
 
     void OnTriggerExit2D(Collider2D collider)

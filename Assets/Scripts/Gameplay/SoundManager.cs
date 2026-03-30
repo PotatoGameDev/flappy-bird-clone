@@ -21,6 +21,9 @@ public class SoundManager : MonoBehaviour
     [SerializeField]
     private AudioSource collectAudioSource;
 
+    [SerializeField]
+    private AudioSource explosionAudioSource;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -110,6 +113,11 @@ public class SoundManager : MonoBehaviour
     public void PlayRandomHit(AudioClip[] clips, float volume)
     {
         PlayRandom(hitAudioSource, clips, volume);
+    }
+
+    public void PlayExplosion()
+    {
+        explosionAudioSource.PlayOneShot(explosionAudioSource.clip);
     }
 
     private void PlayRandom(AudioSource source, AudioClip[] clips, float volume)

@@ -2,9 +2,37 @@ using UnityEngine;
 using UnityEngine.Events;
 using PotatoGameDev.Pool;
 
+[RequireComponent(typeof(Animator))]
 public class ExplosionController : PooledInstance
 {
-    public UnityEvent OnFinished;
+    private UnityEvent _onFinishedEvent = new();
+
+    private Animator anim;
+
+    void Awake()
+    {
+        anim = GetComponent<Animator>();
+    }
+
+    public UnityEvent OnFinished
+    {
+        get
+        {
+            return _onFinishedEvent;
+        }
+
+        set
+        {
+            _onFinishedEvent = value;
+        }
+    }
+
+    private void OnEnable()
+    {
+        anim.enabled = true;
+        anim.Rebind();
+        anim.Update(0f);
+    }
 
     public new void Init()
     {
@@ -19,7 +47,7 @@ public class ExplosionController : PooledInstance
 
     public new void Release()
     {
-        OnFinished.RemoveAllListeners();
+        OnFinished?.RemoveAllListeners();
         base.Release();
     }
 }

@@ -12,9 +12,11 @@ public class GameplayManager : MonoBehaviour
     public PlanetController Player { get; set; }
 
     private static readonly WaitForSeconds WAIT_2_SECONDS = new(2f);
+    private static readonly WaitForSeconds WAIT_1_SECOND = new(1f);
 
     [SerializeField] private TextMeshProUGUI populationLabel;
     [SerializeField] private TextMeshProUGUI rpmLabel;
+    [SerializeField] private GameObject gateCounterContainer;
     [SerializeField] private TextMeshProUGUI gateCounterLabel;
     [SerializeField] private TextMeshProUGUI energyLabel;
 
@@ -42,6 +44,14 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] private GameObject shieldLevelSliderFill;
     private static readonly long SHIELD_AMOUNT_PER_LEVEL = 1000000;
     private long shieldLeft;
+
+    [Header("Boss")]
+    [SerializeField] private TextMeshProUGUI bossLabel;
+    [SerializeField] private Slider bossHealthSlider;
+    [SerializeField] private GameObject bossHealthSliderFill;
+    [SerializeField] private GameObject bossHealthBarContainer;
+
+    [SerializeField] private GameObject winAccomplishedPanel;
 
     public int ScoopedEnergy { get; set; } = 0;
 
@@ -117,6 +127,67 @@ public class GameplayManager : MonoBehaviour
             shieldLevelSlider.maxValue = shieldLeft;
             shieldLevelSlider.value = shieldLeft;
         }
+
+        // Boss
+        LevelSettings levelSettings = GameManager.Instance.levelSettings;
+        if (levelSettings.levelType == LevelType.BossFight)
+        {
+            gateCounterContainer.SetActive(false);
+            bossHealthBarContainer.SetActive(true);
+
+            switch (GameManager.Instance.CurrentLevel)
+            {
+                case 0:
+                    bossLabel.SetText("Annoying Motherships");
+                    break;
+                case 1:
+                    bossLabel.SetText("TODO");
+                    break;
+                case 2:
+                    bossLabel.SetText("TODO");
+                    break;
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            gateCounterContainer.SetActive(true);
+            bossHealthBarContainer.SetActive(false);
+        }
+    }
+
+    public void SetBossHealth(float health, float maxHealth)
+    {
+        if (health != bossHealthSlider.maxValue)
+        {
+            bossHealthSlider.minValue = 0f;
+            bossHealthSlider.maxValue = maxHealth;
+        }
+        bossHealthSlider.SetValueWithoutNotify(health);
+        if (Mathf.Approximately(health, 0f))
+        {
+            // Player won!
+            bossHealthSliderFill.SetActive(false);
+
+            StartCoroutine(BossFightWinSequence());
+
+        }
+    }
+
+    private IEnumerator BossFightWinSequence()
+    {
+        yield return WAIT_2_SECONDS;
+        yield return WAIT_1_SECOND;
+
+        winAccomplishedPanel.SetActive(true);
+
+        yield return WAIT_2_SECONDS;
+        yield return WAIT_1_SECOND;
+
+        GameManager.Instance.UnlockNextPhase();
+
+        SceneManager.LoadScene("NewMenu");
     }
 
     public bool ShieldAvailable()
@@ -214,7 +285,11 @@ public class GameplayManager : MonoBehaviour
     private void UpdateLabels()
     {
         populationLabel.SetText("POP: {0}", currentPopulation);
-        gateCounterLabel.SetText("{0}", GateCount);
+
+        if (gateCounterContainer.activeInHierarchy)
+        {
+            gateCounterLabel.SetText("{0}", GateCount);
+        }
         energyLabel.SetText(" {0} GW", GameManager.Instance.CollectedEnergy);
         UpdateRpmLabel();
     }

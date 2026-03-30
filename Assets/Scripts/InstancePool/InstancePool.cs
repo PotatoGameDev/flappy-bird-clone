@@ -47,13 +47,17 @@ namespace PotatoGameDev.Pool
 
             obj.transform.SetParent(parent);
             // TODO I think init should go here... Not called in the user code.
+            // EDIT Actually not, init sometimes starts some stuff like coroutines for autodestruct...
+            // In this circumstances init shoult not go here
             obj.gameObject.SetActive(true);
+            obj.enabled = true;
             return obj;
         }
 
         public void Release(T inst)
         {
             inst.gameObject.SetActive(false);
+            inst.enabled = false;
             inst.transform.SetParent(parent);
             pool.Enqueue(inst);
         }

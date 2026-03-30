@@ -155,7 +155,12 @@ public class MenusController : MonoBehaviour
         bool canAdvance = GameManager.Instance.CanAdvanceLevel();
         foreach (Button advBtn in advanceButtons)
         {
-            advBtn.gameObject.SetActive(canAdvance);
+            advBtn.gameObject.SetActive(canAdvance || levelCompleted);
+            if (levelCompleted)
+            {
+                TextMeshProUGUI buttonLabel = advBtn.transform.GetComponentInChildren<TextMeshProUGUI>();
+                buttonLabel.SetText("Troll the boss");
+            }
         }
 
         // Update the start button, if the previous level has been completed, then this level can be started

@@ -4,24 +4,16 @@ public class BossManager : MonoBehaviour
 {
     [SerializeField] private GameObject flyingSaucersBossContainer;
 
+
+    [SerializeField] private bool forceBoss;
+
     void Start()
     {
-        if (GameManager.Instance.levelSettings.levelType == LevelType.BossFight)
-        {
-            switch (GameManager.Instance.CurrentLevel)
-            {
-                case 1:
-                    flyingSaucersBossContainer.SetActive(true);
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                default:
-                    Debug.LogWarning("Level not supported");
-                    break;
-            }
-        }
+        LevelType levelType = GameManager.Instance.levelSettings.levelType;
+        int currentLevel = GameManager.Instance.CurrentLevel;
+
+        flyingSaucersBossContainer.SetActive(forceBoss || currentLevel == 0 && levelType == LevelType.BossFight);
+        // TODO Next levels
     }
 
 }

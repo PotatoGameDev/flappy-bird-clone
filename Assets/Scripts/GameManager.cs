@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
         levelType = LevelType.Normal
     };
 
+    // 0 based! So there is level 0, 1, 2
     public int CurrentLevel
     {
         get
@@ -149,7 +150,7 @@ public class GameState
     public long BasePopulation;
     public int CivTypePassed;
     public int CollectedEnergy;
-    public int CurrentLevel;
+    public int CurrentLevel; // 0 based! So there is level 0, 1, 2
     public List<UpgradeState> Upgrades;
 
     public GameState()
