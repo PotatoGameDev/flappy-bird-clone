@@ -32,4 +32,9 @@ public class MainMenuManager : MonoBehaviour
         GameManager.Instance.ResetGame();
         SceneManager.LoadScene("NewMenu", LoadSceneMode.Single);
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }

@@ -5057,7 +5057,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   flyingSaucersBossContainer: {fileID: 54189504}
-  forceBoss: 1
+  forceBoss: 0
 --- !u!1 &54189504
 GameObject:
   m_ObjectHideFlags: 0
