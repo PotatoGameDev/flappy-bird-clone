@@ -51,8 +51,6 @@ public class FlyingSaucerController : MonoBehaviour
     [SerializeField] private float borderDangerMultiplier = 100f;
     */
 
-    [SerializeField] private float maxDistanceFromCamera = 30f;
-
     void Awake()
     {
         swarmFollow = GetComponent<SwarmFollow>();
