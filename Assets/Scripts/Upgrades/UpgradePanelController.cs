@@ -83,8 +83,8 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler, IPoin
         else
         {
             buttonLabel.color = upgradeButton.colors.normalColor;
-            nameLabel.color = upgradeButton.colors.disabledColor;
-            levelLabel.color = upgradeButton.colors.disabledColor;
+            nameLabel.color = upgradeButton.colors.normalColor;
+            levelLabel.color = upgradeButton.colors.normalColor;
         }
 
         // Update the level label
