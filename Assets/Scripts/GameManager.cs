@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour
         return State.BasePopulation;
     }
 
-    public void AddBasePopulation(int toAdd)
+    public void AddBasePopulation(long toAdd)
     {
         State.BasePopulation += toAdd;
 

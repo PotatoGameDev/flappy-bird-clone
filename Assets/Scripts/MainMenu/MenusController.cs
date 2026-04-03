@@ -63,7 +63,7 @@ public class MenusController : MonoBehaviour
             mainSelectionL.gameObject.SetActive(false);
         }
 
-        // Selected
+        // Selecte
         mainSelectionCurrent.SetText(mainSelectionOptions[currentMainSelection]);
 
         // R1

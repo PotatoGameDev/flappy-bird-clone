@@ -50,18 +50,25 @@ public class UpgradesMenuController : SecondaryMenuDelegate
     private void HandleUpgrade(Upgrade u)
     {
         FillInStatTexts();
+        FillInUpgradeDescriptions();
     }
 
     private void OnUpgradeSelected(UpgradePanelController upgradePanel)
     {
         selectedUpgrade = upgradePanel;
 
+        FillInUpgradeDescriptions();
+    }
+
+    private void FillInUpgradeDescriptions()
+    {
         UpgradeId ident = selectedUpgrade.GetUpgradeIdent();
         Upgrade upgrade = UpgradesManager.Instance.GetUpgrade(ident);
 
         selectedUpgradeNameLabel.SetText(upgrade.Name);
-        selectedUpgradeDescriptionLabel.SetText(upgrade.Description);
-
+        selectedUpgradeDescriptionLabel.SetText(
+                UpgradesManager.Instance.GetUpgradeDescription(ident)
+                );
     }
 
     public override void ChangeCurrentMenuSelection(int currentSelection)
