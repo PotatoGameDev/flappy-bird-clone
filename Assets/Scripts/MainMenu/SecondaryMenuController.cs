@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class SecondaryMenuController : MonoBehaviour
@@ -6,8 +7,10 @@ public class SecondaryMenuController : MonoBehaviour
     [SerializeField] private SecondaryMenuDelegate controller;
 
     [SerializeField] private TextMeshProUGUI selectionCurrent;
-    [SerializeField] private TextMeshProUGUI selectionL;
-    [SerializeField] private TextMeshProUGUI selectionR;
+    [SerializeField] private Button selectionL;
+    private TextMeshProUGUI selectionLabelL;
+    [SerializeField] private Button selectionR;
+    private TextMeshProUGUI selectionLabelR;
 
     [SerializeField] private GameObject[] selectionContents;
     [SerializeField] private TextMeshProUGUI[] statLabels;
@@ -16,21 +19,12 @@ public class SecondaryMenuController : MonoBehaviour
 
     [SerializeField] private string[] availableOptions;
 
-    // TODO: This should go to a separate controller, just for upgrades
-    void OnEnable()
+    void Awake()
     {
-        UpgradesManager.Instance.OnUpgrade += HandleUpgrade;
+        selectionLabelL = selectionL.GetComponentInChildren<TextMeshProUGUI>(true);
+        selectionLabelR = selectionR.GetComponentInChildren<TextMeshProUGUI>(true);
     }
 
-    void OnDisable()
-    {
-        UpgradesManager.Instance.OnUpgrade -= HandleUpgrade;
-    }
-
-    private void HandleUpgrade(Upgrade u)
-    {
-        UpdateMenus();
-    }
 
     void Start()
     {
@@ -78,22 +72,31 @@ public class SecondaryMenuController : MonoBehaviour
     private void SetSelectionOptions()
     {
         // Sets main selection option labels, the ones at the top:
-
         // Left
-        selectionL.text = "";
+        selectionLabelL.SetText("");
         if (currentSelection > 0)
         {
-            selectionL.text = availableOptions[currentSelection - 1];
+            selectionL.gameObject.SetActive(true);
+            selectionLabelL.SetText(availableOptions[currentSelection - 1]);
+        }
+        else
+        {
+            selectionL.gameObject.SetActive(false);
         }
 
         // Center
-        selectionCurrent.text = availableOptions[currentSelection];
+        selectionCurrent.SetText(availableOptions[currentSelection]);
 
         // Right
-        selectionR.text = "";
+        selectionLabelR.SetText("");
         if (currentSelection < availableOptions.Length - 1)
         {
-            selectionR.text = availableOptions[currentSelection + 1];
+            selectionR.gameObject.SetActive(true);
+            selectionLabelR.SetText(availableOptions[currentSelection + 1]);
+        }
+        else
+        {
+            selectionR.gameObject.SetActive(false);
         }
     }
 

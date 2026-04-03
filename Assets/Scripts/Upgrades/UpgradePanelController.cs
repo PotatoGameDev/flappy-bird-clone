@@ -1,13 +1,19 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using System;
 
-public class UpgradePanelController : MonoBehaviour
+public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private UpgradeId upgradeIdent;
     [SerializeField] private Button upgradeButton;
     [SerializeField] private TextMeshProUGUI nameLabel;
     [SerializeField] private TextMeshProUGUI levelLabel;
+    [SerializeField] private GameObject borderImage;
+    [SerializeField] private GameObject borderImageDisabled;
+
+    public event Action<UpgradePanelController> PanelSelected;
 
     void Awake()
     {
@@ -23,6 +29,11 @@ public class UpgradePanelController : MonoBehaviour
         UpgradesManager.Instance.Buy(upgradeIdent);
         UpdateUi();
         // TODO Play satisfying sound
+    }
+
+    public UpgradeId GetUpgradeIdent()
+    {
+        return upgradeIdent;
     }
 
     private void OnValidate()
@@ -42,29 +53,70 @@ public class UpgradePanelController : MonoBehaviour
 
         if (u.Level == u.MaxLevel)
         {
-            buttonLabel.text = "Maxed";
+            buttonLabel.SetText("Maxed");
             upgradeButton.interactable = false;
         }
         else if (u.Level == 0)
         {
-            buttonLabel.text = string.Format("Buy ({0}GW)", price);
+            buttonLabel.SetText("Buy ({0}GW)", price);
             upgradeButton.interactable = true;
         }
         else
         {
-            buttonLabel.text = string.Format("Upgrade ({0}GW)", price);
+            buttonLabel.SetText("Upgrade ({0}GW)", price);
             upgradeButton.interactable = true;
         }
 
         if (price > GameManager.Instance.CollectedEnergy)
+        {
             upgradeButton.interactable = false;
+            buttonLabel.SetText("Too Poor ({0}GW)", price);
+        }
+
+        // This makes the label the same color as the button
+        if (!upgradeButton.interactable)
+        {
+            buttonLabel.color = upgradeButton.colors.disabledColor;
+            nameLabel.color = upgradeButton.colors.disabledColor;
+            levelLabel.color = upgradeButton.colors.disabledColor;
+        }
+        else
+        {
+            buttonLabel.color = upgradeButton.colors.normalColor;
+            nameLabel.color = upgradeButton.colors.disabledColor;
+            levelLabel.color = upgradeButton.colors.disabledColor;
+        }
 
         // Update the level label
-        levelLabel.text = u.Level.ToString();
+        levelLabel.SetText("{0}", u.Level);
     }
 
     void HandleUpgrade(Upgrade upgrade)
     {
         UpdateUi();
     }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (upgradeButton.interactable)
+        {
+            borderImage.SetActive(true);
+            borderImageDisabled.SetActive(false);
+        }
+        else
+        {
+            borderImage.SetActive(false);
+            borderImageDisabled.SetActive(true);
+        }
+        EventSystem.current.SetSelectedGameObject(upgradeButton.gameObject);
+        PanelSelected?.Invoke(this);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        borderImage.SetActive(false);
+        borderImageDisabled.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(null);
+    }
+
 }

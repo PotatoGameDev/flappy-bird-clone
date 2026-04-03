@@ -1,9 +1,27 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 
 public class MenusController : MonoBehaviour
 {
+    [SerializeField] private TextMeshProUGUI mainSelectionCurrent;
+    [SerializeField] private Button mainSelectionL;
+    private TextMeshProUGUI mainSelectionLabelL;
+    [SerializeField] private Button mainSelectionR;
+    private TextMeshProUGUI mainSelectionLabelR;
+
+    [SerializeField] private GameObject[] mainSelectionContents;
+
+    [SerializeField] private string[] mainSelectionOptions;
+
+    private int currentMainSelection = 0;
+    void Awake()
+    {
+        mainSelectionLabelL = mainSelectionL.GetComponentInChildren<TextMeshProUGUI>(true);
+        mainSelectionLabelR = mainSelectionR.GetComponentInChildren<TextMeshProUGUI>(true);
+    }
+
     void Start()
     {
         currentMainSelection = 1; // We start in level selection
@@ -31,39 +49,44 @@ public class MenusController : MonoBehaviour
         UpdateMainSelectionMenus();
     }
 
-    // Main Selection
-    [SerializeField] private TextMeshProUGUI mainSelectionCurrent;
-    [SerializeField] private TextMeshProUGUI mainSelectionL;
-    [SerializeField] private TextMeshProUGUI mainSelectionR;
-
-    [SerializeField] private GameObject[] mainSelectionContents;
-
-
-    private readonly string[,] mainSelectionOptions = {
-        { "", "System", "Level Select" },
-        { "System", "Level Select", "Upgrades" },
-        { "Level Select", "Upgrades", "" },
-    };
-
-    private int currentMainSelection = 0;
 
     private void UpdateMainSelectionMenus()
     {
-        mainSelectionL.text = mainSelectionOptions[currentMainSelection, 0];
-        mainSelectionCurrent.text = mainSelectionOptions[currentMainSelection, 1];
-        mainSelectionR.text = mainSelectionOptions[currentMainSelection, 2];
+        // L1
+        if (currentMainSelection > 0)
+        {
+            mainSelectionL.gameObject.SetActive(true);
+            mainSelectionLabelL.SetText(mainSelectionOptions[currentMainSelection - 1]);
+        }
+        else
+        {
+            mainSelectionL.gameObject.SetActive(false);
+        }
 
+        // Selected
+        mainSelectionCurrent.SetText(mainSelectionOptions[currentMainSelection]);
+
+        // R1
+        if (currentMainSelection < mainSelectionOptions.Length - 1)
+        {
+            mainSelectionR.gameObject.SetActive(true);
+            mainSelectionLabelR.SetText(mainSelectionOptions[currentMainSelection + 1]);
+        }
+        else
+        {
+            mainSelectionR.gameObject.SetActive(false);
+        }
+
+        // Enabling/disabling the contents when selected/unselected
         for (int i = 0; i < mainSelectionContents.Length; i++)
         {
-            mainSelectionContents[i].SetActive(false);
+            mainSelectionContents[i].SetActive(i == currentMainSelection);
         }
-        mainSelectionContents[currentMainSelection].SetActive(true);
-
     }
 
     public void OnMainR()
     {
-        if (currentMainSelection >= mainSelectionOptions.GetLength(0) - 1) return;
+        if (currentMainSelection >= mainSelectionOptions.Length - 1) return;
         currentMainSelection++;
         UpdateMainSelectionMenus();
     }
