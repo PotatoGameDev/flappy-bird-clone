@@ -7,6 +7,11 @@ public class LevelSelectionController : SecondaryMenuDelegate
     [SerializeField] private Button startButton;
     [SerializeField] private Button advanceButton;
 
+    void Start()
+    {
+        UpdateMenu();
+    }
+
 
     public override void ChangeCurrentMenuSelection(int currentSelection)
     {

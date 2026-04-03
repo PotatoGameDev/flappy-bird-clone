@@ -4,16 +4,80 @@ using UnityEngine.UI;
 
 public class UpgradesMenuController : SecondaryMenuDelegate
 {
-    private UpgradeId selectedUpgrade;
+    private UpgradePanelController selectedUpgrade;
+
     [SerializeField] private Button startButton;
     [SerializeField] private Button advanceButton;
 
-    public override void ChangeCurrentMenuSelection(int currentSelection)
+
+    [SerializeField] private TextMeshProUGUI selectedUpgradeNameLabel;
+    [SerializeField] private TextMeshProUGUI selectedUpgradeStatsLabel;
+    private string selectedUpgradeStatsLabelTemplate;
+    [SerializeField] private TextMeshProUGUI selectedUpgradeDescriptionLabel;
+
+    private UpgradePanelController[] upgradePanels;
+
+    void Awake()
     {
-        // Nothing
+        upgradePanels = GetComponentsInChildren<UpgradePanelController>(true);
+        selectedUpgradeStatsLabelTemplate = selectedUpgradeStatsLabel.text;
     }
 
+    void Start()
+    {
+        UpdateMenu();
+        FillInStatTexts();
+    }
+
+    void OnEnable()
+    {
+        foreach (UpgradePanelController upgradePanel in upgradePanels)
+        {
+            upgradePanel.PanelSelected += OnUpgradeSelected;
+        }
+        UpgradesManager.Instance.OnUpgrade += HandleUpgrade;
+    }
+
+    void OnDisable()
+    {
+        foreach (UpgradePanelController upgradePanel in upgradePanels)
+        {
+            upgradePanel.PanelSelected -= OnUpgradeSelected;
+        }
+        UpgradesManager.Instance.OnUpgrade -= HandleUpgrade;
+    }
+
+    private void HandleUpgrade(Upgrade u)
+    {
+        FillInStatTexts();
+    }
+
+    private void OnUpgradeSelected(UpgradePanelController upgradePanel)
+    {
+        selectedUpgrade = upgradePanel;
+
+        UpgradeId ident = selectedUpgrade.GetUpgradeIdent();
+        Upgrade upgrade = UpgradesManager.Instance.GetUpgrade(ident);
+
+        selectedUpgradeNameLabel.SetText(upgrade.Name);
+        selectedUpgradeDescriptionLabel.SetText(upgrade.Description);
+
+    }
+
+    public override void ChangeCurrentMenuSelection(int currentSelection)
+    {
+        selectedUpgrade = null;
+
+        selectedUpgradeNameLabel.SetText("-");
+        selectedUpgradeDescriptionLabel.SetText("-");
+    }
+
+    // TODO Get rid of from the abstract class
     public override void FillInStatTexts(string labelTemplate, TextMeshProUGUI statLabel)
+    {
+    }
+
+    private void FillInStatTexts()
     {
         long currentEnergy = GameManager.Instance.CollectedEnergy;
         long currentPopulation = GameManager.Instance.GetBasePopulation();
@@ -22,10 +86,9 @@ public class UpgradesMenuController : SecondaryMenuDelegate
         // Keep synched with the UI:
         // TODO: Maybe do it so that we do not need to keep it synched?
 
-        // TODO: CHange to SetText
-        statLabel.text = string.Format(
-                labelTemplate,
-                currentEnergy + "GW",
+        selectedUpgradeStatsLabel.SetText(
+                selectedUpgradeStatsLabelTemplate,
+                currentEnergy,
                 currentPopulation
         );
     }
@@ -56,5 +119,6 @@ public class UpgradesMenuController : SecondaryMenuDelegate
             startButton.interactable = false;
             startButton.GetComponentInChildren<TextMeshProUGUI>().text = "Locked";
         }
+
     }
 }
