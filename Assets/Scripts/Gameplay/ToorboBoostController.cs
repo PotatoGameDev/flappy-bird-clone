@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 public class ToorboBoostController : MonoBehaviour
 {
-    private static readonly int BOOST_PER_LEVEL = 100;
     [SerializeField] private PlanetController planet;
     [SerializeField] private Camera cam;
 
@@ -14,7 +13,7 @@ public class ToorboBoostController : MonoBehaviour
     [SerializeField] private float toorboBoostSpeedAdd = 0.5f;
 
     private float targetPlanetToCameraOffset;
-    private float currentBoostLeft;
+    private float currentBoostSecondsLeft;
 
     [SerializeField] private Slider toorboBoostSlider;
     [SerializeField] private GameObject toorboBoostSliderFill;
@@ -33,10 +32,10 @@ public class ToorboBoostController : MonoBehaviour
         }
         else
         {
-            currentBoostLeft = BOOST_PER_LEVEL * boostLevel;
+            currentBoostSecondsLeft = UpgradesManager.Instance.GetToorboBoostSecondsForLevel();
             toorboBoostSlider.minValue = 0f;
-            toorboBoostSlider.maxValue = currentBoostLeft;
-            toorboBoostSlider.value = currentBoostLeft;
+            toorboBoostSlider.maxValue = currentBoostSecondsLeft;
+            toorboBoostSlider.value = currentBoostSecondsLeft;
         }
 
         targetPlanetToCameraOffset = PlanetBehindCamera();
@@ -53,7 +52,7 @@ public class ToorboBoostController : MonoBehaviour
 
         transform.position = planet.transform.position;
 
-        if (currentBoostLeft <= 0f)
+        if (currentBoostSecondsLeft <= 0f)
         {
             toorboBoostSliderFill.SetActive(false);
             planet.ToorboBoost = 0f;
@@ -68,13 +67,13 @@ public class ToorboBoostController : MonoBehaviour
 
             planet.ToorboBoost = toorboBoostSpeedAdd;
 
-            currentBoostLeft -= toorboBoostSpeedAdd;
+            currentBoostSecondsLeft -= Time.deltaTime;
 
-            if (!Mathf.Approximately(toorboBoostSlider.value, currentBoostLeft))
+            if (!Mathf.Approximately(toorboBoostSlider.value, currentBoostSecondsLeft))
             {
                 // this is in "if" because we don't want to reset the value every frame, maybe causing 
                 // canvas rebuild
-                toorboBoostSlider.SetValueWithoutNotify(currentBoostLeft);
+                toorboBoostSlider.SetValueWithoutNotify(currentBoostSecondsLeft);
             }
         }
         else

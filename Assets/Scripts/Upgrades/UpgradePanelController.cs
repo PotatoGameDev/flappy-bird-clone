@@ -19,10 +19,13 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler, IPoin
     {
         nameLabel.text = UpgradesManager.Instance.GetUpgrade(upgradeIdent).Name;
         UpdateUi();
+        UpgradesManager.Instance.OnUpgrade += HandleUpgrade;
     }
 
-    void OnEnable() => UpgradesManager.Instance.OnUpgrade += HandleUpgrade;
-    void OnDisable() => UpgradesManager.Instance.OnUpgrade -= HandleUpgrade;
+    void OnDestroy()
+    {
+        UpgradesManager.Instance.OnUpgrade -= HandleUpgrade;
+    }
 
     public void OnUpgradeClicked()
     {

@@ -37,12 +37,10 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] private Slider spinDoctorLevelSlider;
     [SerializeField] private GameObject spinDoctorLevelSliderFill;
     public float SpinDoctorUsagePerSecond { get; private set; }
-    private static readonly int SPIN_DOCTOR_RPM_PER_LEVEL = 100;
     private float spinDoctorLeft;
 
     [SerializeField] private Slider shieldLevelSlider;
     [SerializeField] private GameObject shieldLevelSliderFill;
-    private static readonly long SHIELD_AMOUNT_PER_LEVEL = 1000000;
     private long shieldLeft;
 
     [Header("Boss")]
@@ -100,29 +98,27 @@ public class GameplayManager : MonoBehaviour
         StartCoroutine(DoEverySecondActions());
 
         // SpinDoctor
-        int spinDoctorLevel = UpgradesManager.Instance.GetUpgrade(UpgradeId.SpinDoctor).Level;
+        int spinDoctorLeft = UpgradesManager.Instance.GetSpinDoctorMaxRpmPerSecond();
 
-        if (spinDoctorLevel == 0)
+        if (spinDoctorLeft == 0)
         {
             spinDoctorLevelSliderFill.SetActive(false);
         }
         else
         {
-            spinDoctorLeft = spinDoctorLevel * SPIN_DOCTOR_RPM_PER_LEVEL;
             spinDoctorLevelSlider.minValue = 0f;
             spinDoctorLevelSlider.maxValue = spinDoctorLeft;
             spinDoctorLevelSlider.value = spinDoctorLeft;
         }
 
         // EnergyShield
-        int shieldLevel = UpgradesManager.Instance.GetUpgrade(UpgradeId.EnergyShield).Level;
-        if (shieldLevel == 0)
+        long shieldLeft = UpgradesManager.Instance.GetEnergyShieldMax();
+        if (shieldLeft == 0)
         {
             shieldLevelSliderFill.SetActive(false);
         }
         else
         {
-            shieldLeft = shieldLevel * SHIELD_AMOUNT_PER_LEVEL;
             shieldLevelSlider.minValue = 0f;
             shieldLevelSlider.maxValue = shieldLeft;
             shieldLevelSlider.value = shieldLeft;
@@ -197,13 +193,7 @@ public class GameplayManager : MonoBehaviour
 
     IEnumerator DoEverySecondActions()
     {
-
-        int androidSlaveryLevel = UpgradesManager.Instance.GetUpgrade(UpgradeId.AndroidSlavery).Level;
-        long slaveryIncrease = androidSlaveryLevel * 100;
-
-        int vyagraEnergizingTherapyLevel = UpgradesManager.Instance.GetUpgrade(UpgradeId.VyagraEnergizingTherapy).Level;
-        float vyagraEnergizingTherapyPercent = vyagraEnergizingTherapyLevel / 100f;
-
+        long slaveryIncrease = UpgradesManager.Instance.GetPopulationNumberPerSecond(UpgradeId.AndroidSlavery);
         int previousScoopedEnergy = ScoopedEnergy;
 
         while (true)
@@ -222,11 +212,12 @@ public class GameplayManager : MonoBehaviour
 
             // VyagraEnergizingTherapy
 
-            long vyagraIncrease = (long)(currentPopulation * vyagraEnergizingTherapyPercent);
+            float vyagraIncrease = UpgradesManager.Instance.GetPopulationPercentPerSecond(UpgradeId.VyagraEnergizingTherapy);
             if (vyagraIncrease > 0)
             {
-                currentPopulation += vyagraIncrease;
-                string text = "+" + vyagraIncrease;
+                long totalIncrease = (long)(currentPopulation * vyagraIncrease);
+                currentPopulation += totalIncrease;
+                string text = "+" + totalIncrease;
                 populationMessagesManager.Spawn(text, fadingMessagePopulationAddedColor);
                 UpdateLabels();
             }
@@ -411,7 +402,7 @@ public class GameplayManager : MonoBehaviour
 
     public int EnergyPerGate()
     {
-        return UpgradesManager.Instance.GetUpgrade(UpgradeId.ORing).Level + 1;
+        return UpgradesManager.Instance.GetORingEnergyPerLevel();
     }
 
     private void AddEnergyCollectedText(int energyAdded)

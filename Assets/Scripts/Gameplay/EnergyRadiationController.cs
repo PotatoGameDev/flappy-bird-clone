@@ -15,7 +15,7 @@ public class EnergyRadiationController : MonoBehaviour
 
     void Start()
     {
-        int energyCount = UpgradesManager.Instance.GetUpgrade(upgradeId).Level;
+        int energyCount = UpgradesManager.Instance.GetEnergyRadiationPerSecond(upgradeId);
         if (energyCount > 0)
         {
             StartCoroutine(GenerateEnergyParticles(energyCount));
