@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.InputSystem;
+
 
 public class SecondaryMenuController : MonoBehaviour
 {
@@ -100,27 +102,56 @@ public class SecondaryMenuController : MonoBehaviour
         }
     }
 
+    public void OnGoRight(InputAction.CallbackContext ctx)
+    {
+        if (!ctx.performed)
+        {
+            return;
+        }
+        OnGoRight();
+    }
+
+    public void OnGoLeft(InputAction.CallbackContext ctx)
+    {
+        if (!ctx.performed)
+        {
+            return;
+        }
+        OnGoLeft();
+    }
+
     public void OnGoRight()
     {
+        if (!gameObject.activeInHierarchy)
+        {
+            return;
+        }
         if (currentSelection == availableOptions.Length - 1) return;
         currentSelection++;
+
+        UpdateMenus();
 
         if (controller != null)
         {
             controller.ChangeCurrentMenuSelection(currentSelection);
         }
-        UpdateMenus();
     }
 
     public void OnGoLeft()
     {
+        if (!gameObject.activeInHierarchy)
+        {
+            return;
+        }
         if (currentSelection == 0) return;
         currentSelection--;
+
+        UpdateMenus();
+
         if (controller != null)
         {
             controller.ChangeCurrentMenuSelection(currentSelection);
         }
-        UpdateMenus();
     }
 }
 

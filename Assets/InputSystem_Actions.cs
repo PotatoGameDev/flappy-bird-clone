@@ -208,7 +208,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": ""Submit"",
                     ""type"": ""Button"",
                     ""id"": ""7607c7b6-cd76-4816-beef-bd0341cfe950"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -281,6 +281,42 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""type"": ""PassThrough"",
                     ""id"": ""9caa3d8a-6b2f-4e8e-8bad-6ede561bd9be"",
                     ""expectedControlType"": ""Quaternion"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SecondaryMenuRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""d45f1cef-24c5-4790-92b5-afbad30b1ceb"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SecondaryMenuLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""5853e107-901c-41a8-a4d6-e2acbfc84c89"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MainMenuLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""2f424c57-13c3-4ffe-ac99-ff0187f9bb86"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MainMenuRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""edee54e0-d5d3-4cb2-90f6-ef57a92ba162"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -704,6 +740,50 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""TrackedDeviceOrientation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""46138880-3232-4531-b94b-19730a9fddf9"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""SecondaryMenuRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""587f386a-a275-48bc-81da-634505156923"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""SecondaryMenuLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""698bdcb9-7dde-472c-b8cf-6de91270e800"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""MainMenuLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""af0a5a08-2063-44b6-af60-2eaafdec5a7d"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""MainMenuRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -787,6 +867,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_UI_ScrollWheel = m_UI.FindAction("ScrollWheel", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+        m_UI_SecondaryMenuRight = m_UI.FindAction("SecondaryMenuRight", throwIfNotFound: true);
+        m_UI_SecondaryMenuLeft = m_UI.FindAction("SecondaryMenuLeft", throwIfNotFound: true);
+        m_UI_MainMenuLeft = m_UI.FindAction("MainMenuLeft", throwIfNotFound: true);
+        m_UI_MainMenuRight = m_UI.FindAction("MainMenuRight", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
@@ -985,6 +1069,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_ScrollWheel;
     private readonly InputAction m_UI_TrackedDevicePosition;
     private readonly InputAction m_UI_TrackedDeviceOrientation;
+    private readonly InputAction m_UI_SecondaryMenuRight;
+    private readonly InputAction m_UI_SecondaryMenuLeft;
+    private readonly InputAction m_UI_MainMenuLeft;
+    private readonly InputAction m_UI_MainMenuRight;
     /// <summary>
     /// Provides access to input actions defined in input action map "UI".
     /// </summary>
@@ -1036,6 +1124,22 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "UI/TrackedDeviceOrientation".
         /// </summary>
         public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/SecondaryMenuRight".
+        /// </summary>
+        public InputAction @SecondaryMenuRight => m_Wrapper.m_UI_SecondaryMenuRight;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/SecondaryMenuLeft".
+        /// </summary>
+        public InputAction @SecondaryMenuLeft => m_Wrapper.m_UI_SecondaryMenuLeft;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/MainMenuLeft".
+        /// </summary>
+        public InputAction @MainMenuLeft => m_Wrapper.m_UI_MainMenuLeft;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/MainMenuRight".
+        /// </summary>
+        public InputAction @MainMenuRight => m_Wrapper.m_UI_MainMenuRight;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1092,6 +1196,18 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @TrackedDeviceOrientation.started += instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.performed += instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.canceled += instance.OnTrackedDeviceOrientation;
+            @SecondaryMenuRight.started += instance.OnSecondaryMenuRight;
+            @SecondaryMenuRight.performed += instance.OnSecondaryMenuRight;
+            @SecondaryMenuRight.canceled += instance.OnSecondaryMenuRight;
+            @SecondaryMenuLeft.started += instance.OnSecondaryMenuLeft;
+            @SecondaryMenuLeft.performed += instance.OnSecondaryMenuLeft;
+            @SecondaryMenuLeft.canceled += instance.OnSecondaryMenuLeft;
+            @MainMenuLeft.started += instance.OnMainMenuLeft;
+            @MainMenuLeft.performed += instance.OnMainMenuLeft;
+            @MainMenuLeft.canceled += instance.OnMainMenuLeft;
+            @MainMenuRight.started += instance.OnMainMenuRight;
+            @MainMenuRight.performed += instance.OnMainMenuRight;
+            @MainMenuRight.canceled += instance.OnMainMenuRight;
         }
 
         /// <summary>
@@ -1133,6 +1249,18 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @TrackedDeviceOrientation.started -= instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.performed -= instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.canceled -= instance.OnTrackedDeviceOrientation;
+            @SecondaryMenuRight.started -= instance.OnSecondaryMenuRight;
+            @SecondaryMenuRight.performed -= instance.OnSecondaryMenuRight;
+            @SecondaryMenuRight.canceled -= instance.OnSecondaryMenuRight;
+            @SecondaryMenuLeft.started -= instance.OnSecondaryMenuLeft;
+            @SecondaryMenuLeft.performed -= instance.OnSecondaryMenuLeft;
+            @SecondaryMenuLeft.canceled -= instance.OnSecondaryMenuLeft;
+            @MainMenuLeft.started -= instance.OnMainMenuLeft;
+            @MainMenuLeft.performed -= instance.OnMainMenuLeft;
+            @MainMenuLeft.canceled -= instance.OnMainMenuLeft;
+            @MainMenuRight.started -= instance.OnMainMenuRight;
+            @MainMenuRight.performed -= instance.OnMainMenuRight;
+            @MainMenuRight.canceled -= instance.OnMainMenuRight;
         }
 
         /// <summary>
@@ -1330,5 +1458,33 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SecondaryMenuRight" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSecondaryMenuRight(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SecondaryMenuLeft" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSecondaryMenuLeft(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "MainMenuLeft" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMainMenuLeft(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "MainMenuRight" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMainMenuRight(InputAction.CallbackContext context);
     }
 }

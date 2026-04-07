@@ -44013,6 +44013,10 @@ PrefabInstance:
       value: InstancePoolsManager
       objectReference: {fileID: 0}
     - target: {fileID: 9138722143102967130, guid: ab4cc410dfe2aa964b2579d7b7c4d4b7, type: 3}
+      propertyPath: fadingMessagePrefab
+      value: 
+      objectReference: {fileID: 8648792056202067061, guid: 37bf8c6ef03ffdd0287ecea8cd99a384, type: 3}
+    - target: {fileID: 9138722143102967130, guid: ab4cc410dfe2aa964b2579d7b7c4d4b7, type: 3}
       propertyPath: bulletControllerPrefab
       value: 
       objectReference: {fileID: 2213680125840268772, guid: 0d6f9e4dbe5691cdda2a28875cfdc73f, type: 3}

@@ -55,6 +55,13 @@ public class UpgradesMenuController : SecondaryMenuDelegate
 
     private void OnUpgradeSelected(UpgradePanelController upgradePanel)
     {
+        // Deselecting the old selection:
+        if (selectedUpgrade != null)
+        {
+            selectedUpgrade.SetSelected(false);
+        }
+
+        // Selecting the new one:
         selectedUpgrade = upgradePanel;
 
         FillInUpgradeDescriptions();
@@ -73,10 +80,17 @@ public class UpgradesMenuController : SecondaryMenuDelegate
 
     public override void ChangeCurrentMenuSelection(int currentSelection)
     {
-        selectedUpgrade = null;
+        foreach (UpgradePanelController panel in upgradePanels)
+        {
+            if (panel.gameObject.activeInHierarchy)
+            {
+                panel.SetSelected(true);
+                break;
+            }
+        }
 
-        selectedUpgradeNameLabel.SetText("-");
-        selectedUpgradeDescriptionLabel.SetText("-");
+        //selectedUpgradeNameLabel.SetText("-");
+        //selectedUpgradeDescriptionLabel.SetText("-");
     }
 
     // TODO Get rid of from the abstract class
@@ -126,6 +140,5 @@ public class UpgradesMenuController : SecondaryMenuDelegate
             startButton.interactable = false;
             startButton.GetComponentInChildren<TextMeshProUGUI>().text = "Locked";
         }
-
     }
 }

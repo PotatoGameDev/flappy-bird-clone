@@ -339,6 +339,7 @@ public class PlanetController : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Enemy"))
         {
+            // TODO May be more enemy types later
             if (collision.gameObject.GetComponent<FlyingSaucerController>().Active)
             {
                 return;
