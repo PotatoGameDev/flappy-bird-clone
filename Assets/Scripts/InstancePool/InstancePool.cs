@@ -16,6 +16,8 @@ namespace PotatoGameDev.Pool
             this.parent = parent;
         }
 
+        public T Prefab { get => prefab; }
+
         public void Preheat(int prewarm)
         {
             for (int i = 0; i < prewarm; i++)

@@ -102,4 +102,15 @@ public class EnergyBallManager : MonoBehaviour
         ball.SetColor(color, value);
         return ball;
     }
+
+
+    public bool CanPlace(Vector2 position, LayerMask blockingLayer)
+    {
+        return Physics2D.OverlapBox(
+                position,
+                Vector2.one * 0.5f, // Simplified, we check in the radius of 0.5,
+                0f,                 // not exactly the size of the energy ball, but this is not critical.
+                blockingLayer
+            ) == null;
+    }
 }

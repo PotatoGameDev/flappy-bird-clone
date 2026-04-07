@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
+
 public class EnergyRadiationController : MonoBehaviour
 {
 
@@ -26,6 +27,12 @@ public class EnergyRadiationController : MonoBehaviour
     {
         while (true)
         {
+            Vector3 destination = destinationPosition.position;
+            while (!EnergyBallManager.Instance.CanPlace(destination, layerMask))
+            {
+                destination += Vector3.right * 0.1f;
+            }
+
             float timePerEnergy = 1f /* sec */ / energyCount;
 
             for (int i = 0; i < energyCount; i++)
@@ -37,15 +44,11 @@ public class EnergyRadiationController : MonoBehaviour
                 ball.transform.position = spawnPosition.position
                     + new Vector3(Random.Range(-1, 2), Random.Range(-1, 2), 0f);
 
-                Vector3 destination = destinationPosition.position + new Vector3(Random.Range(0, destinationSpread.x), Random.Range(0, destinationSpread.y));
+                Vector3 finalDestination = destination + new Vector3(Random.Range(0, destinationSpread.x), Random.Range(0, destinationSpread.y));
 
-                while (!ball.CanPlace(destination, layerMask))
-                {
-                    destination += Vector3.right * 0.01f;
-                }
 
                 ball.Type = EnergyType.CollectEnergy;
-                ball.Target = destination;
+                ball.Target = finalDestination;
 
                 yield return new WaitForSeconds(timePerEnergy / 2f);
             }

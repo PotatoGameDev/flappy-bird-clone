@@ -34,28 +34,24 @@ public class GateController : PooledInstance
         int i = 0;
         while (energyPortions.Count > 0)
         {
+            EnergyBallController ball = energyPortions.Pop();
+            ball.Init();
+            ball.Type = EnergyType.PipeEnergy;
+
             if (i % 2 == 0)
             {
-                EnergyBallController ball = energyPortions.Pop();
-                ball.Init();
-
-                ball.transform.position = topEnergyBallSpawner.position + new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0f);
-                ball.Type = EnergyType.PipeEnergy;
-                yield return new WaitForSeconds(timePerEnergy / 2f);
+                ball.transform.position = bottomEnergyBallSpawner.position
+                    + new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0f);
             }
             else
             {
-                EnergyBallController ball = energyPortions.Pop();
-                ball.Init();
-                ball.transform.position = bottomEnergyBallSpawner.position + new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0f);
-                ball.Type = EnergyType.PipeEnergy;
-                yield return new WaitForSeconds(timePerEnergy / 2f);
+                ball.transform.position = topEnergyBallSpawner.position
+                    + new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0f);
             }
             i++;
+
+            yield return new WaitForSeconds(timePerEnergy / 2f); // Divide by 2 because it's split
         }
     }
 
-    private void CreateBall(Transform source)
-    {
-    }
 }
