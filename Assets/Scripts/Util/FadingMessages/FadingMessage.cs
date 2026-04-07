@@ -1,8 +1,10 @@
 using UnityEngine;
 using TMPro;
+using PotatoGameDev.Pool;
+using System.Collections;
 
 [RequireComponent(typeof(RectTransform))]
-public class FadingMessage : MonoBehaviour
+public class FadingMessage : PooledInstance
 {
     [SerializeField] private TextMeshProUGUI label;
     [SerializeField] private float maxDisplayTimeSeconds = 1;
@@ -17,9 +19,18 @@ public class FadingMessage : MonoBehaviour
         rect = GetComponent<RectTransform>();
     }
 
-    void Start()
+    public new void Init()
     {
         displayTime = 0f;
+
+        StartCoroutine(SelfDestruct());
+    }
+
+    private IEnumerator SelfDestruct()
+    {
+        yield return new WaitForSeconds(displayTime);
+
+        Release();
     }
 
     public void SetColor(Color color)

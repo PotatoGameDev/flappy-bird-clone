@@ -26,10 +26,6 @@ public class GateController : PooledInstance
         float timePerEnergy = 0.5f /* sec */ / energyPerGate;
 
         Stack<EnergyBallController> energyPortions = EnergyBallManager.Instance.GetForTotal(energyPerGate);
-        foreach (EnergyBallController energy in energyPortions)
-        {
-            energy.Type = EnergyType.PipeEnergy;
-        }
 
         int i = 0;
         while (energyPortions.Count > 0)

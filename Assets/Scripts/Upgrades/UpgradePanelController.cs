@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
 
-public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
 {
     [SerializeField] private UpgradeId upgradeIdent;
     [SerializeField] private Button upgradeButton;
@@ -12,14 +12,26 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler, IPoin
     [SerializeField] private TextMeshProUGUI levelLabel;
     [SerializeField] private GameObject borderImage;
     [SerializeField] private GameObject borderImageDisabled;
+    [SerializeField] private bool defaultSelected;
 
     public event Action<UpgradePanelController> PanelSelected;
+
+
+    public bool Selected { get; private set; }
 
     void Awake()
     {
         nameLabel.text = UpgradesManager.Instance.GetUpgrade(upgradeIdent).Name;
         UpdateUi();
         UpgradesManager.Instance.OnUpgrade += HandleUpgrade;
+    }
+
+    void Start()
+    {
+        if (defaultSelected)
+        {
+            SetSelected(true);
+        }
     }
 
     void OnDestroy()
@@ -101,25 +113,41 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler, IPoin
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (upgradeButton.interactable)
+        SetSelected(true);
+    }
+
+    public void SetSelected(bool selected)
+    {
+        if (Selected == selected)
         {
-            borderImage.SetActive(true);
-            borderImageDisabled.SetActive(false);
+            // We are selecting already selected button, or deselecting unselected
+            return;
+        }
+
+        Selected = selected;
+        if (selected)
+        {
+            if (upgradeButton.interactable)
+            {
+                borderImage.SetActive(true);
+                borderImageDisabled.SetActive(false);
+            }
+            else
+            {
+                borderImage.SetActive(false);
+                borderImageDisabled.SetActive(true);
+            }
+            PanelSelected?.Invoke(this);
+            if (!EventSystem.current.alreadySelecting)
+            {
+                EventSystem.current.SetSelectedGameObject(upgradeButton.gameObject);
+            }
         }
         else
         {
             borderImage.SetActive(false);
-            borderImageDisabled.SetActive(true);
+            borderImageDisabled.SetActive(false);
         }
-        EventSystem.current.SetSelectedGameObject(upgradeButton.gameObject);
-        PanelSelected?.Invoke(this);
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        borderImage.SetActive(false);
-        borderImageDisabled.SetActive(false);
-        EventSystem.current.SetSelectedGameObject(null);
     }
 
 }

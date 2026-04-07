@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class MenusController : MonoBehaviour
 {
@@ -11,11 +12,12 @@ public class MenusController : MonoBehaviour
     [SerializeField] private Button mainSelectionR;
     private TextMeshProUGUI mainSelectionLabelR;
 
-    [SerializeField] private GameObject[] mainSelectionContents;
+    [SerializeField] private SecondaryMenuController[] mainSelectionContents;
 
     [SerializeField] private string[] mainSelectionOptions;
 
     private int currentMainSelection = 0;
+
     void Awake()
     {
         mainSelectionLabelL = mainSelectionL.GetComponentInChildren<TextMeshProUGUI>(true);
@@ -80,8 +82,44 @@ public class MenusController : MonoBehaviour
         // Enabling/disabling the contents when selected/unselected
         for (int i = 0; i < mainSelectionContents.Length; i++)
         {
-            mainSelectionContents[i].SetActive(i == currentMainSelection);
+            mainSelectionContents[i].gameObject.SetActive(i == currentMainSelection);
         }
+    }
+
+    public void OnSecondaryRight(InputAction.CallbackContext ctx)
+    {
+        if (!ctx.performed)
+        {
+            return;
+        }
+        mainSelectionContents[currentMainSelection].OnGoRight(ctx);
+    }
+
+    public void OnSecondaryLeft(InputAction.CallbackContext ctx)
+    {
+        if (!ctx.performed)
+        {
+            return;
+        }
+        mainSelectionContents[currentMainSelection].OnGoLeft(ctx);
+    }
+
+    public void OnGoRight(InputAction.CallbackContext ctx)
+    {
+        if (!ctx.performed)
+        {
+            return;
+        }
+        OnMainR();
+    }
+
+    public void OnGoLeft(InputAction.CallbackContext ctx)
+    {
+        if (!ctx.performed)
+        {
+            return;
+        }
+        OnMainL();
     }
 
     public void OnMainR()
@@ -99,6 +137,13 @@ public class MenusController : MonoBehaviour
     }
 
     // Level Selection
+    public void OnLevelSelectStartClicked(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed)
+        {
+            OnLevelSelectStartClicked();
+        }
+    }
 
     // TODO Prune
     public void OnLevelSelectStartClicked()
