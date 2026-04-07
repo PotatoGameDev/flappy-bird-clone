@@ -5,7 +5,7 @@ public class InstancePoolsManager : MonoBehaviour
 {
     public static InstancePoolsManager Instance { get; private set; }
 
-    [SerializeField] private EnergyBallController energyBallControllerPrefab;
+    [SerializeField] internal EnergyBallController energyBallControllerPrefab;
     public InstancePool<EnergyBallController> EnergyBallControllerPool { get; private set; }
 
     [SerializeField] private BulletController bulletControllerPrefab;

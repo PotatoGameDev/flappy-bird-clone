@@ -20,7 +20,7 @@ public class EnergyBallController : PooledInstance
 
     public int energyValue = 1;
 
-    private CircleCollider2D col;
+    public CircleCollider2D Collider { get; set; }
     private SpriteRenderer rendr;
 
     private Coroutine timeout;
@@ -30,7 +30,8 @@ public class EnergyBallController : PooledInstance
         anim = GetComponent<Animator>();
         initialScale = transform.localScale;
 
-        col = GetComponent<CircleCollider2D>();
+
+        Collider = GetComponent<CircleCollider2D>();
         rendr = GetComponent<SpriteRenderer>();
     }
 
@@ -123,10 +124,6 @@ public class EnergyBallController : PooledInstance
         Release();
     }
 
-    public bool CanPlace(Vector2 position, LayerMask blockingLayer)
-    {
-        return Physics2D.OverlapBox(position + col.offset, Vector2.one * col.radius, 0f, blockingLayer) == null;
-    }
 
     public void SetColor(Color color, int value)
     {
