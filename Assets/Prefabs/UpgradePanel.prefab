@@ -239,6 +239,7 @@ MonoBehaviour:
   levelLabel: {fileID: 5798511634319160975}
   borderImage: {fileID: 7994616545267407745}
   borderImageDisabled: {fileID: 2403482398384397267}
+  defaultSelected: 0
 --- !u!1 &2180563050974143416
 GameObject:
   m_ObjectHideFlags: 0
@@ -791,7 +792,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}

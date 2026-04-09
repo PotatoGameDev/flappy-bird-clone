@@ -26,7 +26,7 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
         UpgradesManager.Instance.OnUpgrade += HandleUpgrade;
     }
 
-    void Start()
+    void OnEnable()
     {
         if (defaultSelected)
         {
