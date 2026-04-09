@@ -76,18 +76,6 @@ public class UpgradesMenuController : SecondaryMenuDelegate
                 );
     }
 
-    public override void ChangeCurrentMenuSelection(int currentSelection)
-    {
-        foreach (UpgradePanelController panel in upgradePanels)
-        {
-            if (panel.gameObject.activeInHierarchy)
-            {
-                panel.SetSelected(true);
-                break;
-            }
-        }
-    }
-
     // TODO Get rid of from the abstract class
     public override void FillInStatTexts(string labelTemplate, TextMeshProUGUI statLabel)
     {

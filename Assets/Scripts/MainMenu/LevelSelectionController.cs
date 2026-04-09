@@ -18,7 +18,6 @@ public class LevelSelectionController : SecondaryMenuDelegate
 
     public override int InitCurrentMenuSelection()
     {
-        Debug.Log("Init in level sel");
         return GameManager.Instance.CurrentLevel;
     }
 

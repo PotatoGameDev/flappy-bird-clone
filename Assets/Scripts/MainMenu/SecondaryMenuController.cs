@@ -41,7 +41,6 @@ public class SecondaryMenuController : MonoBehaviour
         }
 
         currentSelection = controller.InitCurrentMenuSelection();
-        Debug.Log("Inited to: " + currentSelection);
 
         UpdateMenus();
     }
@@ -160,7 +159,7 @@ public class SecondaryMenuController : MonoBehaviour
 
 public abstract class SecondaryMenuDelegate : MonoBehaviour
 {
-    public abstract void ChangeCurrentMenuSelection(int current);
+    public virtual void ChangeCurrentMenuSelection(int current) { }
 
     public abstract void FillInStatTexts(string labelTemplate, TextMeshProUGUI statLabel);
 
@@ -168,7 +167,6 @@ public abstract class SecondaryMenuDelegate : MonoBehaviour
 
     public virtual int InitCurrentMenuSelection()
     {
-        Debug.Log("I work");
         return 0;
     }
 
