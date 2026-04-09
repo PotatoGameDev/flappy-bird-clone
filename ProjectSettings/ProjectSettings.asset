@@ -614,7 +614,7 @@ PlayerSettings:
     QNX: DOTWEEN
     Standalone: DOTWEEN
     VisionOS: DOTWEEN
-    WebGL: DOTWEEN;SUPERDEBUG
+    WebGL: DOTWEEN;SUPERDEBUG_OFF
     Windows Store Apps: DOTWEEN
     XboxOne: DOTWEEN
     iPhone: DOTWEEN

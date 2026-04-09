@@ -40,6 +40,9 @@ public class SecondaryMenuController : MonoBehaviour
             }
         }
 
+        currentSelection = controller.InitCurrentMenuSelection();
+        Debug.Log("Inited to: " + currentSelection);
+
         UpdateMenus();
     }
 
@@ -129,12 +132,12 @@ public class SecondaryMenuController : MonoBehaviour
         if (currentSelection == availableOptions.Length - 1) return;
         currentSelection++;
 
-        UpdateMenus();
-
         if (controller != null)
         {
             controller.ChangeCurrentMenuSelection(currentSelection);
         }
+
+        UpdateMenus();
     }
 
     public void OnGoLeft()
@@ -146,12 +149,12 @@ public class SecondaryMenuController : MonoBehaviour
         if (currentSelection == 0) return;
         currentSelection--;
 
-        UpdateMenus();
-
         if (controller != null)
         {
             controller.ChangeCurrentMenuSelection(currentSelection);
         }
+
+        UpdateMenus();
     }
 }
 
@@ -162,5 +165,11 @@ public abstract class SecondaryMenuDelegate : MonoBehaviour
     public abstract void FillInStatTexts(string labelTemplate, TextMeshProUGUI statLabel);
 
     public abstract void UpdateMenu();
+
+    public virtual int InitCurrentMenuSelection()
+    {
+        Debug.Log("I work");
+        return 0;
+    }
 
 }

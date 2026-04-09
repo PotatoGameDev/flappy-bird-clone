@@ -5,20 +5,26 @@ using UnityEngine.UI;
 public class LevelSelectionController : SecondaryMenuDelegate
 {
     [SerializeField] private Button startButton;
-    [SerializeField] private Button advanceButton;
 
     void Start()
     {
         UpdateMenu();
     }
 
-
     public override void ChangeCurrentMenuSelection(int currentSelection)
     {
         GameManager.Instance.CurrentLevel = currentSelection;
     }
 
-    public override void FillInStatTexts(string labelTemplate, TextMeshProUGUI label)
+    public override int InitCurrentMenuSelection()
+    {
+        Debug.Log("Init in level sel");
+        return GameManager.Instance.CurrentLevel;
+    }
+
+    public override void FillInStatTexts(
+            string labelTemplate,
+            TextMeshProUGUI label)
     {
         int currentLevelSelection = GameManager.Instance.CurrentLevel;
         bool levelCompleted = currentLevelSelection < GameManager.Instance.CivTypePassed;
@@ -36,34 +42,22 @@ public class LevelSelectionController : SecondaryMenuDelegate
                 currentEnergy + "GW",
                 advanceEnergy + "GW"
         );
-
     }
 
     public override void UpdateMenu()
     {
-        // Update the Advance button:
-        bool canAdvance = GameManager.Instance.CanAdvanceLevel();
-
-        bool levelCompleted = true;
-
-        advanceButton.gameObject.SetActive(canAdvance || levelCompleted);
-        if (levelCompleted)
-        {
-            TextMeshProUGUI buttonLabel = advanceButton.transform.GetComponentInChildren<TextMeshProUGUI>();
-            buttonLabel.SetText("Troll the boss");
-        }
-
         // Update the start button, if the previous level has been completed, then this level can be started
-        int currentLevelSelection = GameManager.Instance.CurrentLevel;
-        if (currentLevelSelection <= GameManager.Instance.CivTypePassed)
+        if (GameManager.Instance.CanPlayLevel())
         {
             startButton.interactable = true;
-            startButton.GetComponentInChildren<TextMeshProUGUI>().text = "Play";
+            startButton.GetComponentInChildren<TextMeshProUGUI>()
+                .SetText("Play");
         }
         else
         {
             startButton.interactable = false;
-            startButton.GetComponentInChildren<TextMeshProUGUI>().text = "Locked";
+            startButton.GetComponentInChildren<TextMeshProUGUI>()
+                .SetText("Locked");
         }
     }
 }
