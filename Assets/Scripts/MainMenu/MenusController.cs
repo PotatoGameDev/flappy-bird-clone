@@ -16,12 +16,33 @@ public class MenusController : MonoBehaviour
 
     [SerializeField] private string[] mainSelectionOptions;
 
+    [SerializeField] private InputActionReference actionSubmit;
+    [SerializeField] private InputActionReference actionSecondaryMenuLeft;
+    [SerializeField] private InputActionReference actionSecondaryMenuRight;
+    [SerializeField] private InputActionReference actionMainMenuLeft;
+    [SerializeField] private InputActionReference actionMainMenuRight;
+
     private int currentMainSelection = 0;
 
     void Awake()
     {
         mainSelectionLabelL = mainSelectionL.GetComponentInChildren<TextMeshProUGUI>(true);
         mainSelectionLabelR = mainSelectionR.GetComponentInChildren<TextMeshProUGUI>(true);
+
+        actionSubmit.action.performed += OnLevelSelectStartClicked;
+        actionSecondaryMenuLeft.action.performed += OnSecondaryLeft;
+        actionSecondaryMenuRight.action.performed += OnSecondaryRight;
+        actionMainMenuLeft.action.performed += OnGoLeft;
+        actionMainMenuRight.action.performed += OnGoRight;
+    }
+
+    void OnDestroy()
+    {
+        actionSubmit.action.performed -= OnLevelSelectStartClicked;
+        actionSecondaryMenuLeft.action.performed -= OnSecondaryLeft;
+        actionSecondaryMenuRight.action.performed -= OnSecondaryRight;
+        actionMainMenuLeft.action.performed -= OnGoLeft;
+        actionMainMenuRight.action.performed -= OnGoRight;
     }
 
     void Start()
@@ -148,6 +169,10 @@ public class MenusController : MonoBehaviour
     // TODO Prune
     public void OnLevelSelectStartClicked()
     {
+        if (!GameManager.Instance.CanPlayLevel())
+        {
+            return;
+        }
         GameManager.Instance.levelSettings.levelType = LevelType.Normal;
         SceneManager.LoadScene("Loading");
     }

@@ -7,8 +7,6 @@ public class UpgradesMenuController : SecondaryMenuDelegate
     private UpgradePanelController selectedUpgrade;
 
     [SerializeField] private Button startButton;
-    [SerializeField] private Button advanceButton;
-
 
     [SerializeField] private TextMeshProUGUI selectedUpgradeNameLabel;
     [SerializeField] private TextMeshProUGUI selectedUpgradeStatsLabel;
@@ -88,9 +86,6 @@ public class UpgradesMenuController : SecondaryMenuDelegate
                 break;
             }
         }
-
-        //selectedUpgradeNameLabel.SetText("-");
-        //selectedUpgradeDescriptionLabel.SetText("-");
     }
 
     // TODO Get rid of from the abstract class
@@ -116,29 +111,18 @@ public class UpgradesMenuController : SecondaryMenuDelegate
 
     public override void UpdateMenu()
     {
-        // Update the Advance button:
-        bool canAdvance = GameManager.Instance.CanAdvanceLevel();
-
-        bool levelCompleted = true;
-
-        advanceButton.gameObject.SetActive(canAdvance || levelCompleted);
-        if (levelCompleted)
-        {
-            TextMeshProUGUI buttonLabel = advanceButton.transform.GetComponentInChildren<TextMeshProUGUI>();
-            buttonLabel.SetText("Troll the boss");
-        }
-
         // Update the start button, if the previous level has been completed, then this level can be started
-        int currentLevelSelection = GameManager.Instance.CurrentLevel;
-        if (currentLevelSelection <= GameManager.Instance.CivTypePassed)
+        if (GameManager.Instance.CanPlayLevel())
         {
             startButton.interactable = true;
-            startButton.GetComponentInChildren<TextMeshProUGUI>().text = "Play";
+            startButton.GetComponentInChildren<TextMeshProUGUI>()
+                .SetText("Play");
         }
         else
         {
             startButton.interactable = false;
-            startButton.GetComponentInChildren<TextMeshProUGUI>().text = "Locked";
+            startButton.GetComponentInChildren<TextMeshProUGUI>()
+                .SetText("Locked");
         }
     }
 }

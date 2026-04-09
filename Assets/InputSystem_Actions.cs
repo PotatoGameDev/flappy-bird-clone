@@ -320,6 +320,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Accept"",
+                    ""type"": ""Button"",
+                    ""id"": ""4c576e79-778a-4403-906f-da79a0cf77e4"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -784,6 +793,39 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""MainMenuRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e8e85ea7-1396-4a64-9d58-1861dbcaac4f"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Accept"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ed607048-b4ae-42b0-8af4-46fd7eacbe6c"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Accept"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c7533366-8658-4f68-9841-8ecdef1b410a"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Accept"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -871,6 +913,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_UI_SecondaryMenuLeft = m_UI.FindAction("SecondaryMenuLeft", throwIfNotFound: true);
         m_UI_MainMenuLeft = m_UI.FindAction("MainMenuLeft", throwIfNotFound: true);
         m_UI_MainMenuRight = m_UI.FindAction("MainMenuRight", throwIfNotFound: true);
+        m_UI_Accept = m_UI.FindAction("Accept", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
@@ -1073,6 +1116,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_SecondaryMenuLeft;
     private readonly InputAction m_UI_MainMenuLeft;
     private readonly InputAction m_UI_MainMenuRight;
+    private readonly InputAction m_UI_Accept;
     /// <summary>
     /// Provides access to input actions defined in input action map "UI".
     /// </summary>
@@ -1141,6 +1185,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @MainMenuRight => m_Wrapper.m_UI_MainMenuRight;
         /// <summary>
+        /// Provides access to the underlying input action "UI/Accept".
+        /// </summary>
+        public InputAction @Accept => m_Wrapper.m_UI_Accept;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_UI; }
@@ -1208,6 +1256,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @MainMenuRight.started += instance.OnMainMenuRight;
             @MainMenuRight.performed += instance.OnMainMenuRight;
             @MainMenuRight.canceled += instance.OnMainMenuRight;
+            @Accept.started += instance.OnAccept;
+            @Accept.performed += instance.OnAccept;
+            @Accept.canceled += instance.OnAccept;
         }
 
         /// <summary>
@@ -1261,6 +1312,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @MainMenuRight.started -= instance.OnMainMenuRight;
             @MainMenuRight.performed -= instance.OnMainMenuRight;
             @MainMenuRight.canceled -= instance.OnMainMenuRight;
+            @Accept.started -= instance.OnAccept;
+            @Accept.performed -= instance.OnAccept;
+            @Accept.canceled -= instance.OnAccept;
         }
 
         /// <summary>
@@ -1486,5 +1540,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMainMenuRight(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Accept" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnAccept(InputAction.CallbackContext context);
     }
 }
