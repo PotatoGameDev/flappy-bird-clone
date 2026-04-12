@@ -36,7 +36,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 846.0497, y: 184.5918}
-  m_SizeDelta: {x: 63.28601, y: 63.286}
+  m_SizeDelta: {x: 82, y: 82}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &6360182601608611863
 MonoBehaviour:
@@ -52,6 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GlyphIcon
   action: {fileID: 2575855288593337390, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   image: {fileID: 1074829622980099810}
+  glyphManager: {fileID: 0}
 --- !u!222 &1808233277109927541
 CanvasRenderer:
   m_ObjectHideFlags: 0

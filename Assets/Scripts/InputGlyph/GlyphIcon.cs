@@ -11,25 +11,52 @@ namespace PotatoGameDev.InputGlyph
         [SerializeField] private Image image;
         [SerializeField] private GlyphManager glyphManager;
 
-        void Awake()
+        void Start()
         {
+            glyphManager = FindAnyObjectByType<GlyphManager>();
+            Debug.Assert(glyphManager != null, "No GlyphManager on scene!");
+
             glyphManager.InputSchemeChanged += InputSchemeChanged;
             InputSchemeChanged(glyphManager.CurrentScheme, glyphManager.CurrentMapping);
         }
 
+        void OnEnable()
+        {
+            if (glyphManager != null)
+            {
+                glyphManager.InputSchemeChanged += InputSchemeChanged;
+                InputSchemeChanged(glyphManager.CurrentScheme, glyphManager.CurrentMapping);
+            }
+        }
+
+        void OnDisable()
+        {
+            if (glyphManager != null)
+            {
+                glyphManager.InputSchemeChanged -= InputSchemeChanged;
+            }
+        }
+
         void OnDestroy()
         {
-            glyphManager.InputSchemeChanged -= InputSchemeChanged;
+            if (glyphManager != null)
+            {
+                glyphManager.InputSchemeChanged -= InputSchemeChanged;
+            }
         }
 
         void InputSchemeChanged(string scheme, GlyphMapping currentMapping)
         {
             string bindingPath = GetBindingPath2(action.action, scheme);
-            //Debug.Log("Binding: " + bindingPath + " " + scheme);
 
-            Sprite sprite = currentMapping.GetGlyph(bindingPath);
+            Sprite sprite = null;
+            if (bindingPath != null && currentMapping != null)
+            {
+                sprite = currentMapping.GetGlyph(bindingPath);
+            }
             if (sprite == null)
             {
+                // No binding in that scheme, hiding image
                 image.enabled = false;
             }
             else
@@ -54,11 +81,13 @@ namespace PotatoGameDev.InputGlyph
 
         static string GetBindingPath2(InputAction action, string scheme)
         {
+            if (scheme == null || action == null)
+            {
+                return null;
+            }
+
             foreach (var binding in action.bindings)
             {
-                //Debug.Log("BBB: " + binding.path + " " + binding.groups + " " + binding.effectivePath);
-                //Debug.Log("Comp: " + binding.isComposite + " " + binding.isPartOfComposite);
-
                 if (binding.isComposite || binding.isPartOfComposite)
                     continue;
 

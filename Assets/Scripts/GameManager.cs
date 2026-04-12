@@ -115,7 +115,6 @@ public class GameManager : MonoBehaviour
 
     public bool CanPlayLevel()
     {
-        Debug.Log("Can play: " + State.CurrentLevel + " " + State.CivTypePassed);
         return State.CurrentLevel <= State.CivTypePassed;
     }
 

@@ -16,3 +16,11 @@ MonoBehaviour:
   mappings:
   - bindingPath: buttonEast
     glyph: {fileID: 21300000, guid: 7033e84b905fb7a4f94f8aa4a792c72e, type: 3}
+  - bindingPath: leftTrigger
+    glyph: {fileID: 21300000, guid: 1456831ad84e9e1c289a6dc7ebda679a, type: 3}
+  - bindingPath: rightTrigger
+    glyph: {fileID: 21300000, guid: cb7c60bcddf95454e86b41c8f61e3109, type: 3}
+  - bindingPath: leftShoulder
+    glyph: {fileID: 21300000, guid: 09bcbda30a7cb07cb8e9b082eccdafff, type: 3}
+  - bindingPath: rightShoulder
+    glyph: {fileID: 21300000, guid: 171f93c28656c1149879bd0616753b8c, type: 3}

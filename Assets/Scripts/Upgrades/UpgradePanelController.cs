@@ -12,10 +12,8 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
     [SerializeField] private TextMeshProUGUI levelLabel;
     [SerializeField] private GameObject borderImage;
     [SerializeField] private GameObject borderImageDisabled;
-    [SerializeField] private bool defaultSelected;
 
     public event Action<UpgradePanelController> PanelSelected;
-
 
     public bool Selected { get; private set; }
 
@@ -24,14 +22,6 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
         nameLabel.text = UpgradesManager.Instance.GetUpgrade(upgradeIdent).Name;
         UpdateUi();
         UpgradesManager.Instance.OnUpgrade += HandleUpgrade;
-    }
-
-    void OnEnable()
-    {
-        if (defaultSelected)
-        {
-            SetSelected(true);
-        }
     }
 
     void OnDestroy()
@@ -125,6 +115,7 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
         }
 
         Selected = selected;
+
         if (selected)
         {
             if (upgradeButton.interactable)
@@ -137,6 +128,7 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
                 borderImage.SetActive(false);
                 borderImageDisabled.SetActive(true);
             }
+
             PanelSelected?.Invoke(this);
             if (!EventSystem.current.alreadySelecting)
             {
