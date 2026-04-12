@@ -25,11 +25,7 @@ public class SecondaryMenuController : MonoBehaviour
     {
         selectionLabelL = selectionL.GetComponentInChildren<TextMeshProUGUI>(true);
         selectionLabelR = selectionR.GetComponentInChildren<TextMeshProUGUI>(true);
-    }
 
-
-    void Start()
-    {
         if (statLabelTemplates == null && statLabels.Length > 0)
         {
             statLabelTemplates = new string[statLabels.Length];
@@ -40,8 +36,15 @@ public class SecondaryMenuController : MonoBehaviour
             }
         }
 
-        currentSelection = controller.InitCurrentMenuSelection();
+        if (controller != null)
+        {
+            currentSelection = controller.InitCurrentMenuSelection();
+        }
+    }
 
+
+    void OnEnable()
+    {
         UpdateMenus();
     }
 
@@ -57,7 +60,6 @@ public class SecondaryMenuController : MonoBehaviour
             selectionContents[i].SetActive(false);
         }
         selectionContents[currentSelection].SetActive(true);
-
 
         if (controller != null)
         {
@@ -161,9 +163,9 @@ public abstract class SecondaryMenuDelegate : MonoBehaviour
 {
     public virtual void ChangeCurrentMenuSelection(int current) { }
 
-    public abstract void FillInStatTexts(string labelTemplate, TextMeshProUGUI statLabel);
+    public virtual void FillInStatTexts(string labelTemplate, TextMeshProUGUI statLabel) { }
 
-    public abstract void UpdateMenu();
+    public virtual void UpdateMenu() { }
 
     public virtual int InitCurrentMenuSelection()
     {

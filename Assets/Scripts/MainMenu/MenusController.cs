@@ -29,7 +29,7 @@ public class MenusController : MonoBehaviour
         mainSelectionLabelL = mainSelectionL.GetComponentInChildren<TextMeshProUGUI>(true);
         mainSelectionLabelR = mainSelectionR.GetComponentInChildren<TextMeshProUGUI>(true);
 
-        actionSubmit.action.performed += OnLevelSelectStartClicked;
+        actionSubmit.action.performed += OnStartClicked;
         actionSecondaryMenuLeft.action.performed += OnSecondaryLeft;
         actionSecondaryMenuRight.action.performed += OnSecondaryRight;
         actionMainMenuLeft.action.performed += OnGoLeft;
@@ -38,7 +38,7 @@ public class MenusController : MonoBehaviour
 
     void OnDestroy()
     {
-        actionSubmit.action.performed -= OnLevelSelectStartClicked;
+        actionSubmit.action.performed -= OnStartClicked;
         actionSecondaryMenuLeft.action.performed -= OnSecondaryLeft;
         actionSecondaryMenuRight.action.performed -= OnSecondaryRight;
         actionMainMenuLeft.action.performed -= OnGoLeft;
@@ -116,6 +116,11 @@ public class MenusController : MonoBehaviour
         mainSelectionContents[currentMainSelection].OnGoRight(ctx);
     }
 
+    public void OnSecondaryRight()
+    {
+        mainSelectionContents[currentMainSelection].OnGoRight();
+    }
+
     public void OnSecondaryLeft(InputAction.CallbackContext ctx)
     {
         if (!ctx.performed)
@@ -123,6 +128,11 @@ public class MenusController : MonoBehaviour
             return;
         }
         mainSelectionContents[currentMainSelection].OnGoLeft(ctx);
+    }
+
+    public void OnSecondaryLeft()
+    {
+        mainSelectionContents[currentMainSelection].OnGoLeft();
     }
 
     public void OnGoRight(InputAction.CallbackContext ctx)
@@ -157,33 +167,21 @@ public class MenusController : MonoBehaviour
         UpdateMainSelectionMenus();
     }
 
-    // Level Selection
-    public void OnLevelSelectStartClicked(InputAction.CallbackContext ctx)
+    public void OnStartClicked(InputAction.CallbackContext ctx)
     {
         if (ctx.performed)
         {
-            OnLevelSelectStartClicked();
+            OnStartClicked();
         }
     }
 
-    // TODO Prune
-    public void OnLevelSelectStartClicked()
+    public void OnStartClicked()
     {
         if (!GameManager.Instance.CanPlayLevel())
         {
             return;
         }
         GameManager.Instance.levelSettings.levelType = LevelType.Normal;
-        SceneManager.LoadScene("Loading");
-    }
-
-    public void OnLevelSelectAdvanceClicked()
-    {
-        // TODO This will happen when Player defeats the boss.
-        // GameManager.Instance.UnlockNextPhase();
-        //UpdateLevelSelectionMenus();
-
-        GameManager.Instance.levelSettings.levelType = LevelType.BossFight;
         SceneManager.LoadScene("Loading");
     }
 }

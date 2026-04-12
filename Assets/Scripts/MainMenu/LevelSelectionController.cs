@@ -46,6 +46,7 @@ public class LevelSelectionController : SecondaryMenuDelegate
     public override void UpdateMenu()
     {
         // Update the start button, if the previous level has been completed, then this level can be started
+        startButton.gameObject.SetActive(true);
         if (GameManager.Instance.CanPlayLevel())
         {
             startButton.interactable = true;
