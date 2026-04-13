@@ -15,13 +15,16 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
 
     public event Action<UpgradePanelController> PanelSelected;
 
-    public bool Selected { get; private set; }
-
-    void Awake()
+    void Start()
     {
         nameLabel.text = UpgradesManager.Instance.GetUpgrade(upgradeIdent).Name;
         UpdateUi();
         UpgradesManager.Instance.OnUpgrade += HandleUpgrade;
+    }
+
+    void OnEnable()
+    {
+        UpdateUi();
     }
 
     void OnDestroy()
@@ -96,6 +99,24 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
         levelLabel.SetText("{0}", u.Level);
     }
 
+    private bool ButtonInteractable()
+    {
+        Upgrade u = UpgradesManager.Instance.GetUpgrade(upgradeIdent);
+        int price = u.GetTotalPrice();
+
+        if (u.Level == u.MaxLevel)
+        {
+            return false;
+        }
+
+        if (price > GameManager.Instance.CollectedEnergy)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     void HandleUpgrade(Upgrade upgrade)
     {
         UpdateUi();
@@ -103,22 +124,23 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        SetSelected(true);
+        SelectButton();
+    }
+
+    public void SelectButton()
+    {
+        if (EventSystem.current.currentSelectedGameObject != upgradeButton.gameObject)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(upgradeButton.gameObject);
+        }
     }
 
     public void SetSelected(bool selected)
     {
-        if (Selected == selected)
-        {
-            // We are selecting already selected button, or deselecting unselected
-            return;
-        }
-
-        Selected = selected;
-
         if (selected)
         {
-            if (upgradeButton.interactable)
+            if (ButtonInteractable())
             {
                 borderImage.SetActive(true);
                 borderImageDisabled.SetActive(false);
@@ -130,16 +152,12 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
             }
 
             PanelSelected?.Invoke(this);
-            if (!EventSystem.current.alreadySelecting)
-            {
-                EventSystem.current.SetSelectedGameObject(upgradeButton.gameObject);
-            }
         }
         else
         {
+            Debug.Log("Setting border inactive, disabledBorder inactive");
             borderImage.SetActive(false);
             borderImageDisabled.SetActive(false);
         }
     }
-
 }

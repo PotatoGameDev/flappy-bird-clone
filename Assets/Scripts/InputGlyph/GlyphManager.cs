@@ -23,12 +23,10 @@ namespace PotatoGameDev.InputGlyph
             playerInput.onControlsChanged += OnControlsChanged;
 
             OnControlsChanged(playerInput);
-            Debug.Log("Start " + playerInput + "AAA");
         }
 
         void OnDestroy()
         {
-            Debug.Log("OnDestroy");
             playerInput.onControlsChanged -= OnControlsChanged;
         }
 
@@ -42,7 +40,6 @@ namespace PotatoGameDev.InputGlyph
                 "Keyboard&Mouse" => mouseAndKeyboardMapping,
                 _ => genericMapping,
             };
-            Debug.Log("OnControlsChanged: " + CurrentScheme + " = " + CurrentMapping);
 
             InputSchemeChanged?.Invoke(CurrentScheme, CurrentMapping);
             // TODO

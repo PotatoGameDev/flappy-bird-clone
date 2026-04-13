@@ -1,12 +1,12 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
+
 
 public class UpgradesMenuController : SecondaryMenuDelegate
 {
     private UpgradePanelController selectedUpgrade;
 
-    [SerializeField] private Button startButton;
+    [SerializeField] private FakeButton startButton;
 
     [SerializeField] private TextMeshProUGUI selectedUpgradeNameLabel;
     [SerializeField] private TextMeshProUGUI selectedUpgradeStatsLabel;
@@ -53,12 +53,6 @@ public class UpgradesMenuController : SecondaryMenuDelegate
 
     private void OnUpgradeSelected(UpgradePanelController upgradePanel)
     {
-        // Deselecting the old selection:
-        if (selectedUpgrade != null)
-        {
-            selectedUpgrade.SetSelected(false);
-        }
-
         // Selecting the new one:
         selectedUpgrade = upgradePanel;
 
@@ -74,11 +68,6 @@ public class UpgradesMenuController : SecondaryMenuDelegate
         selectedUpgradeDescriptionLabel.SetText(
                 UpgradesManager.Instance.GetUpgradeDescription(ident)
                 );
-    }
-
-    // TODO Get rid of from the abstract class
-    public override void FillInStatTexts(string labelTemplate, TextMeshProUGUI statLabel)
-    {
     }
 
     private void FillInStatTexts()

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
@@ -7,20 +6,14 @@ using UnityEngine.InputSystem;
 public class MenusController : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI mainSelectionCurrent;
-    [SerializeField] private Button mainSelectionL;
+    [SerializeField] private FakeButton mainSelectionL;
     private TextMeshProUGUI mainSelectionLabelL;
-    [SerializeField] private Button mainSelectionR;
+    [SerializeField] private FakeButton mainSelectionR;
     private TextMeshProUGUI mainSelectionLabelR;
 
     [SerializeField] private SecondaryMenuController[] mainSelectionContents;
 
     [SerializeField] private string[] mainSelectionOptions;
-
-    [SerializeField] private InputActionReference actionSubmit;
-    [SerializeField] private InputActionReference actionSecondaryMenuLeft;
-    [SerializeField] private InputActionReference actionSecondaryMenuRight;
-    [SerializeField] private InputActionReference actionMainMenuLeft;
-    [SerializeField] private InputActionReference actionMainMenuRight;
 
     private int currentMainSelection = 0;
 
@@ -28,21 +21,6 @@ public class MenusController : MonoBehaviour
     {
         mainSelectionLabelL = mainSelectionL.GetComponentInChildren<TextMeshProUGUI>(true);
         mainSelectionLabelR = mainSelectionR.GetComponentInChildren<TextMeshProUGUI>(true);
-
-        actionSubmit.action.performed += OnStartClicked;
-        actionSecondaryMenuLeft.action.performed += OnSecondaryLeft;
-        actionSecondaryMenuRight.action.performed += OnSecondaryRight;
-        actionMainMenuLeft.action.performed += OnGoLeft;
-        actionMainMenuRight.action.performed += OnGoRight;
-    }
-
-    void OnDestroy()
-    {
-        actionSubmit.action.performed -= OnStartClicked;
-        actionSecondaryMenuLeft.action.performed -= OnSecondaryLeft;
-        actionSecondaryMenuRight.action.performed -= OnSecondaryRight;
-        actionMainMenuLeft.action.performed -= OnGoLeft;
-        actionMainMenuRight.action.performed -= OnGoRight;
     }
 
     void Start()

@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 
 public class AutoselectOnEnable : MonoBehaviour
 {
@@ -9,7 +11,7 @@ public class AutoselectOnEnable : MonoBehaviour
     {
         if (autoselect)
         {
-            EventSystem.current.SetSelectedGameObject(gameObject);
+            //EventSystem.current.SetSelectedGameObject(gameObject);
         }
     }
 }

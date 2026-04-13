@@ -1,10 +1,10 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
 
 public class LevelSelectionController : SecondaryMenuDelegate
 {
-    [SerializeField] private Button startButton;
+    [SerializeField] private FakeButton startButton;
+
 
     void Start()
     {
