@@ -1,9 +1,8 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class SystemMenuController : SecondaryMenuDelegate
 {
-    [SerializeField] private Button startButton;
+    [SerializeField] private FakeButton startButton;
 
     void Start()
     {

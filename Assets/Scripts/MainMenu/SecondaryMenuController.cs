@@ -1,7 +1,7 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 
 public class SecondaryMenuController : MonoBehaviour
@@ -9,15 +9,16 @@ public class SecondaryMenuController : MonoBehaviour
     [SerializeField] private SecondaryMenuDelegate controller;
 
     [SerializeField] private TextMeshProUGUI selectionCurrent;
-    [SerializeField] private Button selectionL;
+    [SerializeField] private FakeButton selectionL;
     private TextMeshProUGUI selectionLabelL;
-    [SerializeField] private Button selectionR;
+    [SerializeField] private FakeButton selectionR;
     private TextMeshProUGUI selectionLabelR;
 
     [SerializeField] private GameObject[] selectionContents;
     [SerializeField] private TextMeshProUGUI[] statLabels;
     private string[] statLabelTemplates;
 
+    [SerializeField] private GameObject defaultButton;
 
     [SerializeField] private string[] availableOptions;
 
@@ -45,6 +46,12 @@ public class SecondaryMenuController : MonoBehaviour
 
     void OnEnable()
     {
+        // make sure we don't try to select the same button again
+        if (defaultButton != null && EventSystem.current.currentSelectedGameObject != defaultButton)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(defaultButton);
+        }
         UpdateMenus();
     }
 
@@ -57,9 +64,15 @@ public class SecondaryMenuController : MonoBehaviour
         // Makes the selected contents active, and all the non selected non active, duh...
         for (int i = 0; i < selectionContents.Length; i++)
         {
-            selectionContents[i].SetActive(false);
+            if (i == currentSelection)
+            {
+                selectionContents[currentSelection].SetActive(true);
+            }
+            else
+            {
+                selectionContents[i].SetActive(false);
+            }
         }
-        selectionContents[currentSelection].SetActive(true);
 
         if (controller != null)
         {
