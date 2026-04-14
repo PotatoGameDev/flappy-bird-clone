@@ -19,6 +19,24 @@ namespace PotatoGameDev.InputGlyph
             }
         }
 
+        void OnEnable()
+        {
+            if (EventSystem.current.currentSelectedGameObject == gameObject)
+            {
+                glyph.SetActive(true);
+            }
+            else
+            {
+                glyph.SetActive(false);
+            }
+        }
+
+        void OnDisable()
+        {
+            glyph.SetActive(false);
+        }
+
+
         public void OnSelect(BaseEventData eventData)
         {
             glyph.SetActive(true);

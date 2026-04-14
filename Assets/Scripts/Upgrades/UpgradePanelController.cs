@@ -155,7 +155,6 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
         }
         else
         {
-            Debug.Log("Setting border inactive, disabledBorder inactive");
             borderImage.SetActive(false);
             borderImageDisabled.SetActive(false);
         }
