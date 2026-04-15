@@ -5137,10 +5137,12 @@ MonoBehaviour:
   parallaxPrefab: {fileID: 7296782702753569385, guid: bff9e32969a8fac259cc57f9261a5268, type: 3}
   preload: 1
   speed: -2
+  verticalFactor: 0.08
   minInitialOffsetX: 20
   maxInitialOffsetX: 70
   deviationY: 5
   vanishingOffsetX: 30
+  cameraTarget: {fileID: 879999046}
 --- !u!1 &88973204
 GameObject:
   m_ObjectHideFlags: 0
@@ -23702,8 +23704,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   initialPosition: {x: 0, y: 0, z: 0}
   maxVerticalFollowDistance: 2
-  maxVerticalTargetSpeed: 4
+  maxVerticalTargetSpeed: 5
   minVerticalTargetSpeed: 1
+  vertical: 0
+  verticalSmoothTime: 0.3
 --- !u!4 &879999046
 Transform:
   m_ObjectHideFlags: 0
@@ -25512,6 +25516,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1346200755}
+  - component: {fileID: 1346200756}
   m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
@@ -25538,6 +25543,18 @@ Transform:
   - {fileID: 1598782644}
   m_Father: {fileID: 519420032}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1346200756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1346200754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffb4338e0d11dee86b1ad02c56357fa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &1387378447
 GameObject:
   m_ObjectHideFlags: 0
@@ -26101,10 +26118,12 @@ MonoBehaviour:
   parallaxPrefab: {fileID: 7296782702753569385, guid: 8da3c5559f5083d5cb6b6fdd72bd4e8a, type: 3}
   preload: 3
   speed: -0.05
+  verticalFactor: 0.1
   minInitialOffsetX: 0
   maxInitialOffsetX: 0
   deviationY: 0
   vanishingOffsetX: 30
+  cameraTarget: {fileID: 879999046}
 --- !u!1 &1448632726
 GameObject:
   m_ObjectHideFlags: 0
@@ -26414,10 +26433,12 @@ MonoBehaviour:
   parallaxPrefab: {fileID: 5908570102913687149, guid: 6265c3b89fed97ec9a444d3a6d164fbd, type: 3}
   preload: 3
   speed: -0.2
+  verticalFactor: 1
   minInitialOffsetX: 0
   maxInitialOffsetX: 0
   deviationY: 0
   vanishingOffsetX: 20
+  cameraTarget: {fileID: 879999046}
 --- !u!1 &1512446780
 GameObject:
   m_ObjectHideFlags: 0
@@ -32064,11 +32085,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   parallaxPrefab: {fileID: 442869500392283410, guid: a5f4940a52e816290b1a5f3bd717f564, type: 3}
   preload: 3
-  speed: -0.8
+  speed: -0.5
+  verticalFactor: 0.05
   minInitialOffsetX: 0
   maxInitialOffsetX: 0
   deviationY: 0
   vanishingOffsetX: 20
+  cameraTarget: {fileID: 879999046}
 --- !u!1001 &1715773007
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44172,7 +44195,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 440030004787799869, guid: d66d24d49968afa8c8625e850668ae30, type: 3}
       propertyPath: m_Name
-      value: EnergyRadiationGenerator
+      value: EnergyRadiationGeneratorStar
       objectReference: {fileID: 0}
     - target: {fileID: 1485268937479584667, guid: d66d24d49968afa8c8625e850668ae30, type: 3}
       propertyPath: upgradeId
