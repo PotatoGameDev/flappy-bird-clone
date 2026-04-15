@@ -1,6 +1,8 @@
 using UnityEngine;
 using TMPro;
 
+using UnityEngine.EventSystems;
+
 
 public class UpgradesMenuController : SecondaryMenuDelegate
 {
@@ -27,6 +29,8 @@ public class UpgradesMenuController : SecondaryMenuDelegate
         FillInStatTexts();
     }
 
+
+
     void OnEnable()
     {
         foreach (UpgradePanelController upgradePanel in upgradePanels)
@@ -41,6 +45,8 @@ public class UpgradesMenuController : SecondaryMenuDelegate
         foreach (UpgradePanelController upgradePanel in upgradePanels)
         {
             upgradePanel.PanelSelected -= OnUpgradeSelected;
+
+            upgradePanel.SetSelected(false);
         }
         UpgradesManager.Instance.OnUpgrade -= HandleUpgrade;
     }

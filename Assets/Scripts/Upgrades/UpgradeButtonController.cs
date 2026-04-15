@@ -22,6 +22,7 @@ public class UpgradeButtonController : MonoBehaviour, ISelectHandler, IDeselectH
         {
             // Manually, because if the button gets disabled, OnDeselect does not run.
             EventSystem.current.SetSelectedGameObject(null);
+
             upgradePanel.SetSelected(false);
         }
     }

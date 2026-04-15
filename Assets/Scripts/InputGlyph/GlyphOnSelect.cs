@@ -36,7 +36,6 @@ namespace PotatoGameDev.InputGlyph
             glyph.SetActive(false);
         }
 
-
         public void OnSelect(BaseEventData eventData)
         {
             glyph.SetActive(true);
