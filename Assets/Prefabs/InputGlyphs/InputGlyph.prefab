@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 569cb6dca11fe88de84249881dfe4183, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GlyphIcon
-  action: {fileID: 2575855288593337390, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  action: {fileID: 392368643174621059, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   image: {fileID: 1074829622980099810}
   glyphManager: {fileID: 0}
 --- !u!222 &1808233277109927541
