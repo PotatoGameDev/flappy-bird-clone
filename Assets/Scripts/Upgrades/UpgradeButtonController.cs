@@ -6,6 +6,7 @@ public class UpgradeButtonController : MonoBehaviour, ISelectHandler, IDeselectH
 {
     [SerializeField] private UpgradePanelController upgradePanel;
     [SerializeField] private bool defaultOnEnable;
+    [SerializeField] private MenuSoundManager soundManager;
 
     void OnEnable()
     {
@@ -36,6 +37,8 @@ public class UpgradeButtonController : MonoBehaviour, ISelectHandler, IDeselectH
     public void OnSelect(BaseEventData eventData)
     {
         upgradePanel.SetSelected(true);
+
+        soundManager.PlaySelect();
     }
 
 }

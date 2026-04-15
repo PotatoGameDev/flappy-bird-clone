@@ -7,6 +7,7 @@ public class FakeButton : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] private InputActionReference actionSubmit;
     [SerializeField] private UnityEvent onClicked;
+    [SerializeField] private MenuSoundManager soundManager;
 
     public bool interactable = true;
 
@@ -14,6 +15,7 @@ public class FakeButton : MonoBehaviour, IPointerClickHandler
     {
         if (interactable)
         {
+            soundManager.PlayClick();
             onClicked?.Invoke();
         }
     }
@@ -22,6 +24,7 @@ public class FakeButton : MonoBehaviour, IPointerClickHandler
     {
         if (interactable)
         {
+            soundManager.PlayClick();
             onClicked?.Invoke();
         }
     }

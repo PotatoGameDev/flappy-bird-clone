@@ -36,7 +36,6 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
     {
         UpgradesManager.Instance.Buy(upgradeIdent);
         UpdateUi();
-        // TODO Play satisfying sound
     }
 
     public UpgradeId GetUpgradeIdent()
