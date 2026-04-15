@@ -24,6 +24,8 @@ public class PlanetController : MonoBehaviour
     private Rigidbody2D rb;
     private SpriteRenderer rendr;
 
+    public Vector2 Velocity => rb.linearVelocity;
+
     [SerializeField] private float damageFlashingDurationSeconds = 1f;
     [SerializeField] private float shieldFlashingDurationSeconds = 1f;
 

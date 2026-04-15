@@ -5404,6 +5404,7 @@ GameObject:
   - component: {fileID: 133549797}
   - component: {fileID: 133549800}
   - component: {fileID: 133549801}
+  - component: {fileID: 133549802}
   m_Layer: 0
   m_Name: SoundManager
   m_TagString: Untagged
@@ -5425,6 +5426,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   clipDuration: 2
   fadeDuration: 0.5
+  musicClips:
+  - {fileID: 8300000, guid: 86baeca269cdb3b24899a43fe8074c73, type: 3}
+  - {fileID: 8300000, guid: 68332063e876e2e8cb799e88faa32f83, type: 3}
+  - {fileID: 8300000, guid: 430ab4f1446a4a2eb99943620f8fabf8, type: 3}
+  - {fileID: 8300000, guid: 333a2bdc74aa3ea01801b988a140eb0d, type: 3}
+  - {fileID: 8300000, guid: 50e8d4889dcbbef9db8a4afc78bfa1fe, type: 3}
+  - {fileID: 8300000, guid: 7cd73cb02150c09ce8db7032aecb9fb1, type: 3}
+  - {fileID: 8300000, guid: 717d4cb08e76942a2a75ebcb332b67a6, type: 3}
+  - {fileID: 8300000, guid: 50ca7274e25f8beac94a5f0eb157dcf3, type: 3}
+  - {fileID: 8300000, guid: 361b0f5467d288c2fb9b0116b2d71253, type: 3}
+  musicSource: {fileID: 133549801}
   quakeAudioSource: {fileID: 133549798}
   hitAudioSource: {fileID: 133549797}
   screamAudioSource: {fileID: 133549799}
@@ -5844,9 +5856,9 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: e12c1b36e5dfaac839bcd6ce2c07bcb8, type: 3}
+  m_Resource: {fileID: 8300000, guid: 86baeca269cdb3b24899a43fe8074c73, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.527
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -5855,6 +5867,103 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 4
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!82 &133549802
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 133549794}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
@@ -22336,7 +22445,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.64404, y: -0.33175, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -23116,7 +23225,7 @@ GameObject:
   m_Component:
   - component: {fileID: 756719337}
   - component: {fileID: 756719336}
-  - component: {fileID: 756719339}
+  - component: {fileID: 756719341}
   - component: {fileID: 756719335}
   - component: {fileID: 756719338}
   - component: {fileID: 756719340}
@@ -23203,7 +23312,7 @@ Transform:
   m_GameObject: {fileID: 756719334}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.64404, y: -0.33175, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -23262,7 +23371,24 @@ MonoBehaviour:
     DissipationDistance: 100
     PropagationSpeed: 343
   DefaultVelocity: {x: 0, y: -1, z: 0}
---- !u!114 &756719339
+--- !u!114 &756719340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 756719334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineBasicMultiChannelPerlin
+  NoiseProfile: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
+  PivotOffset: {x: 0, y: 0, z: 0}
+  AmplitudeGain: 0
+  FrequencyGain: 0
+  m_NoiseOffsets: {x: 0, y: 0, z: 0}
+--- !u!114 &756719341
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -23281,23 +23407,6 @@ MonoBehaviour:
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
   FollowOffset: {x: 0, y: 0, z: -10}
---- !u!114 &756719340
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 756719334}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineBasicMultiChannelPerlin
-  NoiseProfile: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
-  PivotOffset: {x: 0, y: 0, z: 0}
-  AmplitudeGain: 0
-  FrequencyGain: 0
-  m_NoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1 &774652045
 GameObject:
   m_ObjectHideFlags: 0
@@ -23591,6 +23700,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecb55665b83131071a86da75589bcd0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  initialPosition: {x: 0, y: 0, z: 0}
+  maxVerticalFollowDistance: 2
+  maxVerticalTargetSpeed: 4
+  minVerticalTargetSpeed: 1
 --- !u!4 &879999046
 Transform:
   m_ObjectHideFlags: 0
@@ -23600,7 +23713,7 @@ Transform:
   m_GameObject: {fileID: 879999044}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.64404, y: -0.33175, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -42412,6 +42525,26 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: dc59c20d-a99f-4e2b-a2dd-04ca359b0569
     m_ActionName: 'Player/Back[/Keyboard/escape]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d45f1cef-24c5-4790-92b5-afbad30b1ceb
+    m_ActionName: 'UI/SecondaryMenuRight[/Gamepad/rightTrigger]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5853e107-901c-41a8-a4d6-e2acbfc84c89
+    m_ActionName: 'UI/SecondaryMenuLeft[/Gamepad/leftTrigger]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2f424c57-13c3-4ffe-ac99-ff0187f9bb86
+    m_ActionName: 'UI/MainMenuLeft[/Gamepad/leftShoulder]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: edee54e0-d5d3-4cb2-90f6-ef57a92ba162
+    m_ActionName: 'UI/MainMenuRight[/Gamepad/rightShoulder]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4c576e79-778a-4403-906f-da79a0cf77e4
+    m_ActionName: 'UI/Accept[/Gamepad/start,/Keyboard/enter]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
