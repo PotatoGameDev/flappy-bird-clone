@@ -10,6 +10,12 @@ public class SoundManager : MonoBehaviour
     public float fadeDuration = 0.5f;
 
     [SerializeField]
+    private AudioClip[] musicClips;
+
+    [SerializeField]
+    private AudioSource musicSource;
+
+    [SerializeField]
     private AudioSource quakeAudioSource;
 
     [SerializeField]
@@ -33,6 +39,16 @@ public class SoundManager : MonoBehaviour
         }
 
         Instance = this;
+
+        // other
+
+        PlayRandomMusic();
+    }
+
+    public void PlayRandomMusic()
+    {
+        musicSource.clip = musicClips[Random.Range(0, musicClips.Length)];
+        musicSource.Play();
     }
 
     public void PlayScreams(float volume = 1f)
