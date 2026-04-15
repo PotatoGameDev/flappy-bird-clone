@@ -16,6 +16,10 @@ public class CameraTarget : MonoBehaviour
     // Min speed is to stop constant jumping:
     [SerializeField] private float minVerticalTargetSpeed = 0.5f;
 
+    [SerializeField] private bool vertical = true;
+
+    [SerializeField] private float verticalSmoothTime = 0.3f;
+    private float verticalVelocity;
 
     void Awake()
     {
@@ -32,24 +36,34 @@ public class CameraTarget : MonoBehaviour
         Vector3 pos = transform.position;
         pos.x += player.speed * Time.fixedDeltaTime;
 
-        float verticalSpeed = player.Velocity.y;
-
-        float newY = 0f;
-
-        if (player.Velocity.y > minVerticalTargetSpeed)
+        if (vertical)
         {
-            float deviationFraction = Mathf.Clamp01(
-                    verticalSpeed / maxVerticalTargetSpeed
-                    );
+            float verticalSpeed = player.Velocity.y;
 
-            newY = Mathf.Lerp(
-                    0,
-                    maxVerticalFollowDistance,
-                    deviationFraction
-                    );
+            float newY = 0f;
+
+            if (player.Velocity.y > minVerticalTargetSpeed)
+            {
+                float deviationFraction = Mathf.Clamp01(
+                        verticalSpeed / maxVerticalTargetSpeed
+                        );
+
+                newY = Mathf.Lerp(
+                        0,
+                        maxVerticalFollowDistance,
+                        deviationFraction
+                        );
+            }
+
+            float targetY = initialPosition.y + newY;
+
+            pos.y = Mathf.SmoothDamp(
+                transform.position.y,
+                targetY,
+                ref verticalVelocity,
+                verticalSmoothTime
+                );
         }
-
-        pos.y = initialPosition.y + newY;
 
         transform.position = pos;
     }

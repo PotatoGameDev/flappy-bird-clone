@@ -3,26 +3,29 @@ using System.Collections.Generic;
 
 public class Parallax : MonoBehaviour
 {
-    public GameObject parallaxPrefab;
-    public int preload = 3;
+    [SerializeField] private GameObject parallaxPrefab;
+    [SerializeField] private int preload = 3;
 
     // The component is nested in the main camera,
     // so the background has to move backwards
-    public float speed = -1;
+    [SerializeField] private float speed = -1;
+    [SerializeField] private float verticalFactor = 0.1f;
 
     // How far in advance to mage the instances
-    public float minInitialOffsetX = 0f;
-    public float maxInitialOffsetX = 0f;
+    [SerializeField] private float minInitialOffsetX = 0f;
+    [SerializeField] private float maxInitialOffsetX = 0f;
 
     // The background item can be distributed along the Y axis
-    public float deviationY = 0f;
+    [SerializeField] private float deviationY = 0f;
 
-    public float vanishingOffsetX = 10f;
+    [SerializeField] private float vanishingOffsetX = 10f;
 
     //
     private List<ParallaxBackground> initialized;
 
     const int safeguard = 10;
+
+    [SerializeField] private Transform cameraTarget;
 
     void Awake()
     {
@@ -48,7 +51,8 @@ public class Parallax : MonoBehaviour
 
     void Update()
     {
-        if (GameplayManager.Instance.Player.Dead) return;
+        PlanetController player = GameplayManager.Instance.Player;
+        if (player.Dead) return;
 
         ParallaxBackground leader = initialized[0];
 
@@ -65,7 +69,11 @@ public class Parallax : MonoBehaviour
 
         foreach (ParallaxBackground bg in initialized)
         {
-            bg.transform.Translate(new Vector3(speed, 0f, 0f) * Time.deltaTime);
+            Vector2 pos = bg.transform.position;
+            pos.x += speed * Time.deltaTime;
+            pos.y = verticalFactor * cameraTarget.transform.position.y;
+
+            bg.transform.position = pos;
         }
     }
 
