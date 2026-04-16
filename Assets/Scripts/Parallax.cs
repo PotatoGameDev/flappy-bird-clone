@@ -25,7 +25,7 @@ public class Parallax : MonoBehaviour
 
     const int safeguard = 10;
 
-    [SerializeField] private Transform cameraTarget;
+    [SerializeField] private CameraTarget cameraTarget;
 
     void Awake()
     {
@@ -71,7 +71,7 @@ public class Parallax : MonoBehaviour
         {
             Vector2 pos = bg.transform.position;
             pos.x += speed * Time.deltaTime;
-            pos.y = verticalFactor * cameraTarget.transform.position.y;
+            pos.y = -verticalFactor * cameraTarget.DisplacementY;
 
             bg.transform.position = pos;
         }

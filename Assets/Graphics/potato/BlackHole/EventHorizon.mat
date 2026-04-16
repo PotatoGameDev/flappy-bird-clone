@@ -41,13 +41,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _DiskFalloffPower: 2.06
-    - _DiskMaxRadius: 0.347
+    - _DiskFalloffPower: 2.48
+    - _DiskMaxRadius: 0.29
     - _EnableExternalAlpha: 0
-    - _GapWidth: 0.0359
+    - _GapWidth: 0.005
     - _HorizonRadius: 0.25
     - _PhotonRingWidth: 0.003
-    - _RotationSpeed: 0.5
+    - _RotationSpeed: 0.2
     - _ZWrite: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}

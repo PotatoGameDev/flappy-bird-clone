@@ -14,8 +14,6 @@ public class CameraMovement : MonoBehaviour
         cam = GetComponent<Camera>();
     }
 
-
-
     void Update()
     {
         float height = cam.orthographicSize * 2f;
