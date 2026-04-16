@@ -239,6 +239,7 @@ MonoBehaviour:
   levelLabel: {fileID: 5798511634319160975}
   borderImage: {fileID: 7994616545267407745}
   borderImageDisabled: {fileID: 2403482398384397267}
+  soundManager: {fileID: 0}
 --- !u!1 &2180563050974143416
 GameObject:
   m_ObjectHideFlags: 0
@@ -713,6 +714,7 @@ GameObject:
   - component: {fileID: 4764081748279294344}
   - component: {fileID: 6040992065023641222}
   - component: {fileID: 2971875816536039321}
+  - component: {fileID: 8877518541290001109}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -849,6 +851,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   upgradePanel: {fileID: 4960825093065785799}
   defaultOnEnable: 0
+  soundManager: {fileID: 0}
+--- !u!114 &8877518541290001109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8731907327423525722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbcc5d5da691b60a5973fce90b96a837, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PotatoGameDev.InputGlyph.GlyphOnSelect
+  glyph: {fileID: 521184114535648417}
 --- !u!1 &9042211577457391443
 GameObject:
   m_ObjectHideFlags: 0
@@ -986,5 +1002,10 @@ PrefabInstance:
 --- !u!224 &356869285960654308 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6000242650470838905, guid: 086374e6e0115a2039580410ec37ac2d, type: 3}
+  m_PrefabInstance: {fileID: 6320518815056195485}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &521184114535648417 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5804401525528830780, guid: 086374e6e0115a2039580410ec37ac2d, type: 3}
   m_PrefabInstance: {fileID: 6320518815056195485}
   m_PrefabAsset: {fileID: 0}

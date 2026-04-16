@@ -29,6 +29,8 @@ public class UpgradeButtonController : MonoBehaviour, ISelectHandler, IDeselectH
     }
 
     // This does not get called when the button gets disabled!
+    // BUT! It does get called when the button changes to non-interactable.
+    // FFFFFFFFuuuuuuuuuuuuuuuuuuuuuuuuu...
     public void OnDeselect(BaseEventData eventData)
     {
         upgradePanel.SetSelected(false);
