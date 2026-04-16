@@ -9,7 +9,6 @@ public class UpgradesMenuController : SecondaryMenuDelegate
     private UpgradePanelController selectedUpgrade;
 
     [SerializeField] private FakeButton startButton;
-
     [SerializeField] private TextMeshProUGUI selectedUpgradeNameLabel;
     [SerializeField] private TextMeshProUGUI selectedUpgradeStatsLabel;
     private string selectedUpgradeStatsLabelTemplate;
@@ -29,8 +28,6 @@ public class UpgradesMenuController : SecondaryMenuDelegate
         FillInStatTexts();
     }
 
-
-
     void OnEnable()
     {
         foreach (UpgradePanelController upgradePanel in upgradePanels)
@@ -45,6 +42,7 @@ public class UpgradesMenuController : SecondaryMenuDelegate
         foreach (UpgradePanelController upgradePanel in upgradePanels)
         {
             upgradePanel.PanelSelected -= OnUpgradeSelected;
+
 
             upgradePanel.SetSelected(false);
         }
