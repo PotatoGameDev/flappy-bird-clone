@@ -4,6 +4,8 @@ using System.Collections;
 [RequireComponent(typeof(AudioSource))]
 public class SoundManager : MonoBehaviour
 {
+    private readonly WaitForSeconds WAIT_ONE_SEC = new(1);
+
     public static SoundManager Instance { get; private set; }
 
     public float clipDuration = 1.0f;
@@ -42,14 +44,30 @@ public class SoundManager : MonoBehaviour
 
         // other
 
-        PlayRandomMusic();
+        StartCoroutine(PlayRandomMusic());
     }
 
-    public void PlayRandomMusic()
+    public IEnumerator PlayRandomMusic()
     {
-        musicSource.clip = musicClips[Random.Range(0, musicClips.Length)];
-        musicSource.Play();
+        int currentSong = Random.Range(0, musicClips.Length);
+        while (true)
+        {
+            if (musicSource.isPlaying)
+            {
+                yield return WAIT_ONE_SEC;
+            }
+            else
+            {
+                musicSource.clip = musicClips[currentSong % musicClips.Length];
+                musicSource.Play();
+
+                yield return new WaitForSeconds(musicSource.clip.length);
+                currentSong++;
+            }
+        }
     }
+
+
 
     public void PlayScreams(float volume = 1f)
     {

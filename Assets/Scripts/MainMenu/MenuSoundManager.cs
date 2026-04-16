@@ -26,6 +26,10 @@ public class MenuSoundManager : MonoBehaviour
 
     public void PlaySelect()
     {
-        audioSource.PlayOneShot(selectClip);
+        if (audioSource != null)
+        {
+            //TODO This is because onSelect happens somewhere before Awake happens, and npe:
+            audioSource.PlayOneShot(selectClip);
+        }
     }
 }
