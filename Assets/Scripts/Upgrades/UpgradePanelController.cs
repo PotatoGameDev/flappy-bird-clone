@@ -12,6 +12,7 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
     [SerializeField] private TextMeshProUGUI levelLabel;
     [SerializeField] private GameObject borderImage;
     [SerializeField] private GameObject borderImageDisabled;
+    [SerializeField] private MenuSoundManager soundManager;
 
     public event Action<UpgradePanelController> PanelSelected;
 
@@ -36,6 +37,7 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
     {
         UpgradesManager.Instance.Buy(upgradeIdent);
         UpdateUi();
+        soundManager.PlayUpgrade();
     }
 
     public UpgradeId GetUpgradeIdent()
