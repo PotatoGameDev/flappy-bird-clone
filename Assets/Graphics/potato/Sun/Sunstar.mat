@@ -41,36 +41,36 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _CoreRadius: 0.286
+    - _CoreRadius: 0.257
     - _DebugRect: 0
-    - _EdgeSoftness: 0.0359
+    - _EdgeSoftness: 0.0016
     - _EnableExternalAlpha: 0
-    - _GlowFalloff: 8
-    - _GlowRadius: 0.355
-    - _GlowStrength: 1.56
-    - _GranuleScale: 76.1
-    - _GranuleStr: 0.092
-    - _LimbDarken: 0.838
-    - _NoiseScale: 11.8
-    - _NoiseStrength: 0.3
-    - _PulseAmount: 0.038
-    - _PulseSpeed: 0.14
-    - _Radius: 0.32
-    - _RayCount: 15.9
-    - _RayLength: 0.213
-    - _RaySharpness: 43.5
+    - _GlowFalloff: 7.38
+    - _GlowRadius: 0.26
+    - _GlowStrength: 2.66
+    - _GranuleScale: 119.9
+    - _GranuleStr: 0.668
+    - _LimbDarken: 0.189
+    - _NoiseScale: 20
+    - _NoiseStrength: 0.73
+    - _PulseAmount: 0
+    - _PulseSpeed: 0
+    - _Radius: 0.301
+    - _RayCount: 25.2
+    - _RayLength: 0.113
+    - _RaySharpness: 44.1
     - _RayWidth: 0.217
-    - _RotateSpeed: 0.01
-    - _SecondRayCount: 15.9
-    - _SecondRayScale: 0.15
+    - _RotateSpeed: 0.0005
+    - _SecondRayCount: 37.5
+    - _SecondRayScale: 0.506
     - _SpriteSize: 5
     - _ZWrite: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _CoreColor: {r: 1, g: 0.97999996, b: 0.85, a: 1}
-    - _CoronaColor: {r: 1, g: 0.45, b: 0.049999952, a: 1}
+    - _CoronaColor: {r: 0.95819324, g: 0.4783154, b: 0.12869014, a: 1}
     - _MidColor: {r: 1, g: 0.6, b: 0.09999997, a: 1}
-    - _OuterColor: {r: 1, g: 0.19999996, b: 0.02, a: 1}
+    - _OuterColor: {r: 1, g: 0.42177346, b: 0.019607842, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

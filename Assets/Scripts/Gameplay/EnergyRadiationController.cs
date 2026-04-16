@@ -31,7 +31,6 @@ public class EnergyRadiationController : MonoBehaviour
             Vector3 destination = destinationPosition.position;
             while (!EnergyBallManager.Instance.CanPlace(destination, layerMask))
             {
-                Debug.Log("Cant place " + gameObject.name);
                 destination += Vector3.right * 0.1f;
             }
 
@@ -39,7 +38,6 @@ public class EnergyRadiationController : MonoBehaviour
 
             for (int i = 0; i < energyCount; i++)
             {
-                Debug.Log("Generating " + gameObject.name);
                 EnergyBallController ball = EnergyBallManager.Instance.GetRandom(
                         GameplayManager.Instance.GateCount
                 );
