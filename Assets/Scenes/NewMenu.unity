@@ -6565,6 +6565,18 @@ MonoBehaviour:
   clickClip: {fileID: 8300000, guid: f2190f234a43e7274a8bd3f33d8ce7e6, type: 3}
   upgradeClip: {fileID: 8300000, guid: 2bba036dbc363a863b62a5a2b5581c3c, type: 3}
   selectClip: {fileID: 8300000, guid: 514e526ea6343d601aa5b83a46226d9e, type: 3}
+  musicClips:
+  - {fileID: 8300000, guid: 02a9a6351b95130718a83d892c6ea8fe, type: 3}
+  - {fileID: 8300000, guid: 546cd00f93d2ff5679478acd9a1262ff, type: 3}
+  - {fileID: 8300000, guid: 6efe7816a009d8df0a9481263a70dfca, type: 3}
+  - {fileID: 8300000, guid: 5053b52f486e7c36592f633cf4532b78, type: 3}
+  - {fileID: 8300000, guid: 1abca6cae6be5c0f9bd031489384d129, type: 3}
+  - {fileID: 8300000, guid: 81ea0d867f6a197b9bb03fbaeb2c7d3d, type: 3}
+  - {fileID: 8300000, guid: 2b61a9e3889a60402b2cd973dc4323a5, type: 3}
+  - {fileID: 8300000, guid: fb693f4b04328858199e9dc5b1a26879, type: 3}
+  - {fileID: 8300000, guid: a3018efb4a6bebb73a94cb8ed507cce4, type: 3}
+  - {fileID: 8300000, guid: 98ad638efeae0321aabe5b61883a1bea, type: 3}
+  - {fileID: 8300000, guid: e70da51b76b5fdf3eacf4253f0c27481, type: 3}
 --- !u!4 &1593900404
 Transform:
   m_ObjectHideFlags: 0
@@ -6592,7 +6604,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 6efe7816a009d8df0a9481263a70dfca, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

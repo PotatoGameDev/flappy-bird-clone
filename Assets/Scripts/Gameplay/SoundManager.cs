@@ -11,26 +11,13 @@ public class SoundManager : MonoBehaviour
     public float clipDuration = 1.0f;
     public float fadeDuration = 0.5f;
 
-    [SerializeField]
-    private AudioClip[] musicClips;
-
-    [SerializeField]
-    private AudioSource musicSource;
-
-    [SerializeField]
-    private AudioSource quakeAudioSource;
-
-    [SerializeField]
-    private AudioSource hitAudioSource;
-
-    [SerializeField]
-    private AudioSource screamAudioSource;
-
-    [SerializeField]
-    private AudioSource collectAudioSource;
-
-    [SerializeField]
-    private AudioSource explosionAudioSource;
+    [SerializeField] private AudioClip[] musicClips;
+    [SerializeField] private AudioSource musicSource;
+    [SerializeField] private AudioSource quakeAudioSource;
+    [SerializeField] private AudioSource hitAudioSource;
+    [SerializeField] private AudioSource screamAudioSource;
+    [SerializeField] private AudioSource collectAudioSource;
+    [SerializeField] private AudioSource explosionAudioSource;
 
     void Awake()
     {
