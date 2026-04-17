@@ -6,8 +6,6 @@ using UnityEngine.EventSystems;
 
 public class UpgradesMenuController : SecondaryMenuDelegate
 {
-    private UpgradePanelController selectedUpgrade;
-
     [SerializeField] private FakeButton startButton;
     [SerializeField] private TextMeshProUGUI selectedUpgradeNameLabel;
     [SerializeField] private TextMeshProUGUI selectedUpgradeStatsLabel;
@@ -55,23 +53,37 @@ public class UpgradesMenuController : SecondaryMenuDelegate
         FillInUpgradeDescriptions();
     }
 
-    private void OnUpgradeSelected(UpgradePanelController upgradePanel)
+    private void OnUpgradeSelected(UpgradePanelController selectedUpgrade)
     {
-        // Selecting the new one:
-        selectedUpgrade = upgradePanel;
+
+        foreach (UpgradePanelController upgradePanel in upgradePanels)
+        {
+            if (selectedUpgrade == upgradePanel)
+            {
+                continue;
+            }
+
+            upgradePanel.SetSelected(false);
+            //
+        }
 
         FillInUpgradeDescriptions();
     }
 
     private void FillInUpgradeDescriptions()
     {
-        UpgradeId ident = selectedUpgrade.GetUpgradeIdent();
-        Upgrade upgrade = UpgradesManager.Instance.GetUpgrade(ident);
+        UpgradePanelController selectedUpgrade = GetSelectedUpgrade();
 
-        selectedUpgradeNameLabel.SetText(upgrade.Name);
-        selectedUpgradeDescriptionLabel.SetText(
-                UpgradesManager.Instance.GetUpgradeDescription(ident)
-                );
+        if (selectedUpgrade != null)
+        {
+            UpgradeId ident = GetSelectedUpgrade().GetUpgradeIdent();
+            Upgrade upgrade = UpgradesManager.Instance.GetUpgrade(ident);
+
+            selectedUpgradeNameLabel.SetText(upgrade.Name);
+            selectedUpgradeDescriptionLabel.SetText(
+                    UpgradesManager.Instance.GetUpgradeDescription(ident)
+                    );
+        }
     }
 
     private void FillInStatTexts()
@@ -106,5 +118,19 @@ public class UpgradesMenuController : SecondaryMenuDelegate
             startButton.GetComponentInChildren<TextMeshProUGUI>()
                 .SetText("Locked");
         }
+    }
+
+    private UpgradePanelController GetSelectedUpgrade()
+    {
+        foreach (UpgradePanelController upgradePanel in upgradePanels)
+        {
+            if (upgradePanel.Selected)
+            {
+                return upgradePanel;
+            }
+        }
+
+        // Maybe return the first one?
+        return null;
     }
 }

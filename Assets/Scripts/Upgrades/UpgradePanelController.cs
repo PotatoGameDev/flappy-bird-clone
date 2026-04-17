@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using System;
 
 public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
@@ -13,8 +14,19 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
     [SerializeField] private GameObject borderImage;
     [SerializeField] private GameObject borderImageDisabled;
     [SerializeField] private MenuSoundManager soundManager;
+    [SerializeField] private bool defaultOnEnable;
+
+    [Header("Navigation")]
+    [SerializeField] private InputActionReference navigationAction;
+    [SerializeField] private UpgradePanelController navigateUp;
+    [SerializeField] private UpgradePanelController navigateDown;
 
     public event Action<UpgradePanelController> PanelSelected;
+
+    public bool Selected
+    {
+        get; private set;
+    }
 
     void Start()
     {
@@ -26,11 +38,46 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
     void OnEnable()
     {
         UpdateUi();
+        if (defaultOnEnable && !Selected)
+        {
+            SetSelected(true);
+        }
+    }
+
+    void OnDisable()
+    {
+        navigationAction.action.performed -= OnNavigate;
     }
 
     void OnDestroy()
     {
         UpgradesManager.Instance.OnUpgrade -= HandleUpgrade;
+    }
+
+    void OnNavigate(InputAction.CallbackContext ctx)
+    {
+        if (!Selected)
+        {
+            return;
+        }
+
+        if (!ctx.action.WasPressedThisFrame())
+        {
+            return;
+        }
+
+        Vector2 value = ctx.ReadValue<Vector2>();
+        if (value != Vector2.zero)
+        {
+            if (value.y > 0)
+            {
+                navigateUp.SetSelected(true);
+            }
+            if (value.y < 0)
+            {
+                navigateDown.SetSelected(true);
+            }
+        }
     }
 
     public void OnUpgradeClicked()
@@ -47,7 +94,10 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
 
     private void OnValidate()
     {
-        if (nameLabel != null) nameLabel.text = upgradeIdent.ToString();
+        if (nameLabel != null)
+        {
+            nameLabel.text = upgradeIdent.ToString();
+        }
     }
 
     void UpdateUi()
@@ -125,39 +175,45 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        SelectButton();
+        SetSelected(true);
     }
 
     public void SelectButton()
     {
-        if (EventSystem.current.currentSelectedGameObject != upgradeButton.gameObject)
-        {
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(upgradeButton.gameObject);
-        }
+        EventSystem.current.SetSelectedGameObject(upgradeButton.gameObject);
     }
 
     public void SetSelected(bool selected)
     {
         if (selected)
         {
-            if (ButtonInteractable())
+            if (!Selected)
             {
-                borderImage.SetActive(true);
-                borderImageDisabled.SetActive(false);
-            }
-            else
-            {
-                borderImage.SetActive(false);
-                borderImageDisabled.SetActive(true);
+                if (ButtonInteractable())
+                {
+                    borderImage.SetActive(true);
+                    borderImageDisabled.SetActive(false);
+                    SelectButton();
+                }
+                else
+                {
+                    borderImage.SetActive(false);
+                    borderImageDisabled.SetActive(true);
+                }
+
+                PanelSelected?.Invoke(this);
             }
 
-            PanelSelected?.Invoke(this);
+            navigationAction.action.performed += OnNavigate;
         }
         else
         {
             borderImage.SetActive(false);
             borderImageDisabled.SetActive(false);
+
+            navigationAction.action.performed -= OnNavigate;
         }
+
+        Selected = selected;
     }
 }
