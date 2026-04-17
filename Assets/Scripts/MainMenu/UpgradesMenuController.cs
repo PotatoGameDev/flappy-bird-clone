@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using TMPro;
 
 
@@ -12,6 +13,9 @@ public class UpgradesMenuController : SecondaryMenuDelegate
     [SerializeField] private TextMeshProUGUI selectedUpgradeStatsLabel;
     private string selectedUpgradeStatsLabelTemplate;
     [SerializeField] private TextMeshProUGUI selectedUpgradeDescriptionLabel;
+
+    [Header("Navigation")]
+    [SerializeField] private InputActionReference navigationAction;
 
     private UpgradePanelController[] upgradePanels;
 
@@ -34,6 +38,8 @@ public class UpgradesMenuController : SecondaryMenuDelegate
         {
             upgradePanel.PanelSelected += OnUpgradeSelected;
         }
+
+        navigationAction.action.performed += OnNavigate;
     }
 
     void OnDisable()
@@ -41,8 +47,9 @@ public class UpgradesMenuController : SecondaryMenuDelegate
         UpgradesManager.Instance.OnUpgrade -= HandleUpgrade;
         foreach (UpgradePanelController upgradePanel in upgradePanels)
         {
-            upgradePanel.PanelSelected += OnUpgradeSelected;
+            upgradePanel.PanelSelected -= OnUpgradeSelected;
         }
+        navigationAction.action.performed -= OnNavigate;
     }
 
     private void HandleUpgrade(Upgrade u)
@@ -120,6 +127,8 @@ public class UpgradesMenuController : SecondaryMenuDelegate
     {
         foreach (UpgradePanelController upgradePanel in upgradePanels)
         {
+
+            Debug.Log("Upgrade: " + upgradePanel.GetUpgradeIdent() + " = " + upgradePanel.Selected);
             if (upgradePanel.Selected)
             {
                 return upgradePanel;
@@ -128,5 +137,26 @@ public class UpgradesMenuController : SecondaryMenuDelegate
 
         // Maybe return the first one?
         return null;
+    }
+
+    void OnNavigate(InputAction.CallbackContext ctx)
+    {
+        if (!ctx.action.WasPressedThisFrame())
+        {
+            return;
+        }
+
+        Vector2 value = ctx.ReadValue<Vector2>();
+        if (value != Vector2.zero)
+        {
+            if (value.y > 0)
+            {
+                GetSelectedUpgrade().NavigateUp();
+            }
+            if (value.y < 0)
+            {
+                GetSelectedUpgrade().NavigateDown();
+            }
+        }
     }
 }

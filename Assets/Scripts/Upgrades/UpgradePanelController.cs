@@ -17,7 +17,6 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
     [SerializeField] private bool defaultOnEnable;
 
     [Header("Navigation")]
-    [SerializeField] private InputActionReference navigationAction;
     [SerializeField] private UpgradePanelController navigateUp;
     [SerializeField] private UpgradePanelController navigateDown;
 
@@ -47,7 +46,16 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
     void OnDisable()
     {
         SetSelected(false);
-        navigationAction.action.performed -= OnNavigate;
+    }
+
+    public void NavigateUp()
+    {
+        navigateUp.SetSelected(true);
+    }
+
+    public void NavigateDown()
+    {
+        navigateDown.SetSelected(true);
     }
 
     void OnDestroy()
@@ -186,37 +194,28 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
 
     public void SetSelected(bool selected)
     {
-        Debug.Log("Selecting: " + upgradeIdent + " " + selected);
+
+        Selected = selected;
         if (selected)
         {
-            if (!Selected)
+            if (ButtonInteractable())
             {
-                if (ButtonInteractable())
-                {
-                    borderImage.SetActive(true);
-                    borderImageDisabled.SetActive(false);
-                    SelectButton();
-                }
-                else
-                {
-                    borderImage.SetActive(false);
-                    borderImageDisabled.SetActive(true);
-                }
-
-                PanelSelected?.Invoke(this);
+                borderImage.SetActive(true);
+                borderImageDisabled.SetActive(false);
+                SelectButton();
+            }
+            else
+            {
+                borderImage.SetActive(false);
+                borderImageDisabled.SetActive(true);
             }
 
-            Debug.Log("Adding nav: " + upgradeIdent + " " + selected);
-            navigationAction.action.performed += OnNavigate;
+            PanelSelected?.Invoke(this);
         }
         else
         {
             borderImage.SetActive(false);
             borderImageDisabled.SetActive(false);
-
-            navigationAction.action.performed -= OnNavigate;
         }
-
-        Selected = selected;
     }
 }
