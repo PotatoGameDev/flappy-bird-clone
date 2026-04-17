@@ -10,9 +10,9 @@ public class SecondaryMenuController : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI selectionCurrent;
     [SerializeField] private FakeButton selectionL;
-    private TextMeshProUGUI selectionLabelL;
+    [SerializeField] private TextMeshProUGUI selectionLabelL;
     [SerializeField] private FakeButton selectionR;
-    private TextMeshProUGUI selectionLabelR;
+    [SerializeField] private TextMeshProUGUI selectionLabelR;
 
     [SerializeField] private GameObject[] selectionContents;
     [SerializeField] private TextMeshProUGUI[] statLabels;
@@ -22,11 +22,11 @@ public class SecondaryMenuController : MonoBehaviour
 
     [SerializeField] private string[] availableOptions;
 
+    [SerializeField] private GameObject[] glyphs;
+    [SerializeField] private GameObject[] showGlyphs;
+
     void Awake()
     {
-        selectionLabelL = selectionL.GetComponentInChildren<TextMeshProUGUI>(true);
-        selectionLabelR = selectionR.GetComponentInChildren<TextMeshProUGUI>(true);
-
         if (statLabelTemplates == null && statLabels.Length > 0)
         {
             statLabelTemplates = new string[statLabels.Length];
@@ -43,7 +43,6 @@ public class SecondaryMenuController : MonoBehaviour
         }
     }
 
-
     void OnEnable()
     {
         // make sure we don't try to select the same button again
@@ -52,6 +51,7 @@ public class SecondaryMenuController : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(defaultButton);
         }
+
         UpdateMenus();
     }
 
@@ -85,6 +85,15 @@ public class SecondaryMenuController : MonoBehaviour
             }
 
             controller.UpdateMenu();
+        }
+
+        foreach (GameObject glyph in glyphs)
+        {
+            glyph.SetActive(false);
+        }
+        foreach (GameObject glyph in showGlyphs)
+        {
+            glyph.SetActive(true);
         }
     }
 

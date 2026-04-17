@@ -46,6 +46,7 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
 
     void OnDisable()
     {
+        SetSelected(false);
         navigationAction.action.performed -= OnNavigate;
     }
 
@@ -185,6 +186,7 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
 
     public void SetSelected(bool selected)
     {
+        Debug.Log("Selecting: " + upgradeIdent + " " + selected);
         if (selected)
         {
             if (!Selected)
@@ -204,6 +206,7 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
                 PanelSelected?.Invoke(this);
             }
 
+            Debug.Log("Adding nav: " + upgradeIdent + " " + selected);
             navigationAction.action.performed += OnNavigate;
         }
         else

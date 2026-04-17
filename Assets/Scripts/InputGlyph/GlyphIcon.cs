@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using TMPro;
 
 namespace PotatoGameDev.InputGlyph
 {
@@ -9,7 +10,9 @@ namespace PotatoGameDev.InputGlyph
     {
         [SerializeField] private InputActionReference action;
         [SerializeField] private Image image;
+        [SerializeField] private TextMeshProUGUI label;
         [SerializeField] private GlyphManager glyphManager;
+        [SerializeField] private bool showLabel;
 
         void Start()
         {
@@ -18,6 +21,12 @@ namespace PotatoGameDev.InputGlyph
 
             glyphManager.InputSchemeChanged += InputSchemeChanged;
             InputSchemeChanged(glyphManager.CurrentScheme, glyphManager.CurrentMapping);
+
+
+            if (!showLabel)
+            {
+                label.gameObject.SetActive(false);
+            }
         }
 
         void OnEnable()
@@ -58,11 +67,19 @@ namespace PotatoGameDev.InputGlyph
             {
                 // No binding in that scheme, hiding image
                 image.enabled = false;
+                if (showLabel)
+                {
+                    label.gameObject.SetActive(false);
+                }
             }
             else
             {
                 image.enabled = true;
                 image.sprite = sprite;
+                if (showLabel)
+                {
+                    label.gameObject.SetActive(true);
+                }
             }
         }
 

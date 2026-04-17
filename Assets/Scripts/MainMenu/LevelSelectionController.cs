@@ -4,6 +4,8 @@ using TMPro;
 public class LevelSelectionController : SecondaryMenuDelegate
 {
     [SerializeField] private FakeButton startButton;
+    [SerializeField] private TextMeshProUGUI startButtonLabel;
+    [SerializeField] private TextMeshProUGUI startGlyphLabel;
 
 
     void Start()
@@ -50,14 +52,14 @@ public class LevelSelectionController : SecondaryMenuDelegate
         if (GameManager.Instance.CanPlayLevel())
         {
             startButton.interactable = true;
-            startButton.GetComponentInChildren<TextMeshProUGUI>()
-                .SetText("Play");
+            startButtonLabel.SetText("Play");
+            startGlyphLabel.SetText("Play");
         }
         else
         {
             startButton.interactable = false;
-            startButton.GetComponentInChildren<TextMeshProUGUI>()
-                .SetText("Locked");
+            startButtonLabel.SetText("Play [Locked]");
+            startGlyphLabel.SetText("Play [Locked]");
         }
     }
 }
