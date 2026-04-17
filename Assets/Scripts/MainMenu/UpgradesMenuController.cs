@@ -1,12 +1,13 @@
 using UnityEngine;
 using TMPro;
 
-using UnityEngine.EventSystems;
-
 
 public class UpgradesMenuController : SecondaryMenuDelegate
 {
     [SerializeField] private FakeButton startButton;
+    [SerializeField] private TextMeshProUGUI startButtonLabel;
+    [SerializeField] private TextMeshProUGUI startGlyphLabel;
+
     [SerializeField] private TextMeshProUGUI selectedUpgradeNameLabel;
     [SerializeField] private TextMeshProUGUI selectedUpgradeStatsLabel;
     private string selectedUpgradeStatsLabelTemplate;
@@ -28,23 +29,20 @@ public class UpgradesMenuController : SecondaryMenuDelegate
 
     void OnEnable()
     {
+        UpgradesManager.Instance.OnUpgrade += HandleUpgrade;
         foreach (UpgradePanelController upgradePanel in upgradePanels)
         {
             upgradePanel.PanelSelected += OnUpgradeSelected;
         }
-        UpgradesManager.Instance.OnUpgrade += HandleUpgrade;
     }
 
     void OnDisable()
     {
+        UpgradesManager.Instance.OnUpgrade -= HandleUpgrade;
         foreach (UpgradePanelController upgradePanel in upgradePanels)
         {
-            upgradePanel.PanelSelected -= OnUpgradeSelected;
-
-
-            upgradePanel.SetSelected(false);
+            upgradePanel.PanelSelected += OnUpgradeSelected;
         }
-        UpgradesManager.Instance.OnUpgrade -= HandleUpgrade;
     }
 
     private void HandleUpgrade(Upgrade u)
@@ -55,7 +53,6 @@ public class UpgradesMenuController : SecondaryMenuDelegate
 
     private void OnUpgradeSelected(UpgradePanelController selectedUpgrade)
     {
-
         foreach (UpgradePanelController upgradePanel in upgradePanels)
         {
             if (selectedUpgrade == upgradePanel)
@@ -64,7 +61,6 @@ public class UpgradesMenuController : SecondaryMenuDelegate
             }
 
             upgradePanel.SetSelected(false);
-            //
         }
 
         FillInUpgradeDescriptions();
@@ -109,14 +105,14 @@ public class UpgradesMenuController : SecondaryMenuDelegate
         if (GameManager.Instance.CanPlayLevel())
         {
             startButton.interactable = true;
-            startButton.GetComponentInChildren<TextMeshProUGUI>()
-                .SetText("Play");
+            startButtonLabel.SetText("Play");
+            startGlyphLabel.SetText("Play");
         }
         else
         {
             startButton.interactable = false;
-            startButton.GetComponentInChildren<TextMeshProUGUI>()
-                .SetText("Locked");
+            startButtonLabel.SetText("Play [Locked]");
+            startGlyphLabel.SetText("Play [Locked]");
         }
     }
 
