@@ -79,7 +79,7 @@ public class EnergyBallController : PooledInstance
             if (Type == EnergyType.CollectEnergy)
             {
                 GameManager.Instance.CollectedEnergy += energyValue;
-                GameplayManager.Instance.ScoopedEnergy += energyValue;
+                GameplayManager.Instance.AddScoopedEnergy(energyValue);
             }
             SoundManager.Instance.PlayCollect(GetPitch());
             Release();

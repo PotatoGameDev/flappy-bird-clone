@@ -4,16 +4,36 @@ public class BossManager : MonoBehaviour
 {
     [SerializeField] private GameObject flyingSaucersBossContainer;
 
+    private bool bossActive;
 
-    [SerializeField] private bool forceBoss;
+    private float flyingSaucersBossContainerOffset;
 
     void Start()
     {
-        LevelType levelType = GameManager.Instance.levelSettings.levelType;
-        int currentLevel = GameManager.Instance.CurrentLevel;
+        flyingSaucersBossContainer.SetActive(false);
 
-        flyingSaucersBossContainer.SetActive(forceBoss || currentLevel == 0 && levelType == LevelType.BossFight);
-        // TODO Next levels
+        flyingSaucersBossContainerOffset = (
+                flyingSaucersBossContainer.transform.position -
+                GameplayManager.Instance.Player.transform.position
+            ).x;
+    }
+
+    public bool IsBossActive()
+    {
+        return bossActive;
+    }
+
+    public void ActivateBoss()
+    {
+        bossActive = true;
+
+        float newX = GameplayManager.Instance.Player.transform.position.x
+            + flyingSaucersBossContainerOffset;
+        Vector3 newPos = flyingSaucersBossContainer.transform.position;
+        newPos.x = newX;
+
+        flyingSaucersBossContainer.transform.position = newPos;
+        flyingSaucersBossContainer.SetActive(true);
     }
 
 }

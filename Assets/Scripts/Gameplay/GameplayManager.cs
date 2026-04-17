@@ -22,6 +22,7 @@ public class GameplayManager : MonoBehaviour
 
     public int GateCount { get; set; } = 0;
 
+
     [SerializeField] private Color fadingMessageCasualtiesColor;
     [SerializeField] private Color fadingMessageEnergyColor;
     [SerializeField] private Color fadingMessagePopulationAddedColor;
@@ -43,15 +44,40 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] private GameObject shieldLevelSliderFill;
     private long shieldLeft;
 
+
+    [SerializeField] private Slider energyGoalSlider;
+
     [Header("Boss")]
     [SerializeField] private TextMeshProUGUI bossLabel;
     [SerializeField] private Slider bossHealthSlider;
     [SerializeField] private GameObject bossHealthSliderFill;
     [SerializeField] private GameObject bossHealthBarContainer;
+    [SerializeField] private BossManager bossManager;
 
     [SerializeField] private GameObject winAccomplishedPanel;
 
-    public int ScoopedEnergy { get; set; } = 0;
+    private int scoopedEnergy = 0;
+
+    public void AddScoopedEnergy(int amount)
+    {
+        scoopedEnergy += amount;
+        AddCollectedEnergy(amount);
+    }
+
+    public int collectedEnergy = 0;
+    public void AddCollectedEnergy(int amount)
+    {
+        collectedEnergy += amount;
+        if (collectedEnergy >= GameManager.Instance.GetAdvanceEnergy())
+        {
+            if (!bossManager.IsBossActive())
+            {
+                bossManager.ActivateBoss();
+                gateCounterContainer.SetActive(false);
+                bossHealthBarContainer.SetActive(true);
+            }
+        }
+    }
 
     private readonly string[] casualtiesTexts = {
         "{0} died ({1:0}%)",
@@ -124,33 +150,26 @@ public class GameplayManager : MonoBehaviour
             shieldLevelSlider.value = shieldLeft;
         }
 
-        // Boss
-        LevelSettings levelSettings = GameManager.Instance.levelSettings;
-        if (levelSettings.levelType == LevelType.BossFight)
+        switch (GameManager.Instance.CurrentLevel)
         {
-            gateCounterContainer.SetActive(false);
-            bossHealthBarContainer.SetActive(true);
+            case 0:
+                bossLabel.SetText("Annoying Motherships");
+                break;
+            case 1:
+                bossLabel.SetText("TODO");
+                break;
+            case 2:
+                bossLabel.SetText("TODO");
+                break;
+            default:
+                break;
+        }
+        gateCounterContainer.SetActive(true);
+        bossHealthBarContainer.SetActive(false);
 
-            switch (GameManager.Instance.CurrentLevel)
-            {
-                case 0:
-                    bossLabel.SetText("Annoying Motherships");
-                    break;
-                case 1:
-                    bossLabel.SetText("TODO");
-                    break;
-                case 2:
-                    bossLabel.SetText("TODO");
-                    break;
-                default:
-                    break;
-            }
-        }
-        else
-        {
-            gateCounterContainer.SetActive(true);
-            bossHealthBarContainer.SetActive(false);
-        }
+        energyGoalSlider.minValue = 0;
+        energyGoalSlider.maxValue = GameManager.Instance.GetAdvanceEnergy();
+        energyGoalSlider.value = 0;
     }
 
     public void SetBossHealth(float health, float maxHealth)
@@ -194,7 +213,7 @@ public class GameplayManager : MonoBehaviour
     IEnumerator DoEverySecondActions()
     {
         long slaveryIncrease = UpgradesManager.Instance.GetPopulationNumberPerSecond(UpgradeId.AndroidSlavery);
-        int previousScoopedEnergy = ScoopedEnergy;
+        int previousScoopedEnergy = scoopedEnergy;
 
         while (true)
         {
@@ -223,14 +242,14 @@ public class GameplayManager : MonoBehaviour
             }
 
             // Add scooped energy if it is still the same as previous, to debounce
-            if (ScoopedEnergy > 0 && ScoopedEnergy == previousScoopedEnergy)
+            if (scoopedEnergy > 0 && scoopedEnergy == previousScoopedEnergy)
             {
-                AddEnergyCollectedText(ScoopedEnergy);
+                AddEnergyCollectedText(scoopedEnergy);
                 UpdateLabels();
-                ScoopedEnergy = 0;
+                scoopedEnergy = 0;
             }
 
-            previousScoopedEnergy = ScoopedEnergy;
+            previousScoopedEnergy = scoopedEnergy;
 
             yield return EVERY_SECOND;
         }
@@ -270,6 +289,7 @@ public class GameplayManager : MonoBehaviour
             UpdateRpmLabel();
 
             SpinDoctorUsagePerSecond = rpmDamped / Time.deltaTime;
+
         }
     }
 
@@ -283,6 +303,10 @@ public class GameplayManager : MonoBehaviour
         }
         energyLabel.SetText(" {0} GW", GameManager.Instance.CollectedEnergy);
         UpdateRpmLabel();
+
+
+        // Update goal slider
+        energyGoalSlider.SetValueWithoutNotify(collectedEnergy);
     }
 
     private void UpdateRpmLabel()
@@ -394,6 +418,8 @@ public class GameplayManager : MonoBehaviour
 
         // Initial level is 0, so we need to add 1.
         int collectedEnergy = EnergyPerGate();
+
+        this.collectedEnergy += collectedEnergy;
 
         GameManager.Instance.CollectedEnergy += collectedEnergy;
         AddEnergyCollectedText(collectedEnergy);

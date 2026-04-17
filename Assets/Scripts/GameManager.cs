@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance { get; private set; }
 
-    private readonly int[] energyToAdvance = { 1000, 10000, 100000 };
+    private readonly int[] energyToAdvance = { 100, 10000, 100000 };
 
 
     // State things
