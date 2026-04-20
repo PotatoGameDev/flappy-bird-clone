@@ -127,8 +127,6 @@ public class UpgradesMenuController : SecondaryMenuDelegate
     {
         foreach (UpgradePanelController upgradePanel in upgradePanels)
         {
-
-            Debug.Log("Upgrade: " + upgradePanel.GetUpgradeIdent() + " = " + upgradePanel.Selected);
             if (upgradePanel.Selected)
             {
                 return upgradePanel;
