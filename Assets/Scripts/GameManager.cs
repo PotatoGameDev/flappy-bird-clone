@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance { get; private set; }
 
-    private readonly int[] energyToAdvance = { 1000, 10000, 100000 };
+    private readonly int[] energyToAdvance = { 100, 10000, 100000 };
 
 
     // State things
@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public int CollectedEnergy
+    public long CollectedEnergy
     {
         get
         {
@@ -154,7 +154,7 @@ public class GameState
 {
     public long BasePopulation;
     public int CivTypePassed;
-    public int CollectedEnergy;
+    public long CollectedEnergy;
     public int CurrentLevel; // 0 based! So there is level 0, 1, 2
     public List<UpgradeState> Upgrades;
 

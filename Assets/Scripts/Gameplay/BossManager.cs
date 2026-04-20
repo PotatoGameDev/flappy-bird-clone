@@ -1,8 +1,14 @@
 using UnityEngine;
+using TMPro;
+using System.Collections;
 
 public class BossManager : MonoBehaviour
 {
     [SerializeField] private GameObject flyingSaucersBossContainer;
+    [SerializeField] private float flyingSaucersBossPlayerSpeed = 10.0f;
+
+    [SerializeField] private GameObject bossNameTag;
+    [SerializeField] private TextMeshProUGUI bossNameTagLabel;
 
     private bool bossActive;
 
@@ -26,6 +32,7 @@ public class BossManager : MonoBehaviour
     public void ActivateBoss()
     {
         bossActive = true;
+        GameplayManager.Instance.Player.speed = flyingSaucersBossPlayerSpeed;
 
         float newX = GameplayManager.Instance.Player.transform.position.x
             + flyingSaucersBossContainerOffset;
@@ -34,6 +41,17 @@ public class BossManager : MonoBehaviour
 
         flyingSaucersBossContainer.transform.position = newPos;
         flyingSaucersBossContainer.SetActive(true);
+
+        bossNameTag.SetActive(true);
+        bossNameTagLabel.SetText("Irritating Motherships" + " Attacks");
+        StartCoroutine(DestroyBossNameTag());
+
+        SoundManager.Instance.PlayBossMusic();
     }
 
+    private IEnumerator DestroyBossNameTag()
+    {
+        yield return new WaitForSeconds(2f);
+        Destroy(bossNameTag);
+    }
 }

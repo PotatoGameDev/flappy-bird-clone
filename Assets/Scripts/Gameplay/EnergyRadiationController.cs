@@ -49,7 +49,7 @@ public class EnergyRadiationController : MonoBehaviour
 
 
                 ball.Type = EnergyType.CollectEnergy;
-                ball.Target = finalDestination;
+                ball.SetTargetVector(finalDestination);
 
                 yield return new WaitForSeconds(timePerEnergy / 2f);
             }

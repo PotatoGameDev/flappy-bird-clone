@@ -46,13 +46,13 @@ public class GateController : PooledInstance
             {
                 ball.transform.position = bottomEnergyBallSpawner.position
                     + new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0f);
-                ball.Target = bottomTarget.position + (Vector3)(Random.insideUnitCircle * targetSpread);
+                ball.SetTargetVector(bottomTarget.position + (Vector3)(Random.insideUnitCircle * targetSpread));
             }
             else
             {
                 ball.transform.position = topEnergyBallSpawner.position
                     + new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0f);
-                ball.Target = topTarget.position + (Vector3)(Random.insideUnitCircle * targetSpread);
+                ball.SetTargetVector(topTarget.position + (Vector3)(Random.insideUnitCircle * targetSpread));
             }
 
             yield return new WaitForSeconds(timePerEnergy / 2f); // Divide by 2 because it's split

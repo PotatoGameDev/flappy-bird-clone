@@ -18,6 +18,7 @@ public class FlyingSaucerController : MonoBehaviour
     private float currentCooldown = 0f;
 
     [SerializeField] private float maxLife = 100f;
+
     private float halfLife;
     public float CurrentLife { get; private set; }
     private bool dead;
@@ -31,7 +32,6 @@ public class FlyingSaucerController : MonoBehaviour
     [SerializeField] private float damageFlashingDurationSeconds = 1f;
     private Color originalColor;
     private Coroutine flashingCoroutine;
-
 
     [SerializeField] private ParticleSystem smokeEmitter;
 
@@ -57,7 +57,6 @@ public class FlyingSaucerController : MonoBehaviour
         originalColor = spriteRenderer.color;
         CurrentLife = maxLife;
     }
-
 
     void Start()
     {
@@ -91,6 +90,10 @@ public class FlyingSaucerController : MonoBehaviour
             }
             ParticleSystem.EmissionModule emission = smokeEmitter.emission;
             emission.rateOverTime = maxSmokeEmission * CurrentLife / halfLife;
+        }
+        else
+        {
+            smokeEmitter.Stop();
         }
 
         if (CurrentLife <= 0f)
@@ -135,28 +138,20 @@ public class FlyingSaucerController : MonoBehaviour
 
     }
 
-    void OnTriggerEnter2D(Collider2D collider)
+    public bool IsFullHealth()
     {
-        if (dead || !Active)
+        return CurrentLife == maxLife;
+    }
+
+    public void Repair(int energy)
+    {
+        CurrentLife = Mathf.Clamp(CurrentLife + energy, 0f, maxLife);
+
+        if (flashingCoroutine != null)
         {
-            return;
+            StopCoroutine(flashingCoroutine);
         }
-        if (collider.CompareTag("Energy"))
-        {
-            EnergyBallController energy = collider.GetComponent<EnergyBallController>();
-
-            // The UFOs repair with energy!
-            if (energy.Type == EnergyType.CollectEnergy && energy.energyValue > 0 && CurrentLife < maxLife)
-            {
-                CurrentLife += energy.energyValue;
-                energy.energyValue = 0;
-
-                CurrentLife = Mathf.Clamp(CurrentLife, 0f, maxLife);
-
-                energy.TargetTransform = transform;
-            }
-
-        }
+        flashingCoroutine = StartCoroutine(HealthFlashing(false));
     }
 
     void OnTriggerStay2D(Collider2D collider)
@@ -208,6 +203,8 @@ public class FlyingSaucerController : MonoBehaviour
 
         yield return WAIT_ONE_SECOND;
 
+        spriteRenderer.enabled = false;
+
         ExplosionController explosion = InstancePoolsManager.Instance.ExplosionControllerPool.Get();
         explosion.Init();
         explosion.OnFinished.AddListener(DeathAnimationEnded);
@@ -221,7 +218,6 @@ public class FlyingSaucerController : MonoBehaviour
 
     public void DeathAnimationEnded()
     {
-        spriteRenderer.enabled = false;
         Destroy(gameObject);
     }
 
@@ -252,7 +248,7 @@ public class FlyingSaucerController : MonoBehaviour
         {
             StopCoroutine(flashingCoroutine);
         }
-        flashingCoroutine = StartCoroutine(DamageFlashing());
+        flashingCoroutine = StartCoroutine(HealthFlashing(true));
 
         CurrentLife -= hit;
 
@@ -264,7 +260,7 @@ public class FlyingSaucerController : MonoBehaviour
         DamageTaken?.Invoke();
     }
 
-    private IEnumerator DamageFlashing()
+    private IEnumerator HealthFlashing(bool damage)
     {
         float flashSpeed = 8f;
         float elapsed = 0f;
@@ -274,8 +270,15 @@ public class FlyingSaucerController : MonoBehaviour
             elapsed += Time.deltaTime;
             float t = Mathf.PingPong(elapsed * flashSpeed, 1f);
 
-            // We lerp from the original color to the half of the red (so not so much red)
-            spriteRenderer.color = Color.Lerp(originalColor, Color.red, t);
+            // We lerp from the original color to the half of the red (so not so much red) (or green)
+            if (damage)
+            {
+                spriteRenderer.color = Color.Lerp(originalColor, Color.red, t);
+            }
+            else
+            {
+                spriteRenderer.color = Color.Lerp(originalColor, Color.green, t);
+            }
             yield return null;
         }
 
