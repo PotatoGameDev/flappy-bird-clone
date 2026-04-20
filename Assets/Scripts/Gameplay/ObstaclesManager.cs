@@ -40,6 +40,7 @@ public class ObstaclesManager : MonoBehaviour
 
             GateController gateInst = pool.Get();
             gateInst.transform.position = pos;
+            gateInst.Init();
 
             obstacles.Add(gateInst);
         }

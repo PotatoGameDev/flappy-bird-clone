@@ -412,23 +412,11 @@ public class GameplayManager : MonoBehaviour
         SceneManager.LoadScene("NewMenu");
     }
 
-    public void CollectEnergy()
+    public void PassGate()
     {
         GateCount++;
 
-        // Initial level is 0, so we need to add 1.
-        int collectedEnergy = EnergyPerGate();
-
-        this.collectedEnergy += collectedEnergy;
-
-        GameManager.Instance.CollectedEnergy += collectedEnergy;
-        AddEnergyCollectedText(collectedEnergy);
         UpdateLabels();
-    }
-
-    public int EnergyPerGate()
-    {
-        return UpgradesManager.Instance.GetORingEnergyPerLevel();
     }
 
     private void AddEnergyCollectedText(int energyAdded)

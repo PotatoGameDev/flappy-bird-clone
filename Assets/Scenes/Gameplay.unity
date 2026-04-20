@@ -16769,7 +16769,7 @@ Transform:
   m_GameObject: {fileID: 335913717}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 1.81, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -16834,7 +16834,7 @@ MonoBehaviour:
   alignmentWeight: 1
   cohesionWeight: 1
   leaderWeight: 5
-  minSpeed: 2
+  minSpeed: 3
   maxSpeed: 25
   maxSpeedDistance: 20
   obstacleRadius: 3
@@ -17455,7 +17455,7 @@ GameObject:
   m_Layer: 0
   m_Name: Obstacles
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -17484,7 +17484,7 @@ Transform:
   m_GameObject: {fileID: 478316487}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.56, y: 0, z: 0}
+  m_LocalPosition: {x: 11.6, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -42636,6 +42636,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 4c576e79-778a-4403-906f-da79a0cf77e4
     m_ActionName: 'UI/Accept[/Gamepad/start,/Keyboard/enter]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 6ae3b07f-d475-4d01-9dca-a862c2b4f87b
+    m_ActionName: 'UI/Navigate2[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow,/Gamepad/leftStick/up,/Gamepad/leftStick/down,/Gamepad/leftStick/left,/Gamepad/leftStick/right,/Gamepad/dpad/up,/Gamepad/dpad/down,/Gamepad/dpad/left,/Gamepad/dpad/right]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
@@ -44561,6 +44565,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1135915059}
     m_Modifications:
+    - target: {fileID: 440030004787799869, guid: d66d24d49968afa8c8625e850668ae30, type: 3}
+      propertyPath: m_Icon
+      value: 
+      objectReference: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
     - target: {fileID: 440030004787799869, guid: d66d24d49968afa8c8625e850668ae30, type: 3}
       propertyPath: m_Name
       value: EnergyRadiationGeneratorStar

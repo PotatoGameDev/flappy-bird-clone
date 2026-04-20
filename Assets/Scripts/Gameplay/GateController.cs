@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 using PotatoGameDev.Pool;
 
 public class GateController : PooledInstance
@@ -8,46 +7,55 @@ public class GateController : PooledInstance
     [SerializeField] private Transform topEnergyBallSpawner;
     [SerializeField] private Transform bottomEnergyBallSpawner;
 
+    [SerializeField] private Transform topTarget;
+    [SerializeField] private Transform bottomTarget;
+
+    [SerializeField] private Vector2 targetSpread = Vector2.one;
+
     [SerializeField] private EnergyBallController energyBallPrefab;
 
 
-    void OnTriggerEnter2D(Collider2D collider)
+    public new void Init()
     {
-        if (collider.CompareTag("Player"))
-        {
-            StartCoroutine(GenerateEnergyBalls());
-        }
+        StartCoroutine(GenerateEnergyBalls());
+
+        base.Init();
     }
+
+    public new void Release()
+    {
+        StopAllCoroutines();
+        base.Release();
+    }
+
 
     private IEnumerator GenerateEnergyBalls()
     {
-        int energyPerGate = GameplayManager.Instance.EnergyPerGate();
+        int energyPerGate = UpgradesManager.Instance.GetORingEnergyPerLevel();
 
         float timePerEnergy = 0.5f /* sec */ / energyPerGate;
 
-        Stack<EnergyBallController> energyPortions = EnergyBallManager.Instance.GetForTotal(energyPerGate);
-
-        int i = 0;
-        while (energyPortions.Count > 0)
+        for (int i = 0; i < energyPerGate; i++)
         {
-            EnergyBallController ball = energyPortions.Pop();
+            EnergyBallController ball = EnergyBallManager.Instance.GetRandom(GameplayManager.Instance.GateCount);
+
             ball.Init();
-            ball.Type = EnergyType.PipeEnergy;
+            ball.Type = EnergyType.CollectEnergy;
 
             if (i % 2 == 0)
             {
                 ball.transform.position = bottomEnergyBallSpawner.position
                     + new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0f);
+                ball.Target = bottomTarget.position + (Vector3)(Random.insideUnitCircle * targetSpread);
             }
             else
             {
                 ball.transform.position = topEnergyBallSpawner.position
                     + new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0f);
+                ball.Target = topTarget.position + (Vector3)(Random.insideUnitCircle * targetSpread);
             }
-            i++;
 
             yield return new WaitForSeconds(timePerEnergy / 2f); // Divide by 2 because it's split
         }
     }
-
 }

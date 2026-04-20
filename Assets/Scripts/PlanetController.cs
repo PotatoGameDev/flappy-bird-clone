@@ -423,7 +423,7 @@ public class PlanetController : MonoBehaviour
     {
         if (collider.CompareTag("Gate"))
         {
-            GameplayManager.Instance.CollectEnergy();
+            GameplayManager.Instance.PassGate();
             speed += speedIncrease;
         }
     }
