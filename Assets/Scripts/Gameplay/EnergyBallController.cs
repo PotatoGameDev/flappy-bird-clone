@@ -11,8 +11,8 @@ public class EnergyBallController : PooledInstance
     private readonly WaitForSeconds TIMEOUT = new(5);
 
     public EnergyType Type { get; set; }
-    public Vector2? Target { get; set; }
-    public Transform TargetTransform { get; set; }
+    private Vector2? target;
+    private Transform targetTransform;
     private Animator anim;
     private Vector3 initialScale;
     private float speed = 0.1f;
@@ -51,34 +51,57 @@ public class EnergyBallController : PooledInstance
             return;
         }
 
-        if (Type == EnergyType.CollectEnergy && Target != null)
+        if (Type == EnergyType.CollectEnergy && target != null)
         {
-            if (Target is Vector2 target)
+            if (target is Vector2 targetValue)
             {
-                transform.position = Vector2.Lerp(transform.position, target, speed);
+                speed += 0.1f * Time.fixedDeltaTime; // This makes the energy ball always catch up to the planet, no matter of it's speed.
+                                                     // The energy ball will keep accelerating, eventually going faster than the planet.
+                transform.position = Vector2.Lerp(transform.position, targetValue, speed);
                 return;
             }
         }
 
-        if (Type == EnergyType.CollectEnergy && TargetTransform != null)
+        if (Type == EnergyType.CollectEnergy && targetTransform != null)
         {
-            transform.position = Vector2.Lerp(transform.position, TargetTransform.position, speed);
+            speed += 0.1f * Time.fixedDeltaTime; // This makes the energy ball always catch up to the planet, no matter of it's speed.
+                                                 // The energy ball will keep accelerating, eventually going faster than the planet.
+            transform.position = Vector2.Lerp(transform.position, targetTransform.position, speed);
 
-            if (transform.position == TargetTransform.position)
-            {
-                Release();
-            }
             return;
         }
     }
 
+    public void SetTargetVector(Vector3 value)
+    {
+        target = value;
+        targetTransform = null;
+    }
+
+    public void SetTargetTransform(Transform value)
+    {
+        targetTransform = value;
+        target = null;
+    }
+
     void OnTriggerEnter2D(Collider2D collider)
     {
+        if (collider.gameObject.CompareTag("Enemy"))
+        {
+            if (collider.transform == targetTransform)
+            {
+                FlyingSaucerController flyingSaucerController = targetTransform.GetComponent<FlyingSaucerController>();
+                flyingSaucerController.Repair(energyValue);
+
+                Release();
+                return;
+            }
+        }
+
         if (collider.CompareTag("Player") && !GameplayManager.Instance.Player.Dead)
         {
             if (Type == EnergyType.CollectEnergy)
             {
-                GameManager.Instance.CollectedEnergy += energyValue;
                 GameplayManager.Instance.AddScoopedEnergy(energyValue);
             }
             SoundManager.Instance.PlayCollect(GetPitch());
@@ -112,8 +135,8 @@ public class EnergyBallController : PooledInstance
         transform.localScale = initialScale;
         anim.Play(0, 0, Random.value);
         Type = EnergyType.CollectEnergy;
-        Target = null;
-        TargetTransform = null;
+        target = null;
+        targetTransform = null;
 
         timeout = StartCoroutine(Timeout());
     }

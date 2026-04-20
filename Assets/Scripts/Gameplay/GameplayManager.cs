@@ -22,6 +22,7 @@ public class GameplayManager : MonoBehaviour
 
     public int GateCount { get; set; } = 0;
 
+    [SerializeField] private ToorboBoostController toorboBoostController;
 
     [SerializeField] private Color fadingMessageCasualtiesColor;
     [SerializeField] private Color fadingMessageEnergyColor;
@@ -56,25 +57,84 @@ public class GameplayManager : MonoBehaviour
 
     [SerializeField] private GameObject winAccomplishedPanel;
 
-    private int scoopedEnergy = 0;
+    private long scoopedEnergy = 0;
 
-    public void AddScoopedEnergy(int amount)
+    public void AddScoopedEnergy(long amount)
     {
+        // This is for the upgrades:
+        GameManager.Instance.CollectedEnergy += amount;
+
+        // This is for the energy floating text to show up after a debounce:
         scoopedEnergy += amount;
+
+        // This is to refill shields and fill boss goal bar:
         AddCollectedEnergy(amount);
+
+        // And finally we update UI:
+        UpdateEnergyGoalSlider();
     }
 
-    public int collectedEnergy = 0;
-    public void AddCollectedEnergy(int amount)
+    public long collectedEnergy = 0;
+
+    public void AddCollectedEnergy(long amount)
     {
-        collectedEnergy += amount;
-        if (collectedEnergy >= GameManager.Instance.GetAdvanceEnergy())
+        if (bossManager.IsBossActive())
         {
-            if (!bossManager.IsBossActive())
+            long maxEnergyShield = UpgradesManager.Instance.GetEnergyShieldMax();
+            if (shieldLeft < maxEnergyShield)
             {
-                bossManager.ActivateBoss();
-                gateCounterContainer.SetActive(false);
-                bossHealthBarContainer.SetActive(true);
+                long shieldToRefill = maxEnergyShield - shieldLeft;
+                if (shieldToRefill > amount)
+                {
+                    shieldToRefill = amount;
+                }
+                amount -= shieldToRefill;
+                shieldLeft += shieldToRefill;
+
+                shieldLevelSliderFill.SetActive(true);
+            }
+
+            float maxSpinDoctorRpmPerSec = UpgradesManager.Instance.GetSpinDoctorMaxRpmPerSecond();
+            if (amount > 0 && spinDoctorLeft < maxSpinDoctorRpmPerSec)
+            {
+                float spinDoctorToRefill = maxSpinDoctorRpmPerSec - spinDoctorLeft;
+                if (spinDoctorToRefill > amount)
+                {
+                    spinDoctorToRefill = amount;
+                }
+                // TODO This should be somehow converted between energy <> RPM
+                amount -= (long)spinDoctorToRefill;
+                spinDoctorLeft += spinDoctorToRefill;
+
+                spinDoctorLevelSliderFill.SetActive(true);
+            }
+            // TODO The same here, this should be somehow converted between energy <> a second of toorbo 
+            long toorboMax = (long)toorboBoostController.MaxToorboBoost;
+            long toorboLeft = (long)toorboBoostController.ToorboBoostLeft;
+            if (amount > 0 && toorboLeft < toorboMax)
+            {
+                long toorboRefill = toorboMax - toorboLeft;
+                if (toorboRefill > amount)
+                {
+                    toorboRefill = amount;
+                }
+                amount -= toorboRefill;
+                toorboBoostController.ToorboBoostLeft += toorboRefill;
+            }
+            UpdateLabels();
+        }
+        else
+        {
+            collectedEnergy += amount;
+
+            if (collectedEnergy >= GameManager.Instance.GetAdvanceEnergy())
+            {
+                if (!bossManager.IsBossActive())
+                {
+                    bossManager.ActivateBoss();
+                    gateCounterContainer.SetActive(false);
+                    bossHealthBarContainer.SetActive(true);
+                }
             }
         }
     }
@@ -213,11 +273,13 @@ public class GameplayManager : MonoBehaviour
     IEnumerator DoEverySecondActions()
     {
         long slaveryIncrease = UpgradesManager.Instance.GetPopulationNumberPerSecond(UpgradeId.AndroidSlavery);
-        int previousScoopedEnergy = scoopedEnergy;
+        long previousScoopedEnergy = scoopedEnergy;
 
         while (true)
         {
             if (Player.Dead) break;
+
+            bool updateLabels = false;
 
             // AndroidSlavery
 
@@ -226,7 +288,7 @@ public class GameplayManager : MonoBehaviour
                 currentPopulation += slaveryIncrease;
                 string text = string.Format("+{0}", slaveryIncrease);
                 populationMessagesManager.Spawn(text, fadingMessagePopulationAddedColor);
-                UpdateLabels();
+                updateLabels = true;
             }
 
             // VyagraEnergizingTherapy
@@ -238,18 +300,23 @@ public class GameplayManager : MonoBehaviour
                 currentPopulation += totalIncrease;
                 string text = "+" + totalIncrease;
                 populationMessagesManager.Spawn(text, fadingMessagePopulationAddedColor);
-                UpdateLabels();
+                updateLabels = true;
             }
 
             // Add scooped energy if it is still the same as previous, to debounce
             if (scoopedEnergy > 0 && scoopedEnergy == previousScoopedEnergy)
             {
                 AddEnergyCollectedText(scoopedEnergy);
-                UpdateLabels();
+                updateLabels = true;
                 scoopedEnergy = 0;
             }
 
             previousScoopedEnergy = scoopedEnergy;
+
+            if (updateLabels)
+            {
+                UpdateLabels();
+            }
 
             yield return EVERY_SECOND;
         }
@@ -303,9 +370,10 @@ public class GameplayManager : MonoBehaviour
         }
         energyLabel.SetText(" {0} GW", GameManager.Instance.CollectedEnergy);
         UpdateRpmLabel();
+    }
 
-
-        // Update goal slider
+    private void UpdateEnergyGoalSlider()
+    {
         energyGoalSlider.SetValueWithoutNotify(collectedEnergy);
     }
 
@@ -419,7 +487,7 @@ public class GameplayManager : MonoBehaviour
         UpdateLabels();
     }
 
-    private void AddEnergyCollectedText(int energyAdded)
+    private void AddEnergyCollectedText(long energyAdded)
     {
         string text = string.Format("+{0}GW", energyAdded);
         energyMessagesManager.Spawn(text, fadingMessageEnergyColor);

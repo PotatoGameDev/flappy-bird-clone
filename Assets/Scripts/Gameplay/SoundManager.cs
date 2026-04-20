@@ -11,7 +11,12 @@ public class SoundManager : MonoBehaviour
     public float clipDuration = 1.0f;
     public float fadeDuration = 0.5f;
 
+    private bool bossMode = false;
+
+    private Coroutine playRandomMusic;
+
     [SerializeField] private AudioClip[] musicClips;
+    [SerializeField] private AudioClip[] bossMusicClips;
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private AudioSource quakeAudioSource;
     [SerializeField] private AudioSource hitAudioSource;
@@ -31,7 +36,7 @@ public class SoundManager : MonoBehaviour
 
         // other
 
-        StartCoroutine(PlayRandomMusic());
+        playRandomMusic = StartCoroutine(PlayRandomMusic());
     }
 
     public IEnumerator PlayRandomMusic()
@@ -45,16 +50,32 @@ public class SoundManager : MonoBehaviour
             }
             else
             {
-                musicSource.clip = musicClips[currentSong % musicClips.Length];
+                AudioClip clip;
+                if (bossMode)
+                {
+                    clip = musicClips[currentSong % musicClips.Length];
+                }
+                else
+                {
+                    clip = bossMusicClips[currentSong % musicClips.Length];
+                }
+
+                musicSource.clip = clip;
                 musicSource.Play();
 
-                yield return new WaitForSeconds(musicSource.clip.length);
+                yield return new WaitForSeconds(clip.length);
                 currentSong++;
             }
         }
     }
 
-
+    public void PlayBossMusic()
+    {
+        bossMode = true;
+        musicSource.Stop();
+        StopCoroutine(playRandomMusic);
+        playRandomMusic = StartCoroutine(PlayRandomMusic());
+    }
 
     public void PlayScreams(float volume = 1f)
     {

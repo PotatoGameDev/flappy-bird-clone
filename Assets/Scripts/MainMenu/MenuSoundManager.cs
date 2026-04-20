@@ -31,10 +31,12 @@ public class MenuSoundManager : MonoBehaviour
             }
             else
             {
-                audioSource.clip = musicClips[currentSong % musicClips.Length];
+                audioSource.Stop();
+                AudioClip clip = musicClips[currentSong % musicClips.Length];
+                audioSource.clip = clip;
                 audioSource.Play();
 
-                yield return new WaitForSeconds(audioSource.clip.length);
+                yield return new WaitForSeconds(clip.length);
                 currentSong++;
             }
         }
