@@ -15,7 +15,10 @@ public class FakeButton : MonoBehaviour, IPointerClickHandler
     {
         if (interactable)
         {
-            soundManager.PlayClick();
+            if (soundManager != null)
+            {
+                soundManager.PlayClick();
+            }
             onClicked?.Invoke();
         }
     }
@@ -24,7 +27,10 @@ public class FakeButton : MonoBehaviour, IPointerClickHandler
     {
         if (interactable)
         {
-            soundManager.PlayClick();
+            if (soundManager != null)
+            {
+                soundManager.PlayClick();
+            }
             onClicked?.Invoke();
         }
     }

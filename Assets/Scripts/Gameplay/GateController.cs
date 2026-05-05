@@ -38,22 +38,20 @@ public class GateController : PooledInstance
         for (int i = 0; i < energyPerGate; i++)
         {
             EnergyBallController ball = EnergyBallManager.Instance.GetRandom(GameplayManager.Instance.GateCount);
-
-            ball.Init();
-            ball.Type = EnergyType.CollectEnergy;
-
             if (i % 2 == 0)
             {
-                ball.transform.position = bottomEnergyBallSpawner.position
-                    + new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0f);
+                ball.Init(bottomEnergyBallSpawner.position
+                    + new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0f));
                 ball.SetTargetVector(bottomTarget.position + (Vector3)(Random.insideUnitCircle * targetSpread));
             }
             else
             {
-                ball.transform.position = topEnergyBallSpawner.position
-                    + new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0f);
+                ball.Init(topEnergyBallSpawner.position
+                    + new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0f));
                 ball.SetTargetVector(topTarget.position + (Vector3)(Random.insideUnitCircle * targetSpread));
             }
+
+            ball.Type = EnergyType.CollectEnergy;
 
             yield return new WaitForSeconds(timePerEnergy / 2f); // Divide by 2 because it's split
         }

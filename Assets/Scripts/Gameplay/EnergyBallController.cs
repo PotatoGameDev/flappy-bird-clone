@@ -25,11 +25,15 @@ public class EnergyBallController : PooledInstance
 
     private Coroutine timeout;
 
+    private float rotationDegreesPerSecond;
+    private float wobbleAmplitude;
+    private float wobbleSpeed;
+    public Vector3 basePosition;
+
     void Awake()
     {
         anim = GetComponent<Animator>();
         initialScale = transform.localScale;
-
 
         Collider = GetComponent<CircleCollider2D>();
         rendr = GetComponent<SpriteRenderer>();
@@ -37,6 +41,9 @@ public class EnergyBallController : PooledInstance
 
     void FixedUpdate()
     {
+        // Rotating around:
+        transform.Rotate(0f, 0f, rotationDegreesPerSecond * Time.fixedDeltaTime);
+
         if (Type == EnergyType.PipeEnergy && !GameplayManager.Instance.Player.Dead)
         {
             transform.position = Vector2.Lerp(transform.position, GameplayManager.Instance.Player.transform.position, speed);
@@ -57,7 +64,14 @@ public class EnergyBallController : PooledInstance
             {
                 speed += 0.1f * Time.fixedDeltaTime; // This makes the energy ball always catch up to the planet, no matter of it's speed.
                                                      // The energy ball will keep accelerating, eventually going faster than the planet.
-                transform.position = Vector2.Lerp(transform.position, targetValue, speed);
+                basePosition = Vector2.Lerp(basePosition, targetValue, speed);
+
+                ApplyWobble();
+
+                if (Vector3.Distance(transform.position, targetValue) < 0.001f)
+                {
+                    target = null;
+                }
                 return;
             }
         }
@@ -70,6 +84,19 @@ public class EnergyBallController : PooledInstance
 
             return;
         }
+
+        // Here we are already stationary and at target position:
+        ApplyWobble();
+    }
+
+    private void ApplyWobble()
+    {
+        // Wobbling:
+        float x = Mathf.PerlinNoise(Time.time * wobbleSpeed, 0f) - 0.5f;
+        float y = Mathf.PerlinNoise(0f, Time.time * wobbleSpeed) - 0.5f;
+
+        Vector3 offset = new Vector3(x, y, 0f) * wobbleAmplitude;
+        transform.position = basePosition + offset;
     }
 
     public void SetTargetVector(Vector3 value)
@@ -128,15 +155,26 @@ public class EnergyBallController : PooledInstance
         base.Release();
     }
 
+    public void Init(Vector3 basePos)
+    {
+        Init();
+        basePosition = basePos;
+        transform.position = basePosition;
+    }
+
     public new void Init()
     {
         // Start the looped animation from random frame:
+
         speed = initialSpeed;
         transform.localScale = initialScale;
         anim.Play(0, 0, Random.value);
         Type = EnergyType.CollectEnergy;
         target = null;
         targetTransform = null;
+        rotationDegreesPerSecond = Random.Range(-90f, 90f);
+        wobbleAmplitude = Random.Range(0f, 2f);
+        wobbleSpeed = Random.Range(0f, 2f);
 
         timeout = StartCoroutine(Timeout());
     }

@@ -13,6 +13,8 @@ public class MenusController : MonoBehaviour
 
     [SerializeField] private SecondaryMenuController[] mainSelectionContents;
 
+    [SerializeField] private InputActionReference backAction;
+
     [SerializeField] private string[] mainSelectionOptions;
 
     private int currentMainSelection = 0;
@@ -33,11 +35,15 @@ public class MenusController : MonoBehaviour
     void OnEnable()
     {
         GameManager.Instance.OnGameStateChanged += UpdateGameStateRelatedLabels;
+
+        backAction.action.performed += BackPressed;
     }
 
     void OnDisable()
     {
         GameManager.Instance.OnGameStateChanged -= UpdateGameStateRelatedLabels;
+
+        backAction.action.performed -= BackPressed;
     }
 
     private void UpdateGameStateRelatedLabels(GameState state)
@@ -161,5 +167,20 @@ public class MenusController : MonoBehaviour
         }
         GameManager.Instance.levelSettings.levelType = LevelType.Normal;
         SceneManager.LoadScene("Loading");
+    }
+
+    private void BackPressed(InputAction.CallbackContext ctx)
+    {
+        if (currentMainSelection == 0)
+        {
+            Application.Quit();
+            return;
+        }
+
+        currentMainSelection = 0;
+
+        UpdateMainSelectionMenus();
+
+        mainSelectionContents[currentMainSelection].GoToMain();
     }
 }
