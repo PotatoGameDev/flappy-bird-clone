@@ -1,17 +1,31 @@
 using UnityEngine;
+using TMPro;
 
+[RequireComponent(typeof(TextMeshProUGUI))]
 public class FPSCounter : MonoBehaviour
 {
-    float deltaTime;
+    [SerializeField] float updateInterval = 0.5f;
+
+    TextMeshProUGUI label;
+    float timer;
+    int frameCount;
+
+    void Awake()
+    {
+        label = GetComponent<TextMeshProUGUI>();
+    }
 
     void Update()
     {
-        deltaTime += (Time.unscaledDeltaTime - deltaTime) * 0.1f;
-    }
+        frameCount++;
+        timer += Time.unscaledDeltaTime;
 
-    void OnGUI()
-    {
-        int fps = Mathf.RoundToInt(1.0f / deltaTime);
-        GUI.Label(new Rect(10, 10, 100, 25), $"{fps} FPS");
+        if (timer >= updateInterval)
+        {
+            int fps = Mathf.RoundToInt(frameCount / timer);
+            label.text = $"{fps} FPS";
+            frameCount = 0;
+            timer = 0f;
+        }
     }
 }

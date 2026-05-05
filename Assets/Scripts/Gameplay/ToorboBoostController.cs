@@ -76,12 +76,7 @@ public class ToorboBoostController : MonoBehaviour
 
             ToorboBoostLeft -= Time.deltaTime;
 
-            if (!Mathf.Approximately(toorboBoostSlider.value, ToorboBoostLeft))
-            {
-                // this is in "if" because we don't want to reset the value every frame, maybe causing 
-                // canvas rebuild
-                toorboBoostSlider.SetValueWithoutNotify(ToorboBoostLeft);
-            }
+            UpdateSlider();
         }
         else
         {
@@ -89,6 +84,16 @@ public class ToorboBoostController : MonoBehaviour
             SetEmission(bottomParticles, 0);
 
             planet.ToorboBoost = 0f;
+        }
+    }
+
+    public void UpdateSlider()
+    {
+        if (!Mathf.Approximately(toorboBoostSlider.value, ToorboBoostLeft))
+        {
+            // this is in "if" because we don't want to reset the value every frame, maybe causing 
+            // canvas rebuild
+            toorboBoostSlider.SetValueWithoutNotify(ToorboBoostLeft);
         }
     }
 

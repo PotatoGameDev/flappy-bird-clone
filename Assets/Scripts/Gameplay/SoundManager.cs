@@ -53,11 +53,11 @@ public class SoundManager : MonoBehaviour
                 AudioClip clip;
                 if (bossMode)
                 {
-                    clip = musicClips[currentSong % musicClips.Length];
+                    clip = bossMusicClips[currentSong % bossMusicClips.Length];
                 }
                 else
                 {
-                    clip = bossMusicClips[currentSong % musicClips.Length];
+                    clip = musicClips[currentSong % musicClips.Length];
                 }
 
                 musicSource.clip = clip;

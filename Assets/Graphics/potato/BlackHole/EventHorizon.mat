@@ -12,7 +12,8 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _FREEZEROTATION_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -41,17 +42,19 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _DiskBrightnes: 1.1
     - _DiskFalloffPower: 2.48
-    - _DiskMaxRadius: 0.29
+    - _DiskMaxRadius: 0.31
     - _EnableExternalAlpha: 0
+    - _FreezeRotation: 1
     - _GapWidth: 0.005
     - _HorizonRadius: 0.25
-    - _PhotonRingWidth: 0.003
+    - _PhotonRingWidth: 0.0057
     - _RotationSpeed: 0.2
     - _ZWrite: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _InnerColor: {r: 0.9689521, g: 0.9483477, b: 0.76591617, a: 1}
+    - _InnerColor: {r: 0.5107937, g: 0.5107937, b: 0.5107937, a: 1}
     - _OuterColor: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

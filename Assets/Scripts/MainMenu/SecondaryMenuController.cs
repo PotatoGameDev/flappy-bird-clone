@@ -179,6 +179,18 @@ public class SecondaryMenuController : MonoBehaviour
 
         UpdateMenus();
     }
+
+    public void GoToMain()
+    {
+        currentSelection = 0;
+
+        if (controller != null)
+        {
+            controller.ChangeCurrentMenuSelection(currentSelection);
+        }
+
+        UpdateMenus();
+    }
 }
 
 public abstract class SecondaryMenuDelegate : MonoBehaviour

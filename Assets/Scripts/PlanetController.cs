@@ -9,7 +9,9 @@ public class PlanetController : MonoBehaviour
 
     private readonly WaitForSeconds EVERY_SECOND = new(1);
 
-    [SerializeField] private bool god;
+    [SerializeField] private InputActionReference jumpActionReference;
+
+    [SerializeField] private PauseMenuController pauseMenuController;
 
     // This is the speed param that influences camera movement and other items. That's why it's internal, not private - other code has to know.
     internal float speed = 0f;
@@ -82,6 +84,7 @@ public class PlanetController : MonoBehaviour
         GameplayManager.Instance.Player = this;
 
         SpriteHolder = transform.Find("Sprite");
+
     }
 
     void Start()
@@ -93,25 +96,30 @@ public class PlanetController : MonoBehaviour
 
         // Damage for getting too close to the sun or to the black hole
         StartCoroutine(UpdateOutOfBoundsDamage());
+    }
 
-        if (god)
-        {
-            rb.gravityScale = 0f;
-            speed = 0f;
-        }
+    void OnEnable()
+    {
+        jumpActionReference.action.performed += OnJump;
+    }
+
+    void OnDisable()
+    {
+        jumpActionReference.action.performed -= OnJump;
     }
 
     void Update()
     {
+        if (pauseMenuController.IsPaused)
+        {
+            return;
+        }
         if (Dead)
         {
             rb.linearVelocity = Vector2.zero;
 
             return;
         }
-
-        if (god)
-            return;
 
         if (speed == 0f)
         {
@@ -310,19 +318,11 @@ public class PlanetController : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed)
+        if (pauseMenuController.IsPaused)
         {
-            currentJumpForce += jumpForce;
+            return;
         }
-    }
-
-    public void OnBack(InputAction.CallbackContext ctx)
-    {
-        if (Dead) return;
-        if (ctx.performed)
-        {
-            Death();
-        }
+        currentJumpForce += jumpForce;
     }
 
     // Collisions:
@@ -494,11 +494,15 @@ public class PlanetController : MonoBehaviour
         explosion.transform.SetParent(transform);
         explosion.transform.localPosition = Vector2.zero;
         explosion.transform.localScale = Vector2.one * 2f;
+
         explosion.OnFinished.AddListener(DeathAnimationEnded);
+
+        SoundManager.Instance.PlayExplosion();
     }
 
     public void DeathAnimationEnded()
     {
+        burningEffect.SetActive(false);
         //Destroy(gameObject);
     }
 

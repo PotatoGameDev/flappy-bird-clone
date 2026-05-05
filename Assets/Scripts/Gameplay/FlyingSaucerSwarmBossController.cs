@@ -39,8 +39,11 @@ public class FlyingSaucerSwarmBossController : MonoBehaviour
         float total = 0f;
         foreach (SwarmFollow boid in boids)
         {
-            FlyingSaucerController flyingSaucer = boid.GetComponent<FlyingSaucerController>();
-            total += flyingSaucer.CurrentLife;
+            if (boid != null && boid.enabled && boid.gameObject.activeInHierarchy)
+            {
+                FlyingSaucerController flyingSaucer = boid.GetComponent<FlyingSaucerController>();
+                total += flyingSaucer.CurrentLife;
+            }
         }
         return total;
     }

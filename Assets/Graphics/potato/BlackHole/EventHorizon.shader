@@ -11,6 +11,8 @@ Shader "Custom/BlackHole/EventHorizon"
         _DiskMaxRadius    ("Disk Outer Radius",      Range(0.2,  0.5))   = 0.45
         _DiskFalloffPower ("Disk Falloff",           Range(0.5,  5.0))   = 2.0
         _RotationSpeed    ("Rotation Speed",         Float)        = 2.0
+    	[Toggle] _FreezeRotation   ("Freeze Rotation (for baking)", Float) = 0
+    	_DiskBrightnes ("Disk Brightness", Range(1.0, 10.0)) = 2.0
     }
 
     SubShader
@@ -54,6 +56,8 @@ Shader "Custom/BlackHole/EventHorizon"
                 float  _DiskMaxRadius;
                 float  _DiskFalloffPower;
                 float  _RotationSpeed;
+                float  _FreezeRotation;
+                float  _DiskBrightnes;
             CBUFFER_END
 
             struct Attributes
@@ -118,7 +122,7 @@ Shader "Custom/BlackHole/EventHorizon"
                 if (r < rDiskOuter)
                 {
                     float theta       = atan2(uv.y, uv.x);
-                    float time        = _Time.y * _RotationSpeed;
+		    float time = _FreezeRotation > 0.5 ? 0.0 : _Time.y * _RotationSpeed;
                     float spiralAngle = theta + r * 8.0 - time;
 
                     // Layered swirl bands
@@ -139,8 +143,14 @@ Shader "Custom/BlackHole/EventHorizon"
                     half3 col = lerp(_InnerColor.rgb, _OuterColor.rgb, tDisk);
                     col *= (0.5 + 1.5 * swirl);
 
-                    float alpha = swirl * fade * innerRamp;
-                    return half4(col, saturate(alpha));
+		    col *= _DiskBrightnes;
+		    
+		    float alpha = swirl * fade * innerRamp;
+		    float finalAlpha = _FreezeRotation > 0.5 
+		        ? saturate(fade * innerRamp * 3.0)
+		        : saturate(alpha * 3.0);
+
+		    return half4(col, finalAlpha);
                 }
 
                 // ═════════════════════════════════════════════════════════════════

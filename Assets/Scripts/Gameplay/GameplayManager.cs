@@ -91,6 +91,7 @@ public class GameplayManager : MonoBehaviour
                 amount -= shieldToRefill;
                 shieldLeft += shieldToRefill;
 
+                shieldLevelSlider.SetValueWithoutNotify(shieldLeft);
                 shieldLevelSliderFill.SetActive(true);
             }
 
@@ -106,6 +107,7 @@ public class GameplayManager : MonoBehaviour
                 amount -= (long)spinDoctorToRefill;
                 spinDoctorLeft += spinDoctorToRefill;
 
+                spinDoctorLevelSlider.SetValueWithoutNotify(spinDoctorLeft);
                 spinDoctorLevelSliderFill.SetActive(true);
             }
             // TODO The same here, this should be somehow converted between energy <> a second of toorbo 
@@ -120,8 +122,8 @@ public class GameplayManager : MonoBehaviour
                 }
                 amount -= toorboRefill;
                 toorboBoostController.ToorboBoostLeft += toorboRefill;
+                toorboBoostController.UpdateSlider();
             }
-            UpdateLabels();
         }
         else
         {

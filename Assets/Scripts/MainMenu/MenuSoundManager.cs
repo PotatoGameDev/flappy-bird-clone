@@ -11,13 +11,18 @@ public class MenuSoundManager : MonoBehaviour
     [SerializeField] private AudioClip selectClip;
     [SerializeField] private AudioClip[] musicClips;
 
+    [SerializeField] private bool playOnAwake;
+
     private AudioSource audioSource;
 
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
 
-        StartCoroutine(PlayRandomMusic());
+        if (playOnAwake)
+        {
+            StartCoroutine(PlayRandomMusic());
+        }
     }
 
     public IEnumerator PlayRandomMusic()

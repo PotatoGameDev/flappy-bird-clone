@@ -41,14 +41,12 @@ public class EnergyRadiationController : MonoBehaviour
                 EnergyBallController ball = EnergyBallManager.Instance.GetRandom(
                         GameplayManager.Instance.GateCount
                 );
-                ball.Init();
-                ball.transform.position = spawnPosition.position
-                    + new Vector3(Random.Range(-1, 2), Random.Range(-1, 2), 0f);
-
-                Vector3 finalDestination = destination + new Vector3(Random.Range(0, destinationSpread.x), Random.Range(0, destinationSpread.y));
-
+                ball.Init(spawnPosition.position
+                    + new Vector3(Random.Range(-1, 2), Random.Range(-1, 2), 0f));
 
                 ball.Type = EnergyType.CollectEnergy;
+
+                Vector3 finalDestination = destination + new Vector3(Random.Range(0, destinationSpread.x), Random.Range(0, destinationSpread.y));
                 ball.SetTargetVector(finalDestination);
 
                 yield return new WaitForSeconds(timePerEnergy / 2f);
