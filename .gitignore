@@ -101,3 +101,5 @@ InitTestScene*.unity*
 .vscode/
 Assets/_Recovery
 Assets/_Recovery.meta
+
+Assets/BuildReports

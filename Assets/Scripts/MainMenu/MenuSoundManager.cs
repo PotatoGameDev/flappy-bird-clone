@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using System.Collections;
 
 [RequireComponent(typeof(AudioSource))]
@@ -13,16 +14,24 @@ public class MenuSoundManager : MonoBehaviour
 
     [SerializeField] private bool playOnAwake;
 
-    private AudioSource audioSource;
+    [SerializeField] private AudioSource sfxSource;
+    [SerializeField] private AudioSource musicSource;
+
+    [SerializeField] private AudioMixer mixer;
 
     void Awake()
     {
-        audioSource = GetComponent<AudioSource>();
-
         if (playOnAwake)
         {
             StartCoroutine(PlayRandomMusic());
         }
+    }
+
+    void Start()
+    {
+        LoadVolume("MasterVolume");
+        LoadVolume("MusicVolume");
+        LoadVolume("SoundVolume");
     }
 
     public IEnumerator PlayRandomMusic()
@@ -30,16 +39,16 @@ public class MenuSoundManager : MonoBehaviour
         int currentSong = Random.Range(0, musicClips.Length);
         while (true)
         {
-            if (audioSource.isPlaying)
+            if (musicSource.isPlaying)
             {
                 yield return WAIT_ONE_SEC;
             }
             else
             {
-                audioSource.Stop();
+                musicSource.Stop();
                 AudioClip clip = musicClips[currentSong % musicClips.Length];
-                audioSource.clip = clip;
-                audioSource.Play();
+                musicSource.clip = clip;
+                musicSource.Play();
 
                 yield return new WaitForSeconds(clip.length);
                 currentSong++;
@@ -49,20 +58,44 @@ public class MenuSoundManager : MonoBehaviour
 
     public void PlayClick()
     {
-        audioSource.PlayOneShot(clickClip);
+        sfxSource.PlayOneShot(clickClip);
     }
 
     public void PlayUpgrade()
     {
-        audioSource.PlayOneShot(upgradeClip);
+        sfxSource.PlayOneShot(upgradeClip);
     }
 
     public void PlaySelect()
     {
-        if (audioSource != null)
+        if (sfxSource != null)
         {
             //TODO This is because onSelect happens somewhere before Awake happens, and npe:
-            audioSource.PlayOneShot(selectClip);
+            sfxSource.PlayOneShot(selectClip);
         }
     }
+
+    // Volume control
+    // All the functions here expect normalized, decibel values.
+
+    public float LoadVolume(string group)
+    {
+        float volume = PlayerPrefs.GetFloat(group, 0f);
+        Debug.Log("Init vol " + group + " to " + volume);
+        SetVolume(group, volume);
+        return volume;
+    }
+
+    public void SetAndSaveVolume(string group, float volume)
+    {
+        SetVolume(group, volume);
+        PlayerPrefs.SetFloat(group, volume);
+    }
+
+    private void SetVolume(string group, float volume)
+    {
+        bool res = mixer.SetFloat(group, volume);
+        Debug.Log("Res: " + res);
+    }
+
 }
