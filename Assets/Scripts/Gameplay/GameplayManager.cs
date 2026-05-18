@@ -32,7 +32,20 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] private FadingMessagesManager energyMessagesManager;
     [SerializeField] private FadingMessagesManager rpmMessagesManager;
 
-    private long currentPopulation = 0;
+    private long _currentPopulation = 0;
+    private long CurrentPopulation
+    {
+        get
+        {
+            return _currentPopulation;
+        }
+
+        set
+        {
+            if (value < 0) return;
+            _currentPopulation = value;
+        }
+    }
 
     private readonly static WaitForSeconds EVERY_SECOND = new(1f);
 
@@ -179,7 +192,7 @@ public class GameplayManager : MonoBehaviour
     void Start()
     {
         // TODO: might be replaying previous level, have to pass the current civ type from menu to here
-        currentPopulation = GameManager.Instance.GetBasePopulation();
+        CurrentPopulation = GameManager.Instance.GetBasePopulation();
 
         UpdateLabels();
 
@@ -287,7 +300,7 @@ public class GameplayManager : MonoBehaviour
 
             if (slaveryIncrease > 0)
             {
-                currentPopulation += slaveryIncrease;
+                CurrentPopulation += slaveryIncrease;
                 string text = string.Format("+{0}", slaveryIncrease);
                 populationMessagesManager.Spawn(text, fadingMessagePopulationAddedColor);
                 updateLabels = true;
@@ -298,8 +311,8 @@ public class GameplayManager : MonoBehaviour
             float vyagraIncrease = UpgradesManager.Instance.GetPopulationPercentPerSecond(UpgradeId.VyagraEnergizingTherapy);
             if (vyagraIncrease > 0)
             {
-                long totalIncrease = (long)(currentPopulation * vyagraIncrease);
-                currentPopulation += totalIncrease;
+                long totalIncrease = (long)(CurrentPopulation * vyagraIncrease);
+                CurrentPopulation += totalIncrease;
                 string text = "+" + totalIncrease;
                 populationMessagesManager.Spawn(text, fadingMessagePopulationAddedColor);
                 updateLabels = true;
@@ -364,7 +377,7 @@ public class GameplayManager : MonoBehaviour
 
     private void UpdateLabels()
     {
-        populationLabel.SetText("POP: {0}", currentPopulation);
+        populationLabel.SetText("POP: " + FormatBigNumber(CurrentPopulation));
 
         if (gateCounterContainer.activeInHierarchy)
         {
@@ -387,10 +400,10 @@ public class GameplayManager : MonoBehaviour
     // Kills <hitFraction> of the population, considers shield and min casualties. Returns the actual number of dead people.
     public long TakeHit(float hitFraction, long minCasualties, bool addLossText = true)
     {
-        long peopleDied = (long)(currentPopulation * hitFraction);
+        long peopleDied = (long)(CurrentPopulation * hitFraction);
         if (peopleDied < minCasualties) peopleDied = minCasualties;
 
-        if (peopleDied > currentPopulation) peopleDied = currentPopulation;
+        if (peopleDied > CurrentPopulation) peopleDied = CurrentPopulation;
 
         long newPeopleDied = peopleDied > shieldLeft ? (peopleDied - shieldLeft) : 0;
         long newShieldLeft = shieldLeft > peopleDied ? (shieldLeft - peopleDied) : 0;
@@ -417,18 +430,18 @@ public class GameplayManager : MonoBehaviour
 
     private void KillPopulation(long dead)
     {
-        if (currentPopulation <= dead)
+        if (CurrentPopulation <= dead)
         {
-            currentPopulation = 0;
+            CurrentPopulation = 0;
         }
         else
         {
-            currentPopulation -= dead;
+            CurrentPopulation -= dead;
         }
 
         UpdateLabels();
 
-        if (currentPopulation <= 0)
+        if (CurrentPopulation <= 0)
         {
             Player.Death();
         }
@@ -443,18 +456,18 @@ public class GameplayManager : MonoBehaviour
 
     public void AddPopulationLossText(long peopleDied, string[] textFormatOverrides = null, bool showPercent = true)
     {
-        float diedPercent = Mathf.Floor(peopleDied / (float)(peopleDied + currentPopulation) * 100f);
+        float diedPercent = Mathf.Floor(peopleDied / (float)(peopleDied + CurrentPopulation) * 100f);
 
         string[] texts = textFormatOverrides ?? casualtiesTexts;
         string text = texts[Random.Range(0, texts.Length)];
 
         if (showPercent)
         {
-            text = string.Format(text, peopleDied, diedPercent);
+            text = string.Format(text, FormatBigNumber(peopleDied), diedPercent);
         }
         else
         {
-            text = string.Format(text, peopleDied);
+            text = string.Format(text, FormatBigNumber(peopleDied));
         }
 
         populationMessagesManager.Spawn(text, fadingMessageCasualtiesColor);
@@ -464,7 +477,7 @@ public class GameplayManager : MonoBehaviour
     {
         string text = rotationCasualtiesTexts[Random.Range(0, rotationCasualtiesTexts.Length)];
 
-        text = string.Format(text, peopleDied);
+        text = string.Format(text, FormatBigNumber(peopleDied));
 
         rpmMessagesManager.Spawn(text, fadingMessageCasualtiesColor);
     }
@@ -493,6 +506,15 @@ public class GameplayManager : MonoBehaviour
     {
         string text = string.Format("+{0}GW", energyAdded);
         energyMessagesManager.Spawn(text, fadingMessageEnergyColor);
+    }
+
+    private string FormatBigNumber(long value)
+    {
+        if (value >= 1_000_000_000_000) return (value / 1_000_000_000_000).ToString("F1") + "T";
+        if (value >= 1_000_000_000) return (value / 1_000_000_000).ToString("F1") + "B";
+        //if (value >= 1_000_000) return (value / 1_000_000_000_000).ToString("F1") + "M";
+        //if (value >= 1_000) return (value / 1_000_000_000_000).ToString("F1") + "K";
+        return value.ToString("N0");
     }
 
 }
