@@ -81,7 +81,6 @@ public class MenuSoundManager : MonoBehaviour
     public float LoadVolume(string group)
     {
         float volume = PlayerPrefs.GetFloat(group, 0f);
-        Debug.Log("Init vol " + group + " to " + volume);
         SetVolume(group, volume);
         return volume;
     }
@@ -95,7 +94,6 @@ public class MenuSoundManager : MonoBehaviour
     private void SetVolume(string group, float volume)
     {
         bool res = mixer.SetFloat(group, volume);
-        Debug.Log("Res: " + res);
     }
 
 }
