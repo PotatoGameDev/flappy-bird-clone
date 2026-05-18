@@ -19,8 +19,6 @@ public class VolumeSliderController : MonoBehaviour
     {
         float volume = LinearToDecibel(slider.value);
 
-        Debug.Log("Setting " + outputGroupParameterName + " to " + volume);
-
         soundManager.SetAndSaveVolume(outputGroupParameterName, volume);
     }
 
