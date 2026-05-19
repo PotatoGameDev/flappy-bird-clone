@@ -43,13 +43,13 @@ Material:
     m_Ints: []
     m_Floats:
     - _DiskBrightnes: 1.1
-    - _DiskFalloffPower: 2.48
-    - _DiskMaxRadius: 0.31
+    - _DiskFalloffPower: 2.86
+    - _DiskMaxRadius: 0.286
     - _EnableExternalAlpha: 0
     - _FreezeRotation: 1
-    - _GapWidth: 0.005
+    - _GapWidth: 0.0064
     - _HorizonRadius: 0.25
-    - _PhotonRingWidth: 0.0057
+    - _PhotonRingWidth: 0.0092
     - _RotationSpeed: 0.2
     - _ZWrite: 0
     m_Colors:

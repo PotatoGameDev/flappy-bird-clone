@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Random = UnityEngine.Random;
 
 [DefaultExecutionOrder(-1000)]
 public class GameManager : MonoBehaviour
@@ -62,6 +63,14 @@ public class GameManager : MonoBehaviour
             State.CivTypePassed = value;
             OnGameStateChanged?.Invoke(State);
             SaveSystem.Save(State);
+        }
+    }
+
+    public int PlanetType
+    {
+        get
+        {
+            return State.PlanetType;
         }
     }
 
@@ -145,7 +154,11 @@ public class GameManager : MonoBehaviour
 
     public void ResetGame()
     {
-        State = new GameState();
+        State = new GameState
+        {
+            PlanetType = Random.Range(0, 10)
+        };
+
         UpgradesManager.Instance.ClearUpgrades();
         Save();
 
@@ -161,6 +174,8 @@ public class GameState
     public long CollectedEnergy;
     public int CurrentLevel; // 0 based! So there is level 0, 1, 2
     public List<UpgradeState> Upgrades;
+
+    public int PlanetType = 0;
 
     public GameState()
     {
