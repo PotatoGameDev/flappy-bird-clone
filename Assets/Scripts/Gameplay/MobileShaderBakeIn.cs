@@ -10,8 +10,8 @@ public class MobileShaderBakeIn : MonoBehaviour
         shaderHolder.enabled = false;
         bakedSprite.enabled = true;
 #else
-        shaderHolder.enabled = false;
-        bakedSprite.enabled = true;
+        shaderHolder.enabled = true;
+        bakedSprite.enabled = false;
 #endif
     }
 }
