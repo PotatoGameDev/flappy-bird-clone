@@ -85,6 +85,13 @@ public class PlanetController : MonoBehaviour
 
         SpriteHolder = transform.Find("Sprite");
 
+        string selectedPlanetName = "planet0" + GameManager.Instance.PlanetType.ToString();
+
+        for (int i = 0; i < SpriteHolder.childCount; i++)
+        {
+            Transform child = SpriteHolder.GetChild(i);
+            child.gameObject.SetActive(child.name == selectedPlanetName);
+        }
     }
 
     void Start()
