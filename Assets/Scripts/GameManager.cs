@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
         levelType = LevelType.Normal
     };
 
+    public bool newLevelUnlocked;
+
     // 0 based! So there is level 0, 1, 2
     public int CurrentLevel
     {
@@ -133,6 +135,8 @@ public class GameManager : MonoBehaviour
         State.CollectedEnergy -= advanceEnergy;
         State.CivTypePassed++;
         CurrentLevel++;
+
+        newLevelUnlocked = true;
 
         Save();
 
