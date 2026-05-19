@@ -18,12 +18,15 @@ public class SecondaryMenuController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI[] statLabels;
     private string[] statLabelTemplates;
 
-    [SerializeField] private GameObject defaultButton;
+    [SerializeField] private GameObject[] defaultSelectables = { null, null, null };
 
     [SerializeField] private string[] availableOptions;
 
     [SerializeField] private GameObject[] glyphs;
     [SerializeField] private GameObject[] showGlyphs;
+
+
+    private int currentSelection;
 
     void Awake()
     {
@@ -45,17 +48,26 @@ public class SecondaryMenuController : MonoBehaviour
 
     void OnEnable()
     {
-        // make sure we don't try to select the same button again
-        if (defaultButton != null && EventSystem.current.currentSelectedGameObject != defaultButton)
-        {
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(defaultButton);
-        }
+        SelectDefaultControl();
 
         UpdateMenus();
     }
 
-    private int currentSelection;
+    private void SelectDefaultControl()
+    {
+        if (defaultSelectables.Length > currentSelection)
+        {
+            GameObject defaultSelectable = defaultSelectables[currentSelection];
+            Debug.Log("Selecting: " + defaultSelectable);
+
+            // make sure we don't try to select the same button again
+            if (defaultSelectable != null && EventSystem.current.currentSelectedGameObject != defaultSelectable)
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(defaultSelectable);
+            }
+        }
+    }
 
     private void UpdateMenus()
     {
@@ -160,6 +172,8 @@ public class SecondaryMenuController : MonoBehaviour
             controller.ChangeCurrentMenuSelection(currentSelection);
         }
 
+        SelectDefaultControl();
+
         UpdateMenus();
     }
 
@@ -176,6 +190,8 @@ public class SecondaryMenuController : MonoBehaviour
         {
             controller.ChangeCurrentMenuSelection(currentSelection);
         }
+
+        SelectDefaultControl();
 
         UpdateMenus();
     }

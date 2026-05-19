@@ -763,7 +763,10 @@ MonoBehaviour:
   - {fileID: 1420547769}
   - {fileID: 1303624072}
   statLabels: []
-  defaultButton: {fileID: 1254511041}
+  defaultSelectables:
+  - {fileID: 1254511041}
+  - {fileID: 927137631}
+  - {fileID: 0}
   availableOptions:
   - Main
   - Settings
@@ -939,7 +942,7 @@ MonoBehaviour:
   - {fileID: 1582619486}
   - {fileID: 1333817968}
   - {fileID: 479890115}
-  defaultButton: {fileID: 0}
+  defaultSelectables: []
   availableOptions:
   - Type I Civilization
   - Type II Civilization
@@ -2180,7 +2183,7 @@ MonoBehaviour:
   - {fileID: 1072795448}
   - {fileID: 1266428673}
   statLabels: []
-  defaultButton: {fileID: 0}
+  defaultSelectables: []
   availableOptions:
   - Energy Upgrades
   - Population Upgrades
@@ -2854,6 +2857,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3834495125000390630, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3834495125000390630, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 1511334509}
+    - target: {fileID: 3834495125000390630, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 7554337762479498810}
     - target: {fileID: 4028400444336562846, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2862,6 +2877,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4757965428666301411, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
+      propertyPath: soundManager
+      value: 
+      objectReference: {fileID: 1593900403}
     - target: {fileID: 6186492764262795801, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
       propertyPath: soundManager
       value: 
@@ -2880,6 +2899,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2723880446089677179, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
   m_PrefabInstance: {fileID: 765301476}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &765301478 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3834495125000390630, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
+  m_PrefabInstance: {fileID: 765301476}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 927137631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
 --- !u!1 &777293948
 GameObject:
   m_ObjectHideFlags: 0
@@ -3405,7 +3435,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 70.15
+  m_fontSize: 72
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3458,6 +3488,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 913855288}
   m_CullTransparentMesh: 1
+--- !u!1 &927137631 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7857087994947475480, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
+  m_PrefabInstance: {fileID: 765301476}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &969023840
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6252,6 +6287,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3834495125000390630, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3834495125000390630, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 7554337762479498810}
+    - target: {fileID: 3834495125000390630, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 765301478}
     - target: {fileID: 4028400444336562846, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -6266,6 +6313,10 @@ PrefabInstance:
 
 '
       objectReference: {fileID: 0}
+    - target: {fileID: 4757965428666301411, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
+      propertyPath: soundManager
+      value: 
+      objectReference: {fileID: 1593900403}
     - target: {fileID: 6186492764262795801, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
       propertyPath: soundManager
       value: 
@@ -6284,6 +6335,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2723880446089677179, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
   m_PrefabInstance: {fileID: 1511334507}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1511334509 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3834495125000390630, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
+  m_PrefabInstance: {fileID: 1511334507}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
 --- !u!1001 &1532400548
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10942,6 +11004,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3834495125000390630, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3834495125000390630, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 765301478}
+    - target: {fileID: 3834495125000390630, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 1511334509}
     - target: {fileID: 4028400444336562846, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -10956,8 +11030,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4542236719667715039, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
       propertyPath: m_fontSize
-      value: 55.3
+      value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 4757965428666301411, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
+      propertyPath: soundManager
+      value: 
+      objectReference: {fileID: 1593900403}
     - target: {fileID: 4848022835598366107, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
       propertyPath: soundManager
       value: 
@@ -10971,6 +11049,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
+--- !u!114 &7554337762479498810 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3834495125000390630, guid: 03e4042179bf8ca05a6e2ed83fa9699c, type: 3}
+  m_PrefabInstance: {fileID: 7554337762479498809}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
