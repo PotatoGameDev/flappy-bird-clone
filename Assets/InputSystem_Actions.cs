@@ -349,6 +349,24 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OptionsSelect"",
+                    ""type"": ""Value"",
+                    ""id"": ""19d31268-47c9-4435-8c11-806e3f6e4b09"",
+                    ""expectedControlType"": ""Analog"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""OptionsChange"",
+                    ""type"": ""Value"",
+                    ""id"": ""112e69e0-3689-4837-9fb0-33b72317963f"",
+                    ""expectedControlType"": ""Analog"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -1099,6 +1117,28 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""Accept"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""66f585be-fee6-4c54-9a74-29d96a0bc38a"",
+                    ""path"": ""<Gamepad>/dpad/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""OptionsSelect"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bfd2fca1-4927-4f34-9b06-fa861ced9a9d"",
+                    ""path"": ""<Gamepad>/dpad/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""OptionsChange"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1188,6 +1228,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_UI_MainMenuLeft = m_UI.FindAction("MainMenuLeft", throwIfNotFound: true);
         m_UI_MainMenuRight = m_UI.FindAction("MainMenuRight", throwIfNotFound: true);
         m_UI_Accept = m_UI.FindAction("Accept", throwIfNotFound: true);
+        m_UI_OptionsSelect = m_UI.FindAction("OptionsSelect", throwIfNotFound: true);
+        m_UI_OptionsChange = m_UI.FindAction("OptionsChange", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
@@ -1392,6 +1434,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_MainMenuLeft;
     private readonly InputAction m_UI_MainMenuRight;
     private readonly InputAction m_UI_Accept;
+    private readonly InputAction m_UI_OptionsSelect;
+    private readonly InputAction m_UI_OptionsChange;
     /// <summary>
     /// Provides access to input actions defined in input action map "UI".
     /// </summary>
@@ -1468,6 +1512,14 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Accept => m_Wrapper.m_UI_Accept;
         /// <summary>
+        /// Provides access to the underlying input action "UI/OptionsSelect".
+        /// </summary>
+        public InputAction @OptionsSelect => m_Wrapper.m_UI_OptionsSelect;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/OptionsChange".
+        /// </summary>
+        public InputAction @OptionsChange => m_Wrapper.m_UI_OptionsChange;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_UI; }
@@ -1541,6 +1593,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Accept.started += instance.OnAccept;
             @Accept.performed += instance.OnAccept;
             @Accept.canceled += instance.OnAccept;
+            @OptionsSelect.started += instance.OnOptionsSelect;
+            @OptionsSelect.performed += instance.OnOptionsSelect;
+            @OptionsSelect.canceled += instance.OnOptionsSelect;
+            @OptionsChange.started += instance.OnOptionsChange;
+            @OptionsChange.performed += instance.OnOptionsChange;
+            @OptionsChange.canceled += instance.OnOptionsChange;
         }
 
         /// <summary>
@@ -1600,6 +1658,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Accept.started -= instance.OnAccept;
             @Accept.performed -= instance.OnAccept;
             @Accept.canceled -= instance.OnAccept;
+            @OptionsSelect.started -= instance.OnOptionsSelect;
+            @OptionsSelect.performed -= instance.OnOptionsSelect;
+            @OptionsSelect.canceled -= instance.OnOptionsSelect;
+            @OptionsChange.started -= instance.OnOptionsChange;
+            @OptionsChange.performed -= instance.OnOptionsChange;
+            @OptionsChange.canceled -= instance.OnOptionsChange;
         }
 
         /// <summary>
@@ -1839,5 +1903,19 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnAccept(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "OptionsSelect" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnOptionsSelect(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "OptionsChange" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnOptionsChange(InputAction.CallbackContext context);
     }
 }

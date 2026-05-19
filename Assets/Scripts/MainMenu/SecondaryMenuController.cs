@@ -24,6 +24,7 @@ public class SecondaryMenuController : MonoBehaviour
 
     [SerializeField] private GameObject[] glyphs;
     [SerializeField] private GameObject[] showGlyphs;
+    [SerializeField] private bool[] showGlyphsOnScreens;
 
 
     private int currentSelection;
@@ -58,7 +59,6 @@ public class SecondaryMenuController : MonoBehaviour
         if (defaultSelectables.Length > currentSelection)
         {
             GameObject defaultSelectable = defaultSelectables[currentSelection];
-            Debug.Log("Selecting: " + defaultSelectable);
 
             // make sure we don't try to select the same button again
             if (defaultSelectable != null && EventSystem.current.currentSelectedGameObject != defaultSelectable)
@@ -103,9 +103,12 @@ public class SecondaryMenuController : MonoBehaviour
         {
             glyph.SetActive(false);
         }
-        foreach (GameObject glyph in showGlyphs)
+        if (showGlyphsOnScreens.Length == 0 || (showGlyphsOnScreens.Length > currentSelection && showGlyphsOnScreens[currentSelection] == true))
         {
-            glyph.SetActive(true);
+            foreach (GameObject glyph in showGlyphs)
+            {
+                glyph.SetActive(true);
+            }
         }
     }
 
