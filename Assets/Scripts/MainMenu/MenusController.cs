@@ -19,6 +19,11 @@ public class MenusController : MonoBehaviour
 
     private int currentMainSelection = 0;
 
+    // Remembering last player screen to go back after the gameplay
+    private static int lastMainSelection = 0;
+
+    private const int LEVEL_SELECTION_MENU = 1;
+
     void Awake()
     {
         mainSelectionLabelL = mainSelectionL.GetComponentInChildren<TextMeshProUGUI>(true);
@@ -27,8 +32,6 @@ public class MenusController : MonoBehaviour
 
     void Start()
     {
-        currentMainSelection = 1; // We start in level selection
-
         UpdateAllLabels();
     }
 
@@ -37,6 +40,18 @@ public class MenusController : MonoBehaviour
         GameManager.Instance.OnGameStateChanged += UpdateGameStateRelatedLabels;
 
         backAction.action.performed += BackPressed;
+
+        // This is for when the player returns from the gameplay:
+        if (GameManager.Instance.newLevelUnlocked)
+        {
+            GameManager.Instance.newLevelUnlocked = false;
+
+            currentMainSelection = LEVEL_SELECTION_MENU;
+        }
+        else
+        {
+            currentMainSelection = lastMainSelection;
+        }
     }
 
     void OnDisable()
@@ -165,6 +180,7 @@ public class MenusController : MonoBehaviour
         {
             return;
         }
+        lastMainSelection = currentMainSelection;
         GameManager.Instance.levelSettings.levelType = LevelType.Normal;
         SceneManager.LoadScene("Loading");
     }

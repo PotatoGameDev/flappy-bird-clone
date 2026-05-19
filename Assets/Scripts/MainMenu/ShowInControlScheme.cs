@@ -11,6 +11,10 @@ public class ShowInControlScheme : MonoBehaviour
     void OnEnable()
     {
         playerInput.onControlsChanged += OnControlsChanged;
+
+        // Initial check, so we don't need actual change
+        // to hide/show the item.
+        OnControlsChanged(playerInput);
     }
 
     void OnDisable()
