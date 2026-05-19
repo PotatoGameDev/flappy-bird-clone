@@ -263,6 +263,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "OptionsSelect",
+                    "type": "Value",
+                    "id": "19d31268-47c9-4435-8c11-806e3f6e4b09",
+                    "expectedControlType": "Analog",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "OptionsChange",
+                    "type": "Value",
+                    "id": "112e69e0-3689-4837-9fb0-33b72317963f",
+                    "expectedControlType": "Analog",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -1011,6 +1029,28 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "Accept",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "66f585be-fee6-4c54-9a74-29d96a0bc38a",
+                    "path": "<Gamepad>/dpad/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "OptionsSelect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bfd2fca1-4927-4f34-9b06-fa861ced9a9d",
+                    "path": "<Gamepad>/dpad/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "OptionsChange",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
