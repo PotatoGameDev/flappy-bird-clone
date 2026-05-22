@@ -1,0 +1,124 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: Casualties_Strings Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: Casualties_Strings
+  m_TableCollectionNameGuidString: e8fafad8ec953d613a0e3c282ab704c5
+  m_Entries:
+  - m_Id: 8784703488
+    m_Key: casualties_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 179916500992
+    m_Key: casualties_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 362855264256
+    m_Key: casualties_10
+    m_Metadata:
+      m_Items: []
+  - m_Id: 405544890368
+    m_Key: casualties_11
+    m_Metadata:
+      m_Items: []
+  - m_Id: 435777433600
+    m_Key: casualties_12
+    m_Metadata:
+      m_Items: []
+  - m_Id: 453527728128
+    m_Key: casualties_13
+    m_Metadata:
+      m_Items: []
+  - m_Id: 226968203264
+    m_Key: casualties_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 472116883456
+    m_Key: casualties_3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 497005883392
+    m_Key: casualties_4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 515028807680
+    m_Key: casualties_5
+    m_Metadata:
+      m_Items: []
+  - m_Id: 256462548992
+    m_Key: casualties_6
+    m_Metadata:
+      m_Items: []
+  - m_Id: 282119106560
+    m_Key: casualties_7
+    m_Metadata:
+      m_Items: []
+  - m_Id: 317414174720
+    m_Key: casualties_8
+    m_Metadata:
+      m_Items: []
+  - m_Id: 340419932160
+    m_Key: casualties_9
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7560683581440
+    m_Key: casualties_black_hole_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5572973555712
+    m_Key: casualties_laser_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5688547602432
+    m_Key: casualties_laser_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5703131197440
+    m_Key: casualties_laser_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5719304433664
+    m_Key: casualties_laser_3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 534683316224
+    m_Key: casualties_rotation_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 567675711488
+    m_Key: casualties_rotation_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 583064612864
+    m_Key: casualties_rotation_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 597962780672
+    m_Key: casualties_rotation_3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7634092290048
+    m_Key: casualties_sun_star_0
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 933378128327475310
+  references:
+    version: 2
+    RefIds:
+    - rid: 933378128327475310
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1779467699514

@@ -11,7 +11,6 @@ public class UpgradesMenuController : SecondaryMenuDelegate
 
     [SerializeField] private TextMeshProUGUI selectedUpgradeNameLabel;
     [SerializeField] private TextMeshProUGUI selectedUpgradeStatsLabel;
-    private string selectedUpgradeStatsLabelTemplate;
     [SerializeField] private TextMeshProUGUI selectedUpgradeDescriptionLabel;
 
     [Header("Navigation")]
@@ -22,7 +21,6 @@ public class UpgradesMenuController : SecondaryMenuDelegate
     void Awake()
     {
         upgradePanels = GetComponentsInChildren<UpgradePanelController>(true);
-        selectedUpgradeStatsLabelTemplate = selectedUpgradeStatsLabel.text;
     }
 
     void Start()
@@ -40,6 +38,9 @@ public class UpgradesMenuController : SecondaryMenuDelegate
         }
 
         navigationAction.action.performed += OnNavigate;
+
+        FillInStatTexts();
+        FillInUpgradeDescriptions();
     }
 
     void OnDisable()
@@ -82,7 +83,7 @@ public class UpgradesMenuController : SecondaryMenuDelegate
             UpgradeId ident = GetSelectedUpgrade().GetUpgradeIdent();
             Upgrade upgrade = UpgradesManager.Instance.GetUpgrade(ident);
 
-            selectedUpgradeNameLabel.SetText(upgrade.Name);
+            selectedUpgradeNameLabel.SetText(Loc.Get(upgrade.LocKey));
             selectedUpgradeDescriptionLabel.SetText(
                     UpgradesManager.Instance.GetUpgradeDescription(ident)
                     );
@@ -99,7 +100,7 @@ public class UpgradesMenuController : SecondaryMenuDelegate
         // TODO: Maybe do it so that we do not need to keep it synched?
 
         selectedUpgradeStatsLabel.SetText(
-                selectedUpgradeStatsLabelTemplate,
+                Loc.Get("upgrades_current_stats"),
                 currentEnergy,
                 currentPopulation
         );
@@ -112,14 +113,14 @@ public class UpgradesMenuController : SecondaryMenuDelegate
         if (GameManager.Instance.CanPlayLevel())
         {
             startButton.interactable = true;
-            startButtonLabel.SetText("Play");
-            startGlyphLabel.SetText("Play");
+            startButtonLabel.SetText(Loc.Get("common_buttons_play"));
+            startGlyphLabel.SetText(Loc.Get("common_glyphs_play"));
         }
         else
         {
             startButton.interactable = false;
-            startButtonLabel.SetText("Play [Locked]");
-            startGlyphLabel.SetText("Play [Locked]");
+            startButtonLabel.SetText(Loc.Get("common_buttons_play_locked"));
+            startGlyphLabel.SetText(Loc.Get("common_glyphs_play_locked"));
         }
     }
 

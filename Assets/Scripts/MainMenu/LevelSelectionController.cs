@@ -36,13 +36,14 @@ public class LevelSelectionController : SecondaryMenuDelegate
         long currentEnergy = GameManager.Instance.CollectedEnergy;
         long advanceEnergy = GameManager.Instance.GetAdvanceEnergy();
 
-        label.text = string.Format(
-                labelTemplate,
+        label.SetText(string.Format(
+                Loc.Get("level_select_stats"),
                 previousLevelCompleted ? startingPopulation.ToString() : "??",
-                levelCompleted ? "COMPLETED" : "NOT COMPLETED",
+                levelCompleted ? Loc.Get("level_select_stats_complete") : Loc.Get("level_select_stats_not_complete"),
                 currentEnergy + "GW",
                 advanceEnergy + "GW"
-        );
+        ));
+
     }
 
     public override void UpdateMenu()
@@ -52,14 +53,14 @@ public class LevelSelectionController : SecondaryMenuDelegate
         if (GameManager.Instance.CanPlayLevel())
         {
             startButton.interactable = true;
-            startButtonLabel.SetText("Play");
-            startGlyphLabel.SetText("Play");
+            startButtonLabel.SetText(Loc.Get("common_buttons_play"));
+            startGlyphLabel.SetText(Loc.Get("common_glyphs_play"));
         }
         else
         {
             startButton.interactable = false;
-            startButtonLabel.SetText("Play [Locked]");
-            startGlyphLabel.SetText("Play [Locked]");
+            startButtonLabel.SetText(Loc.Get("common_buttons_play_locked"));
+            startGlyphLabel.SetText(Loc.Get("common_glyphs_play_locked"));
         }
     }
 }

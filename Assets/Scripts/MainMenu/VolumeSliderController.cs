@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Slider))]
 public class VolumeSliderController : MonoBehaviour
 {
     [SerializeField] private string outputGroupParameterName;

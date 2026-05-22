@@ -66,12 +66,14 @@ public class PlanetController : MonoBehaviour
     private float boundaryDamageShake = 0f;
     //private float speedShake = 0f;
     //
-    private string[] laserHitTexts = {
-        "{0} burned",
-        "{0} barbequed",
-        "{0} got LASIK",
-        "{0} smoked",
-    };
+
+    private const int LaserHitTextsCount = 4;
+    private const string LaserHitTextsPrefix = "casualties_laser";
+    private const int BlackHoleTextsCount = 1;
+    private const string BlackHoleTextsPrefix = "casualties_black_hole";
+    private const int SunStarTextsCount = 1;
+    private const string SunStarTextsPrefix = "casualties_sun_star";
+
     private float timeToLaserDamageSummary;
     private long totalLaserDamage = 0;
 
@@ -235,7 +237,7 @@ public class PlanetController : MonoBehaviour
         // Ufo Swarm Damage:
         if (totalLaserDamage > 0 && timeToLaserDamageSummary <= 0f)
         {
-            GameplayManager.Instance.AddPopulationLossText(totalLaserDamage, laserHitTexts, false);
+            GameplayManager.Instance.AddPopulationLossText(totalLaserDamage, LaserHitTextsPrefix, LaserHitTextsCount, false);
             totalLaserDamage = 0;
         }
         timeToLaserDamageSummary -= Time.deltaTime;
@@ -306,12 +308,20 @@ public class PlanetController : MonoBehaviour
         {
             if (currentSunStarCasualties > 0)
             {
-                GameplayManager.Instance.AddPopulationLossText((long)currentSunStarCasualties, new string[] { "{0} deep fried" });
+                GameplayManager.Instance.AddPopulationLossText(
+                        (long)currentSunStarCasualties,
+                        SunStarTextsPrefix,
+                        SunStarTextsCount
+                        );
                 currentSunStarCasualties = 0;
             }
             if (currentBlackHoleCasualties > 0)
             {
-                GameplayManager.Instance.AddPopulationLossText((long)currentBlackHoleCasualties, new string[] { "{0} spaghettified" });
+                GameplayManager.Instance.AddPopulationLossText(
+                        (long)currentBlackHoleCasualties,
+                        BlackHoleTextsPrefix,
+                        BlackHoleTextsCount
+                        );
                 currentBlackHoleCasualties = 0;
             }
             yield return EVERY_SECOND;

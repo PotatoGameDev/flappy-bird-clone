@@ -29,13 +29,14 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
 
     void Start()
     {
-        nameLabel.text = UpgradesManager.Instance.GetUpgrade(upgradeIdent).Name;
+        nameLabel.SetText(Loc.Get(Upgrade.GetLocKey(upgradeIdent)));
         UpdateUi();
         UpgradesManager.Instance.OnUpgrade += HandleUpgrade;
     }
 
     void OnEnable()
     {
+        nameLabel.SetText(Loc.Get(Upgrade.GetLocKey(upgradeIdent)));
         UpdateUi();
         if (defaultOnEnable && !Selected)
         {
@@ -121,24 +122,24 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
 
         if (u.Level == u.MaxLevel)
         {
-            buttonLabel.SetText("Maxed");
+            buttonLabel.SetText(Loc.Get("upgrades_panel_button_maxed_out"));
             upgradeButton.interactable = false;
         }
         else if (u.Level == 0)
         {
-            buttonLabel.SetText("Buy ({0}GW)", price);
+            buttonLabel.SetText(Loc.Get("upgrades_panel_button_buy", price));
             upgradeButton.interactable = true;
         }
         else
         {
-            buttonLabel.SetText("Upgrade ({0}GW)", price);
+            buttonLabel.SetText(Loc.Get("upgrades_panel_button_upgrade", price));
             upgradeButton.interactable = true;
         }
 
         if (price > GameManager.Instance.CollectedEnergy)
         {
+            buttonLabel.SetText(Loc.Get("upgrades_panel_button_too_poor", price));
             upgradeButton.interactable = false;
-            buttonLabel.SetText("Too Poor ({0}GW)", price);
         }
 
         // This makes the label the same color as the button

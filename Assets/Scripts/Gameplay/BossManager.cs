@@ -43,7 +43,7 @@ public class BossManager : MonoBehaviour
         flyingSaucersBossContainer.SetActive(true);
 
         bossNameTag.SetActive(true);
-        bossNameTagLabel.SetText("Irritating Motherships" + " Attacks");
+        bossNameTagLabel.SetText(Loc.Get("gameplay_boss_intro_title_1"));
         StartCoroutine(DestroyBossNameTag());
 
         SoundManager.Instance.PlayBossMusic();

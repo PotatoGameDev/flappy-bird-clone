@@ -52,6 +52,13 @@ public class SecondaryMenuController : MonoBehaviour
         SelectDefaultControl();
 
         UpdateMenus();
+
+        Loc.OnLanguageChanged += UpdateMenus;
+    }
+
+    void OnDisable()
+    {
+        Loc.OnLanguageChanged -= UpdateMenus;
     }
 
     private void SelectDefaultControl()
@@ -120,7 +127,7 @@ public class SecondaryMenuController : MonoBehaviour
         if (currentSelection > 0)
         {
             selectionL.gameObject.SetActive(true);
-            selectionLabelL.SetText(availableOptions[currentSelection - 1]);
+            selectionLabelL.SetText(Loc.Get(availableOptions[currentSelection - 1]));
         }
         else
         {
@@ -128,14 +135,14 @@ public class SecondaryMenuController : MonoBehaviour
         }
 
         // Center
-        selectionCurrent.SetText(availableOptions[currentSelection]);
+        selectionCurrent.SetText(Loc.Get(availableOptions[currentSelection]));
 
         // Right
         selectionLabelR.SetText("");
         if (currentSelection < availableOptions.Length - 1)
         {
             selectionR.gameObject.SetActive(true);
-            selectionLabelR.SetText(availableOptions[currentSelection + 1]);
+            selectionLabelR.SetText(Loc.Get(availableOptions[currentSelection + 1]));
         }
         else
         {

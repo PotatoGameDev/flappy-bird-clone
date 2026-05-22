@@ -52,6 +52,8 @@ public class MenusController : MonoBehaviour
         {
             currentMainSelection = lastMainSelection;
         }
+
+        Loc.OnLanguageChanged += UpdateMainSelectionMenus;
     }
 
     void OnDisable()
@@ -59,6 +61,8 @@ public class MenusController : MonoBehaviour
         GameManager.Instance.OnGameStateChanged -= UpdateGameStateRelatedLabels;
 
         backAction.action.performed -= BackPressed;
+
+        Loc.OnLanguageChanged -= UpdateMainSelectionMenus;
     }
 
     private void UpdateGameStateRelatedLabels(GameState state)
@@ -78,7 +82,7 @@ public class MenusController : MonoBehaviour
         if (currentMainSelection > 0)
         {
             mainSelectionL.gameObject.SetActive(true);
-            mainSelectionLabelL.SetText(mainSelectionOptions[currentMainSelection - 1]);
+            mainSelectionLabelL.SetText(Loc.Get(mainSelectionOptions[currentMainSelection - 1]));
         }
         else
         {
@@ -86,13 +90,13 @@ public class MenusController : MonoBehaviour
         }
 
         // Selecte
-        mainSelectionCurrent.SetText(mainSelectionOptions[currentMainSelection]);
+        mainSelectionCurrent.SetText(Loc.Get(mainSelectionOptions[currentMainSelection]));
 
         // R1
         if (currentMainSelection < mainSelectionOptions.Length - 1)
         {
             mainSelectionR.gameObject.SetActive(true);
-            mainSelectionLabelR.SetText(mainSelectionOptions[currentMainSelection + 1]);
+            mainSelectionLabelR.SetText(Loc.Get(mainSelectionOptions[currentMainSelection + 1]));
         }
         else
         {

@@ -11,14 +11,25 @@ public class MainMenuManager : MonoBehaviour
 
     void Start()
     {
+        SetStartButtonLabel();
+    }
+
+    void OnEnable()
+    {
+        SetStartButtonLabel();
+    }
+
+    private void SetStartButtonLabel()
+    {
         if (SaveSystem.StateExists())
         {
-            startButtonLabel.text = "continue";
+            startButtonLabel.SetText(Loc.Get("main_continue"));
             resetButton.interactable = true;
         }
         else
         {
-            startButtonLabel.text = "start";
+            startButtonLabel.SetText(Loc.Get("main_new_game"));
+            resetButton.interactable = false;
         }
     }
 

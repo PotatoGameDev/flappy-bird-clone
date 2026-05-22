@@ -136,104 +136,60 @@ public class UpgradesManager : MonoBehaviour
 
     public string GetUpgradeDescription(UpgradeId ident)
     {
-        // TODO: Maybe a scriptable object?
+        string locKey = Upgrade.GetDescriptionLocKey(ident);
+
+        dynamic currentValue;
+        dynamic nextValue;
+
         switch (ident)
         {
             case UpgradeId.ORing:
-                int currentGateEnergyParticles = GetORingEnergyPerLevel();
-                int nextGateEnergyParticles = GetORingEnergyPerLevel(+1);
-
-                return $@"A ring of collectors that catch the energy exhausted from the space pipes.
-The higher the level, the more energy particles are observed to eject from the pipes.
-The higher the gate number, the bigger the chance for a high level energy particle, 
-giving more energy.
-
-Current gate energy particles: {currentGateEnergyParticles}
-Next gate energy particles: {nextGateEnergyParticles}";
+                currentValue = GetORingEnergyPerLevel();
+                nextValue = GetORingEnergyPerLevel(+1);
+                break;
             case UpgradeId.AccretioSuction:
-                int currentRadiationParticlesPerSecond = GetEnergyRadiationPerSecond(UpgradeId.AccretioSuction);
-                int nextRadiationParticlesPerSecond = GetEnergyRadiationPerSecond(UpgradeId.AccretioSuction, +1);
-                return $@"Detects the energy particles that are radiated from that big, gaping black hole at the top.
-The higher the level, the more energy particles are observed to eject.
-The higher the gate number, the bigger the chance for a high level energy particle, 
-giving more energy.
-
-Current black hole energy particles: {currentRadiationParticlesPerSecond}
-Next black hole energy particles: {nextRadiationParticlesPerSecond}";
-
+                currentValue = GetEnergyRadiationPerSecond(UpgradeId.AccretioSuction);
+                nextValue = GetEnergyRadiationPerSecond(UpgradeId.AccretioSuction, +1);
+                break;
             case UpgradeId.StarLifting:
-                int currentRadiationParticlesPerSecondStar = GetEnergyRadiationPerSecond(UpgradeId.StarLifting);
-                int nextRadiationParticlesPerSecondStar = GetEnergyRadiationPerSecond(UpgradeId.StarLifting, +1);
-                return $@"Detects the energy particles that are radiated from our SunStar at the bottom.
-The higher level, the more energy particles are observed to eject.
-The higher the gate number, the bigger the chance for a high level energy particle, 
-giving more energy.
-
-Current SunStar energy particles: {currentRadiationParticlesPerSecondStar}
-Next SunStar energy particles: {nextRadiationParticlesPerSecondStar}";
+                currentValue = GetEnergyRadiationPerSecond(UpgradeId.StarLifting);
+                nextValue = GetEnergyRadiationPerSecond(UpgradeId.StarLifting, +1);
+                break;
             case UpgradeId.AndroidSlavery:
-                long currentPopulationNumberPerSecond = GetPopulationNumberPerSecond(UpgradeId.AndroidSlavery);
-                long nextPopulationNumberPerSecond = GetPopulationNumberPerSecond(UpgradeId.AndroidSlavery, +1);
-                return $@"Allows building artificial antropomorphic droids, that are totally not humans. They have no feelings.
-They don't mind being used as a free workforce, the scientists think. No matter what the androids keep saying.
-This produces an amount of additional population every second.
-One would argue that this is totally not even immoral.
-
-Current additional population per second: {currentPopulationNumberPerSecond}
-Next additional population per second: {nextPopulationNumberPerSecond}";
+                currentValue = GetPopulationNumberPerSecond(UpgradeId.AndroidSlavery);
+                nextValue = GetPopulationNumberPerSecond(UpgradeId.AndroidSlavery, +1);
+                break;
             case UpgradeId.VyagraEnergizingTherapy:
-                float currentPopulationPercentPerSecond = GetPopulationPercentPerSecond(UpgradeId.VyagraEnergizingTherapy);
-                float nextPopulationPercentPerSecond = GetPopulationPercentPerSecond(UpgradeId.VyagraEnergizingTherapy, +1);
-                return $@"Spend energy for extraction of a blue space spice from the planet V-yag'ra.
-It allows the population to be more... energetic. Somehow they can even reproduce with the androids, go figure...
-It generates additional percentage of population.
-If you know what ""Compound Interest"" is, or watched Spiffing Brit, then you understand what this means...
-
-Current additional percentage of population per second: {currentPopulationPercentPerSecond}
-Next additional percentage of population per second: {nextPopulationPercentPerSecond}";
+                currentValue = GetPopulationPercentPerSecond(UpgradeId.VyagraEnergizingTherapy);
+                nextValue = GetPopulationPercentPerSecond(UpgradeId.VyagraEnergizingTherapy, +1);
+                break;
             case UpgradeId.InstantPopulation:
                 long currentBasePopulation = GameManager.Instance.GetBasePopulation();
-                long instantBasePopulationIncrease = GetBasePopulationNumberInstant(+1);
-                long nextBasePopulation = currentBasePopulation + instantBasePopulationIncrease;
-                return $@"This instantly and permanently increases the base population by a given number.
-Just add water and stir!
-
-Current base population: {currentBasePopulation}
-Next base population: {nextBasePopulation} (+{instantBasePopulationIncrease})";
+                currentValue = GetBasePopulationNumberInstant(+1);
+                nextValue = currentBasePopulation + currentValue;
+                break;
             case UpgradeId.EnergyShield:
-                long currentEnergyShieldAbsorb = GetEnergyShieldMax();
-                long nextEnergyShieldAbsorb = GetEnergyShieldMax(+1);
-                return $@"Absorbs some damage from collisions. 
-Also absorbs black hole and sun damage.
-Does not protect from spin damage tho...
-
-Current max population damage absorbed: {currentEnergyShieldAbsorb}
-Next max population damage absorbed: {nextEnergyShieldAbsorb}";
-
+                currentValue = GetEnergyShieldMax();
+                nextValue = GetEnergyShieldMax(+1);
+                break;
             case UpgradeId.SpinDoctor:
-                long currentSpinDoctorRpm = GetSpinDoctorMaxRpmPerSecond();
-                long nextSpinDoctorRpm = GetSpinDoctorMaxRpmPerSecond(+1);
-                return $@"Thrusters distributed around the planet, that reduce planetary spin up to 0RPM.
-The thrusters do kill a marginal number of people and endangered species,
-but the rest of us can enjoy not being ejected into the void of space.
-
-Current max RPM reduced: {currentSpinDoctorRpm}
-Next max RPM reduced: {currentSpinDoctorRpm}";
+                currentValue = GetSpinDoctorMaxRpmPerSecond();
+                nextValue = GetSpinDoctorMaxRpmPerSecond(+1);
+                break;
             case UpgradeId.ToorboBoost:
-                int currentToorboBoostSeconds = GetToorboBoostSecondsForLevel();
-                int nextToorboBoostSeconds = GetToorboBoostSecondsForLevel(+1);
-                return $@"Thrusters distributed at the poles that allow to speed up if the planet lags too much.
-Allows to avoid a premature ejection from the space pipes tunnel.
-Each level adds additional seconds of speed up.
-The planet will speed up only until it reaches the initial position.
-
-Current max boost usage time: {currentToorboBoostSeconds}
-Next max boost usage time: {nextToorboBoostSeconds}";
+                currentValue = GetToorboBoostSecondsForLevel();
+                nextValue = GetToorboBoostSecondsForLevel(+1);
+                break;
 
             default:
                 return "TODO";
-
         }
+
+        return Loc.Get(
+                locKey,
+                currentValue,
+                nextValue
+            );
     }
 
     /// Upgrade params:
@@ -334,6 +290,24 @@ public class Upgrade
     public int EnergyCost { get; }
     public int MaxLevel { get; }
     public int Level { get; private set; }
+
+    public string LocKey
+    {
+        get
+        {
+            return GetLocKey(Ident);
+        }
+    }
+
+    public static string GetLocKey(UpgradeId ident)
+    {
+        return "upgrade_" + ident.ToString().ToLower();
+    }
+
+    public static string GetDescriptionLocKey(UpgradeId ident)
+    {
+        return GetLocKey(ident) + "_description";
+    }
 
     public Upgrade(
             UpgradeId ident,

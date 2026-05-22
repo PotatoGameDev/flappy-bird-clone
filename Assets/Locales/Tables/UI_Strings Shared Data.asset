@@ -1,0 +1,300 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: UI_Strings Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: UI_Strings
+  m_TableCollectionNameGuidString: 537e223fbe29dc917b9bcd8cb9d863e5
+  m_Entries:
+  - m_Id: 267908804608
+    m_Key: main_new_game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 515926388736
+    m_Key: main_continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 604329734144
+    m_Key: main_reset
+    m_Metadata:
+      m_Items: []
+  - m_Id: 711469035520
+    m_Key: main_quit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27955105099776
+    m_Key: settings_language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29233554124800
+    m_Key: settings_volume_master
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29395877883904
+    m_Key: settings_volume_sound
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29474277814272
+    m_Key: settings_volume_music
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37161845649408
+    m_Key: navigation_system
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37234549714944
+    m_Key: navigation_level_select
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37391576068096
+    m_Key: navigation_upgrades
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37722225635328
+    m_Key: navigation_system_main
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37793319088128
+    m_Key: navigation_system_settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37850269347840
+    m_Key: navigation_system_highscores
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38078401736704
+    m_Key: navigation_level_select_level_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38247155363840
+    m_Key: navigation_level_select_level_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38248455598080
+    m_Key: navigation_level_select_level_3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 45658129821696
+    m_Key: navigation_upgrades_energy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 45689012482048
+    m_Key: navigation_upgrades_population
+    m_Metadata:
+      m_Items: []
+  - m_Id: 45723128950784
+    m_Key: navigation_upgrades_planetary
+    m_Metadata:
+      m_Items: []
+  - m_Id: 47180699922432
+    m_Key: level_select_stats
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52693919592448
+    m_Key: level_select_stats_complete
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52851600257024
+    m_Key: level_select_stats_not_complete
+    m_Metadata:
+      m_Items: []
+  - m_Id: 47947540328448
+    m_Key: level_select_flavor_level_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 51488510177280
+    m_Key: level_select_flavor_level_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 51544466386944
+    m_Key: level_select_flavor_level_3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 57955783012352
+    m_Key: upgrades_current_stats
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61010880491520
+    m_Key: upgrade_oring_description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61677657387008
+    m_Key: upgrade_oring
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64025406468096
+    m_Key: upgrade_accretiosuction
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64160177844224
+    m_Key: upgrade_accretiosuction_description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64396300382208
+    m_Key: upgrade_starlifting
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64548515868672
+    m_Key: upgrade_starlifting_description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64570527576064
+    m_Key: upgrade_androidslavery
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64571504848896
+    m_Key: upgrade_androidslavery_description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65012477194240
+    m_Key: upgrade_vyagraenergizingtherapy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65013186031616
+    m_Key: upgrade_vyagraenergizingtherapy_description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65803007029248
+    m_Key: upgrade_instantpopulation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65803892027392
+    m_Key: upgrade_instantpopulation_description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66368713781248
+    m_Key: upgrade_energyshield
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66369527476224
+    m_Key: upgrade_energyshield_description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66605591293952
+    m_Key: upgrade_spindoctor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66606413377536
+    m_Key: upgrade_spindoctor_description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66865961103360
+    m_Key: upgrade_toorboboost
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66866703495168
+    m_Key: upgrade_toorboboost_description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 72975833100288
+    m_Key: upgrades_panel_button_buy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 73138148470784
+    m_Key: upgrades_panel_button_upgrade
+    m_Metadata:
+      m_Items: []
+  - m_Id: 73251235295232
+    m_Key: upgrades_panel_button_too_poor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 73399969509376
+    m_Key: upgrades_panel_button_maxed_out
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74777181810688
+    m_Key: common_buttons_play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74881913581568
+    m_Key: common_buttons_play_locked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 75801221132288
+    m_Key: common_glyphs_play_locked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 75874092969984
+    m_Key: common_glyphs_upgrade
+    m_Metadata:
+      m_Items: []
+  - m_Id: 75929441005568
+    m_Key: common_glyphs_options_select
+    m_Metadata:
+      m_Items: []
+  - m_Id: 76007031435264
+    m_Key: common_glyphs_options_switch
+    m_Metadata:
+      m_Items: []
+  - m_Id: 76749939142656
+    m_Key: common_glyphs_play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 429372483563520
+    m_Key: gameplay_pause_hint_shield
+    m_Metadata:
+      m_Items: []
+  - m_Id: 429475407589376
+    m_Key: gameplay_pause_hint_population
+    m_Metadata:
+      m_Items: []
+  - m_Id: 429532571758592
+    m_Key: gameplay_pause_hint_boss_life_bar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 429633595764736
+    m_Key: gameplay_pause_hint_rpm
+    m_Metadata:
+      m_Items: []
+  - m_Id: 429688977354752
+    m_Key: gameplay_pause_hint_spin_doctor_toorbo_boost
+    m_Metadata:
+      m_Items: []
+  - m_Id: 429986986848256
+    m_Key: gameplay_pause_hint_gate_number
+    m_Metadata:
+      m_Items: []
+  - m_Id: 430090812649472
+    m_Key: gameplay_pause_hint_goal_energy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 429881747566592
+    m_Key: gameplay_pause_button_exit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 429829096468480
+    m_Key: gameplay_pause_button_continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 431285975379968
+    m_Key: gameplay_boss_intro_title_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 431651076960256
+    m_Key: gameplay_win_accomplished
+    m_Metadata:
+      m_Items: []
+  - m_Id: 436066827628544
+    m_Key: gameplay_boss_name_1
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 933378102448619784
+  references:
+    version: 2
+    RefIds:
+    - rid: 933378102448619784
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1779349006923
