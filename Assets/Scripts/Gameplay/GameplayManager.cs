@@ -154,29 +154,9 @@ public class GameplayManager : MonoBehaviour
         }
     }
 
-    private readonly string[] casualtiesTexts = {
-        "{0} died ({1:0}%)",
-        "{0} killed ({1:0}%)",
-        "{0} squashed ({1:0}%)",
-        "{0} evaporated ({1:0}%)",
-        "{0} lost ({1:0}%)",
-        "{0} are no more ({1:0}%)",
-        "{0} are now ex-people ({1:0}%)",
-        "{0} are poorly ({1:0}%)",
-        "{0} need some milk ({1:0}%)",
-        "{0} have a bad feeling about this ({1:0}%)",
-        "{0} did redeem, ma'am ({1:0}%)",
-        "{0} have no fun ({1:0}%)",
-        "{0} perished ({1:0}%)",
-        "{0} don't get no respect ({1:0}%)",
-    };
-
-    private readonly string[] rotationCasualtiesTexts = {
-        "{0} suffocated",
-        "{0} boiled",
-        "{0} no one could hear scream",
-        "{0} are lost in space",
-    };
+    private const string CasualtiesTextsTableName = "Casualties_Strings";
+    private const int CasualtiesTextsCount = 14;
+    private const int RotationCasualtiesTextsCount = 4;
 
     void Awake()
     {
@@ -228,7 +208,7 @@ public class GameplayManager : MonoBehaviour
         switch (GameManager.Instance.CurrentLevel)
         {
             case 0:
-                bossLabel.SetText("Annoying Motherships");
+                bossLabel.SetText(Loc.Get("gameplay_boss_name_1"));
                 break;
             case 1:
                 bossLabel.SetText("TODO");
@@ -454,20 +434,30 @@ public class GameplayManager : MonoBehaviour
         KillPopulation(dead);
     }
 
-    public void AddPopulationLossText(long peopleDied, string[] textFormatOverrides = null, bool showPercent = true)
+    public void AddPopulationLossText(long peopleDied, string prefixOverride = "casualties", int countOverride = CasualtiesTextsCount, bool showPercent = true)
     {
         float diedPercent = Mathf.Floor(peopleDied / (float)(peopleDied + CurrentPopulation) * 100f);
 
-        string[] texts = textFormatOverrides ?? casualtiesTexts;
-        string text = texts[Random.Range(0, texts.Length)];
+        string text;
 
         if (showPercent)
         {
-            text = string.Format(text, FormatBigNumber(peopleDied), diedPercent);
+            text = Loc.GetRandom(
+                    prefixOverride,
+                    countOverride,
+                    CasualtiesTextsTableName,
+                    FormatBigNumber(peopleDied),
+                    diedPercent
+                    );
         }
         else
         {
-            text = string.Format(text, FormatBigNumber(peopleDied));
+            text = Loc.GetRandom(
+                    prefixOverride,
+                    countOverride,
+                    CasualtiesTextsTableName,
+                    FormatBigNumber(peopleDied)
+                    );
         }
 
         populationMessagesManager.Spawn(text, fadingMessageCasualtiesColor);
@@ -475,9 +465,12 @@ public class GameplayManager : MonoBehaviour
 
     private void AddPopulationLossTextShort(long peopleDied)
     {
-        string text = rotationCasualtiesTexts[Random.Range(0, rotationCasualtiesTexts.Length)];
-
-        text = string.Format(text, FormatBigNumber(peopleDied));
+        string text = Loc.GetRandom(
+                "casualties_rotation",
+                RotationCasualtiesTextsCount,
+                CasualtiesTextsTableName,
+                FormatBigNumber(peopleDied)
+                );
 
         rpmMessagesManager.Spawn(text, fadingMessageCasualtiesColor);
     }

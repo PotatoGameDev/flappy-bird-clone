@@ -1,0 +1,358 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: UI_Strings_pl-PL
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: pl-PL
+  m_SharedData: {fileID: 11400000, guid: 537e223fbe29dc917b9bcd8cb9d863e5, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 267908804608
+    m_Localized: Nowa gra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 515926388736
+    m_Localized: Kontynuuj
+    m_Metadata:
+      m_Items: []
+  - m_Id: 604329734144
+    m_Localized: Od nowa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 711469035520
+    m_Localized: "Wyjd\u017A"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27955105099776
+    m_Localized: "J\u0119zyk"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29233554124800
+    m_Localized: "G\u0142o\u015Bno\u015B\u0107"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29395877883904
+    m_Localized: "D\u017Awi\u0119ki"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29474277814272
+    m_Localized: Muzyka
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37161845649408
+    m_Localized: System
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37234549714944
+    m_Localized: Poziomy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37391576068096
+    m_Localized: Ulepszenia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37722225635328
+    m_Localized: "G\u0142\xF3wne Menu"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37793319088128
+    m_Localized: Ustawienia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37850269347840
+    m_Localized: Najlepsze wyniki
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38078401736704
+    m_Localized: Typ I
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38247155363840
+    m_Localized: Typ II
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38248455598080
+    m_Localized: Typ III
+    m_Metadata:
+      m_Items: []
+  - m_Id: 45658129821696
+    m_Localized: Ulepszenia Energii
+    m_Metadata:
+      m_Items: []
+  - m_Id: 45689012482048
+    m_Localized: Ulepszenia Populacji
+    m_Metadata:
+      m_Items: []
+  - m_Id: 45723128950784
+    m_Localized: Ulepsznia Planety
+    m_Metadata:
+      m_Items: []
+  - m_Id: 47180699922432
+    m_Localized: "Populacja Startowa: {0}\nPopulacja Wynikowa: {1}\nEnergia Zebrana:
+      {2}\nEnergia Potrzebna do Nast\u0119pnego Poziomu: {3}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 51488510177280
+    m_Localized: "Ten poziom nie jest w pe\u0142ni gotowy w tej wersji gry.\nEarly
+      acces, co nie?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 51544466386944
+    m_Localized: "Ten level te\u017C nie jest gotowy :/"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 47947540328448
+    m_Localized: "Wyszli\u015Bmy zwyci\u0119sko ze wszystkich tych wojen i kataklizm\xF3w.\nOd
+      prostej kom\xF3rki do pot\u0119\u017Cnej cywilizacji, jednocz\u0105c ca\u0142\u0105
+      planet\u0119\_w pokoju.\nBez jednego wodza, tyrana. Wsp\xF3lnota lud\xF3w.\nNiestety,
+      jeste\u015Bmy \u015Bcigani przez dzik\u0105 band\u0119 wkurzonych statk\xF3w
+      matek.\nTo chyba nie przelewki!\nWskoczyli\u015Bmy wi\u0119c do intergalaktycznego
+      tunelu czasoprzestrzennego aby im uciec (tak jak to si\u0119 robi w takich
+      sytuacjach).\n\nMusimy zebra\u0107 wystarczaj\u0105co du\u017Co kulek energii,
+      by wyj\u015B\u0107 z tunelu i przej\u015B\u0107 do nast\u0119pnego etapu.\n\n---------\n\n\"Ciekawy\"
+      fakt:\nSkala Kardaszowa to system mierz\u0105cy, jak zaawansowana technologicznie
+      jest twoja cywilizacja galaktyczna!\nStarasz si\u0119\_uko\u0144czy\u0107 Typ
+      I, wi\u0119c Twoja cywilizacja pr\xF3buje wykorzysta\u0107 zasoby energii ca\u0142ej
+      swojej planety."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52693919592448
+    m_Localized: "Zako\u0144czone"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52851600257024
+    m_Localized: "Nie Zako\u0144czone"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 57955783012352
+    m_Localized: 'Energia: {0}GW
+
+      Populacja: {1}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61010880491520
+    m_Localized: "Pier\u015Bcie\u0144 detektor\xF3w kt\xF3re wyszukuj\u0105 energi\u0119
+      wydzielan\u0105 z kosmicznych rur.\n\nEnergia mo\u017Ce mie\u0107 r\xF3\u017Cne
+      poziomy kwantowe: bia\u0142a daje 1GW, \u017C\xF3\u0142ta 10GW, czerwona 100GW
+      i niebieska 1000GW.\nIm wy\u017Cszy numer bramki, tym wi\u0119ksza szansa na
+      energi\u0119 wysokiego poziomu.\n\nTo ulepszenie sprawia, \u017Ce rury wyrzucaj\u0105
+      wi\u0119cej cz\u0105stek energii r\xF3\u017Cnych poziom\xF3w.\n\nObesna liczba
+      cz\u0105stek energii: {0}\nNast\u0119pna liczba cz\u0105stek energii: {1}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61677657387008
+    m_Localized: O-Ring
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64025406468096
+    m_Localized: Akrecjo-Sukcja
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64160177844224
+    m_Localized: "Wykrywa cz\u0105stki energii emitowane z tej ogromniastej czarnej
+      dziury na g\xF3rze.\nIm wy\u017Cszy poziom tego usprawnienia, tym wi\u0119cej
+      cz\u0105steczek jest wydzielanych.\nIm wy\u017Cszy numer bramki, tym wi\u0119ksza
+      szansa na energi\u0119 wysokiego poziomu.\n\nObecna liczba wykrywanych cz\u0105setk:
+      {0}\nNast\u0119pna liczba wykrywanych cz\u0105stek: {1}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 72975833100288
+    m_Localized: Kup ({0}GW)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 73138148470784
+    m_Localized: Ulepsz ({0}GW)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 73251235295232
+    m_Localized: Za biedny ({0}GW)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 73399969509376
+    m_Localized: Wymaksowany
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74777181810688
+    m_Localized: Graj
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74881913581568
+    m_Localized: 'Graj [ZABLOK.]'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 75801221132288
+    m_Localized: 'Graj [ZABLOK.]'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 75874092969984
+    m_Localized: Ulepsz
+    m_Metadata:
+      m_Items: []
+  - m_Id: 75929441005568
+    m_Localized: Wybierz
+    m_Metadata:
+      m_Items: []
+  - m_Id: 76007031435264
+    m_Localized: "Zmie\u0144"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 76749939142656
+    m_Localized: Graj
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64396300382208
+    m_Localized: Gwiezdny Lifting
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64548515868672
+    m_Localized: "Wykrywa cz\u0105stki energii emitowane z tej naszej S\u0142o\u0144coGwiazdy
+      na dole.\nIm wy\u017Cszy poziom tego usprawnienia, tym wi\u0119cej cz\u0105steczek
+      jest wydzielanych.\nIm wy\u017Cszy numer bramki, tym wi\u0119ksza szansa na
+      energi\u0119 wysokiego poziomu.\n\nObecna liczba wykrywanych cz\u0105setk:
+      {0}\nNast\u0119pna liczba wykrywanych cz\u0105stek: {1}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64570527576064
+    m_Localized: Robo-Niewolnicy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64571504848896
+    m_Localized: "Pozwala na budowanie sztucznych, antropomorficznych droid\xF3w,
+      kt\xF3re nie s\u0105 lud\u017Ami, wi\u0119c nie maj\u0105 uczu\u0107.\nNie
+      przeszkadza im bycie wykorzystywanym jako darmowa si\u0142a robocza, tak przynajmniej
+      my\u015Bl\u0105 naukowcy.\nNie wa\u017Cne co same androidy gadaj\u0105.\n\nTo
+      ulepszenie dodaje dodatkow\u0105 populacj\u0119 za ka\u017Cd\u0105 sekund\u0119\_gry.\nTo
+      totalnie nie-niemoralne!\n\nObecna dodatkowa populacja co sekund\u0119: {0}\nNast\u0119pna
+      dodatkowa populacja co sekund\u0119: {1}\n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65012477194240
+    m_Localized: Bioenergoterapia V-Yag'ra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65013186031616
+    m_Localized: "Wydaj troch\u0119 energii na wydobycie niebieskiej kosmicznej przyprawy
+      z planety V-Yag'ra!\nPozwala populacji by\u0107 troch\u0119\_bardziej... naenergetyzowan\u0105.\nTak,
+      dzia\u0142a te\u017C na androidy!\n\nTo ulepszenie dodaje procent populacji
+      co sekund\u0119 w trakcie gry.\nJe\u015Bli wiesz co to jest \"Procent sk\u0142adany\",
+      albo ogl\u0105da\u0142e\u015B Spiffing Brita, to rozumiesz co to oznacza...\nTo
+      co, czerwona pigu\u0142ka czy niebieska pigu\u0142ka?\n\nObecny procent populacji
+      co sekund\u0119: {0}\nNast\u0119pny procent populacji co sekund\u0119: {1}\n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65803007029248
+    m_Localized: Populacja Instant
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65803892027392
+    m_Localized: "Natychmiastowo dodaje bazow\u0105 populacj\u0119 na zawsze.\nWystarczy
+      doda\u0107 wrz\u0105tku i zamiesza\u0107! Mmmm...\n\nObecna bazowa populacja:
+      {0}\nNast\u0119pna bazowa populacja: {1}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66368713781248
+    m_Localized: Tarcza Energetyczna
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66369527476224
+    m_Localized: "Absorbuje cz\u0119\u015B\u0107 uszkodze\u0144 spowodowanych kolizjami.\nDzia\u0142a
+      te\u017C na uszkodzenia spowodowane blisko\u015Bci\u0105 S\u0142o\u0144coGwiazdy
+      i czarnej dziury.\n\nNie chroni przed stratami spowodowanymi obracaniem.\n\nObecna
+      chroniona populacja: {0}\nNast\u0119pna chroniona populacja: {1}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66605591293952
+    m_Localized: Spin Doctor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66606413377536
+    m_Localized: "Silniki odrzutowe rozmieszczone woko\u0142o planety, redukuj\u0105
+      nadmierne obroty.\nSilniki co prawda zabij\u0105 pomijaln\u0105 liczb\u0119\_ludzi
+      \u017Cyj\u0105cych nieopodal (oraz niekt\xF3re zagro\u017Cone gatunki),\nale
+      reszta z nas mo\u017Ce si\u0119 cieszy\u0107 nie byciem wystrzelonymi w pr\xF3\u017Cni\u0119\_kosmosu
+      z powodu obrot\xF3w.\n\nDzia\u0142a automatycznie do wyczerpania.\n\nObecna
+      maksymalna ilo\u015B\u0107 RPM: {0}\nNast\u0119pna maksymalna ilo\u015B\u0107
+      RPM: {1}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66865961103360
+    m_Localized: Toorbo Boost
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66866703495168
+    m_Localized: "Silniki odrzutowe rozmieszczone na biegunach, pozwalaj\u0105 przy\u015Bpieszy\u0107
+      planet\u0119 je\u017Celi zacznie zamula\u0107.\nPozwala zapobiega\u0107\_przedwczesnemu
+      wystrzeleniu z tunelu czasoprzestrzennego.\nKa\u017Cdy poziom dodaje sekundy
+      dzia\u0142ania przyspieszenia.\nPlaneta przyspiesza automatycznie do wyczerpania
+      lub osi\u0105gni\u0119cia pozycji startowej.\n\nObecny maksymalny czas przyspieszenia:
+      {0}\nNast\u0119pny maksymalny czas przyspieszenia: {1}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 429829096468480
+    m_Localized: Graj Dalej
+    m_Metadata:
+      m_Items: []
+  - m_Id: 429881747566592
+    m_Localized: "Wyjd\u017A"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 429372483563520
+    m_Localized: Poziom energii tarczy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 429475407589376
+    m_Localized: Populacja
+    m_Metadata:
+      m_Items: []
+  - m_Id: 429532571758592
+    m_Localized: "Poziom \u017Cycia bossa"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 429633595764736
+    m_Localized: "Pr\u0119dko\u015B\u0107 obrotowa w RPM"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 429688977354752
+    m_Localized: 'Poziom energii Spin Doctora
+
+      i
+
+      Poziom energii Toorbo
+      Boost'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 429986986848256
+    m_Localized: Obecny numer bramki i suma zdobytej energii
+    m_Metadata:
+      m_Items: []
+  - m_Id: 430090812649472
+    m_Localized: "Pasek post\u0119pu energii potrzebnej do walki z bossem i awansu
+      do nast\u0119pnego poziomu"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 431285975379968
+    m_Localized: "Irytuj\u0105ce Statki Matki Atakuj\u0105!!!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 431651076960256
+    m_Localized: "Zwyci\u0119stwo Zdobyte."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 436066827628544
+    m_Localized: "Irytuj\u0105ce Statki Matki"
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

@@ -1,0 +1,119 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Casualties_Strings_en
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: e8fafad8ec953d613a0e3c282ab704c5, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 8784703488
+    m_Localized: '{0} died ({1:0}%)'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 179916500992
+    m_Localized: '{0} killed ({1:0}%)'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 226968203264
+    m_Localized: '{0} squashed ({1:0}%)'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 256462548992
+    m_Localized: '{0} evaporated ({1:0}%)'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 282119106560
+    m_Localized: '{0} lost ({1:0}%)'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 317414174720
+    m_Localized: '{0} are no more ({1:0}%)'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 340419932160
+    m_Localized: '{0} are now ex-people ({1:0}%)'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 362855264256
+    m_Localized: '{0} are poorly ({1:0}%)'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 405544890368
+    m_Localized: '{0} need some milk ({1:0}%)'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 435777433600
+    m_Localized: '{0} have a bad feeling about this ({1:0}%)'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 453527728128
+    m_Localized: '{0} did redeem, ma''am ({1:0}%)'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 472116883456
+    m_Localized: '{0} have no fun ({1:0}%)'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 497005883392
+    m_Localized: '{0} perished ({1:0}%)'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 515028807680
+    m_Localized: '{0} don''t get no respect ({1:0}%)'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 534683316224
+    m_Localized: '{0} suffocated'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 567675711488
+    m_Localized: '{0} boiled'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 583064612864
+    m_Localized: '{0} no one could hear scream'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 597962780672
+    m_Localized: '{0} are lost in space'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5572973555712
+    m_Localized: '{0} burned'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5688547602432
+    m_Localized: '{0} barbequed'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5703131197440
+    m_Localized: '{0} got LASIK'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5719304433664
+    m_Localized: '{0} smoked'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7560683581440
+    m_Localized: '{0} spaghettified'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7634092290048
+    m_Localized: '{0} deep fried'
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

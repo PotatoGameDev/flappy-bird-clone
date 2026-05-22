@@ -87,6 +87,8 @@ public class GameManager : MonoBehaviour
 
         // Other
         State = SaveSystem.Load();
+
+        Loc.LoadSavedLanguage();
     }
 
     public void Save()
