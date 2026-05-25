@@ -59,7 +59,10 @@ MonoBehaviour:
   - {fileID: 8300000, guid: fb693f4b04328858199e9dc5b1a26879, type: 3}
   - {fileID: 8300000, guid: a3018efb4a6bebb73a94cb8ed507cce4, type: 3}
   - {fileID: 8300000, guid: 98ad638efeae0321aabe5b61883a1bea, type: 3}
-  - {fileID: 8300000, guid: e70da51b76b5fdf3eacf4253f0c27481, type: 3}
+  playOnAwake: 0
+  sfxSource: {fileID: 0}
+  musicSource: {fileID: 0}
+  mixer: {fileID: 24100000, guid: d06778051fb33e19c93c3cb4ab9aadd6, type: 2}
 --- !u!82 &4397443205847528546
 AudioSource:
   m_ObjectHideFlags: 0
