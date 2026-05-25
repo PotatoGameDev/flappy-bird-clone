@@ -138,8 +138,8 @@ public class UpgradesManager : MonoBehaviour
     {
         string locKey = Upgrade.GetDescriptionLocKey(ident);
 
-        dynamic currentValue;
-        dynamic nextValue;
+        object currentValue;
+        object nextValue;
 
         switch (ident)
         {
@@ -165,8 +165,9 @@ public class UpgradesManager : MonoBehaviour
                 break;
             case UpgradeId.InstantPopulation:
                 long currentBasePopulation = GameManager.Instance.GetBasePopulation();
-                currentValue = GetBasePopulationNumberInstant(+1);
-                nextValue = currentBasePopulation + currentValue;
+                long currentValueLong = GetBasePopulationNumberInstant(+1);
+                currentValue = currentValueLong;
+                nextValue = currentBasePopulation + currentValueLong;
                 break;
             case UpgradeId.EnergyShield:
                 currentValue = GetEnergyShieldMax();
