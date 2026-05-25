@@ -181,7 +181,7 @@ public class GameState
 
     public GameState()
     {
-        BasePopulation = 9000000;
+        BasePopulation = 1000000;
         CurrentLevel = 0;
         CivTypePassed = 0;
         CollectedEnergy = 0;
