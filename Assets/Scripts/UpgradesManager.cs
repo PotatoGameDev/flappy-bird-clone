@@ -221,7 +221,17 @@ public class UpgradesManager : MonoBehaviour
 
         if (ident == UpgradeId.VyagraEnergizingTherapy)
         {
-            float vyagraEnergizingTherapyPercent = level / 100f;
+            // This gives values like:
+            // 1 - 0.6
+            // ...
+            // 10 - 2.08
+            // ...
+            // 30 - 3.01
+            // ...
+            // 100 - 4.0
+            float vyagraEnergizingTherapyPercent = Mathf.Log10(level + 1.0f) * 0.02f;
+
+
             return vyagraEnergizingTherapyPercent;
         }
         return 0f;

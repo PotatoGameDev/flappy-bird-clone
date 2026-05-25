@@ -193,7 +193,7 @@ public class PlanetController : MonoBehaviour
             // We lerp from the original color to the half of the red (so not so much red)
             rendr.color = Color.Lerp(originalColor, Color.Lerp(originalColor, Color.red, 0.5f), outOfBoundsDamagePerSecond);
 
-            long peopleDied = GameplayManager.Instance.TakeHit(HitType.BorderProximity, Time.deltaTime);
+            long peopleDied = GameplayManager.Instance.TakeHit(HitType.BorderProximity, outOfBoundsDamagePerSecond * Time.deltaTime);
 
             if (peopleDied > 0)
             {
