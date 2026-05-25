@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class PlanetController : MonoBehaviour
 {
     private readonly float RPM_PENALTY_THRESHOLD = 20f;
+    private readonly float RPM_MAX = 80f; // This is when the damage is maximal
 
     private readonly WaitForSeconds EVERY_SECOND = new(1);
 
@@ -192,17 +193,17 @@ public class PlanetController : MonoBehaviour
             // We lerp from the original color to the half of the red (so not so much red)
             rendr.color = Color.Lerp(originalColor, Color.Lerp(originalColor, Color.red, 0.5f), outOfBoundsDamagePerSecond);
 
-            long casualties = GameplayManager.Instance.TakeHit(outOfBoundsDamagePerSecond * Time.deltaTime, 1, false);
+            long peopleDied = GameplayManager.Instance.TakeHit(HitType.BorderProximity, Time.deltaTime);
 
-            if (casualties > 0)
+            if (peopleDied > 0)
             {
                 if (blackHoleDamage)
                 {
-                    currentBlackHoleCasualties += casualties;
+                    currentBlackHoleCasualties += peopleDied;
                 }
                 else
                 {
-                    currentSunStarCasualties += casualties;
+                    currentSunStarCasualties += peopleDied;
                 }
 
                 // Adding sustained shake, up to 1.0 for 5000 casualties
@@ -264,13 +265,18 @@ public class PlanetController : MonoBehaviour
 
             if (rpmAbs > 0f)
             {
-
                 if (rpmAbs > RPM_PENALTY_THRESHOLD)
                 {
                     penaltyRpm = rpmAbs - RPM_PENALTY_THRESHOLD;
 
-                    // for each rpmAbs above threshold we kill 100 people
-                    GameplayManager.Instance.RotationalDamage((int)(penaltyRpm * 100));
+                    // for each rpmAbs above threshold we kill people
+                    if (penaltyRpm > 0)
+                    {
+
+                        GameplayManager.Instance.RotationalDamage(
+                                rpmAbs / RPM_MAX
+                                );
+                    }
 
                     // Add shake, max 1 for 50RPM, starting with 10 RPM 
                     rotationShake = Mathf.Lerp(0, 1, (penaltyRpm - 10) / 50f);
@@ -352,12 +358,16 @@ public class PlanetController : MonoBehaviour
         float maxHitPercent = 100f;
         float maxHitForce = 10f;
 
+        HitType hitType = HitType.GateCollision;
+
         if (collision.gameObject.CompareTag("GatePipe"))
         {
             maxHitForce = 20f;
         }
         else if (collision.gameObject.CompareTag("Enemy"))
         {
+            hitType = HitType.BossCollision;
+
             // TODO May be more enemy types later
             if (collision.gameObject.GetComponent<FlyingSaucerController>().Active)
             {
@@ -382,7 +392,8 @@ public class PlanetController : MonoBehaviour
         float hitFraction = hitPercent / 100f;
 
         // This hit fraction will calculate the percent of population, that died.
-        long peopleDied = GameplayManager.Instance.TakeHit(hitFraction, 1000);
+        long peopleDied = GameplayManager.Instance.TakeHit(hitType, hitFraction);
+
 
         // Shaking the screen in direction of the collision
         // TODO: We should pass the shake in percent actually! RelativeVelocity means nothing to shake.
@@ -397,6 +408,8 @@ public class PlanetController : MonoBehaviour
             StartCoroutine(DamageFlashing(rendr));
 
             peopleParticleSystem.Emit((int)Mathf.Log10(peopleDied));
+
+            GameplayManager.Instance.AddPopulationLossText(peopleDied);
         }
     }
 
@@ -421,16 +434,15 @@ public class PlanetController : MonoBehaviour
         {
             ShowShieldIfAvailable();
 
-            long killed = GameplayManager.Instance.TakeHit(0.01f, 1000, false);
-
-            if (killed > 0f)
+            long peopleDied = GameplayManager.Instance.TakeHit(HitType.BossLaser);
+            if (peopleDied > 0f)
             {
                 ExplosionController explosion = InstancePoolsManager.Instance.ExplosionControllerPool.Get();
                 explosion.transform.SetParent(SpriteHolder);
                 explosion.transform.position = collider.transform.position;
                 explosion.transform.localScale = Vector2.one * Random.Range(0.2f, 0.4f);
 
-                totalLaserDamage += killed;
+                totalLaserDamage += peopleDied;
                 timeToLaserDamageSummary = 1; // one second after last damage
             }
         }

@@ -377,17 +377,28 @@ public class GameplayManager : MonoBehaviour
         rpmLabel.SetText("RPM: {0}", (int)Mathf.Abs(Player.GetRpm()));
     }
 
-    // Kills <hitFraction> of the population, considers shield and min casualties. Returns the actual number of dead people.
-    public long TakeHit(float hitFraction, long minCasualties, bool addLossText = true)
+    public long TakeHit(HitType type, float fraction = 1f)
     {
-        long peopleDied = (long)(CurrentPopulation * hitFraction);
-        if (peopleDied < minCasualties) peopleDied = minCasualties;
+        fraction = Mathf.Clamp01(fraction);
+
+        long peopleDied = type switch
+        {
+            HitType.Spin => (long)(fraction * 1_000_000L),
+            HitType.BorderProximity => (long)(fraction * 1_000_000L),
+            HitType.BossCollision => (long)(fraction * 1_000_000L),
+            HitType.BossLaser => 1_000L,
+            HitType.GateCollision => 1_000_000L,
+            _ => 0L
+        };
 
         if (peopleDied > CurrentPopulation) peopleDied = CurrentPopulation;
 
-        long newPeopleDied = peopleDied > shieldLeft ? (peopleDied - shieldLeft) : 0;
-        long newShieldLeft = shieldLeft > peopleDied ? (shieldLeft - peopleDied) : 0;
-
+        long newPeopleDied = peopleDied > shieldLeft
+            ? (peopleDied - shieldLeft)
+            : 0;
+        long newShieldLeft = shieldLeft > peopleDied
+            ? (shieldLeft - peopleDied)
+            : 0;
         peopleDied = newPeopleDied;
         shieldLeft = newShieldLeft;
 
@@ -395,12 +406,6 @@ public class GameplayManager : MonoBehaviour
         if (shieldLeft <= 0f)
         {
             shieldLevelSliderFill.SetActive(false);
-        }
-
-        if (addLossText && peopleDied > 0)
-        {
-            // TODO Move this to something higher, it should not be generated here
-            AddPopulationLossText(peopleDied);
         }
 
         KillPopulation(peopleDied);
@@ -427,11 +432,11 @@ public class GameplayManager : MonoBehaviour
         }
     }
 
-    public void RotationalDamage(long dead)
+    public void RotationalDamage(float fraction)
     {
-        AddPopulationLossTextShort(dead);
+        long peopleDied = TakeHit(HitType.Spin, fraction);
 
-        KillPopulation(dead);
+        AddPopulationLossTextShort(peopleDied);
     }
 
     public void AddPopulationLossText(long peopleDied, string prefixOverride = "casualties", int countOverride = CasualtiesTextsCount, bool showPercent = true)
@@ -512,3 +517,11 @@ public class GameplayManager : MonoBehaviour
 
 }
 
+public enum HitType
+{
+    GateCollision,
+    BossCollision,
+    BossLaser,
+    BorderProximity,
+    Spin
+}
