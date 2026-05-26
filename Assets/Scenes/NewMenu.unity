@@ -1123,6 +1123,7 @@ MonoBehaviour:
   startButton: {fileID: 1748698204}
   startButtonLabel: {fileID: 913855290}
   startGlyphLabel: {fileID: 2071585846}
+  selectionR: {fileID: 1637199626}
 --- !u!114 &221761282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2742,7 +2743,10 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   soundManager: {fileID: 1593900403}
-  interactable: 1
+  interactableColor: {r: 1, g: 1, b: 1, a: 1}
+  nonInteractableColor: {r: 0.4619699, g: 0.4619699, b: 0.4619699, a: 1}
+  label: {fileID: 831486623}
+  glyphIcon: {fileID: 0}
 --- !u!1 &614638647
 GameObject:
   m_ObjectHideFlags: 0
@@ -3092,6 +3096,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6000242650470838905, guid: 086374e6e0115a2039580410ec37ac2d, type: 3}
   m_PrefabInstance: {fileID: 696492123}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &696492125 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6431306417436297731, guid: 086374e6e0115a2039580410ec37ac2d, type: 3}
+  m_PrefabInstance: {fileID: 696492123}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 569cb6dca11fe88de84249881dfe4183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlyphIcon
 --- !u!1 &730986253
 GameObject:
   m_ObjectHideFlags: 0
@@ -3744,7 +3759,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1375380016191489422, guid: 2a935d53c14a8eb0b8dc5f0a69ad92bf, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.0000076293945
+      value: -0.000015258789
       objectReference: {fileID: 0}
     - target: {fileID: 1755024659807398325, guid: 2a935d53c14a8eb0b8dc5f0a69ad92bf, type: 3}
       propertyPath: action
@@ -4218,7 +4233,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45.15
+  m_fontSize: 60.8
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5218,7 +5233,10 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   soundManager: {fileID: 1593900403}
-  interactable: 1
+  interactableColor: {r: 1, g: 1, b: 1, a: 1}
+  nonInteractableColor: {r: 0.4619699, g: 0.4619699, b: 0.4619699, a: 1}
+  label: {fileID: 394801755}
+  glyphIcon: {fileID: 0}
 --- !u!1 &1119627400
 GameObject:
   m_ObjectHideFlags: 0
@@ -5522,7 +5540,6 @@ MonoBehaviour:
   - {fileID: 169444384}
   - {fileID: 205292935}
   - {fileID: 488857255}
-  backAction: {fileID: 7727032971491509709, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   mainSelectionOptions:
   - navigation_system
   - navigation_level_select
@@ -7510,7 +7527,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1375380016191489422, guid: 2a935d53c14a8eb0b8dc5f0a69ad92bf, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.0000076293945
+      value: -0.000015258789
       objectReference: {fileID: 0}
     - target: {fileID: 1755024659807398325, guid: 2a935d53c14a8eb0b8dc5f0a69ad92bf, type: 3}
       propertyPath: action
@@ -8061,7 +8078,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1375380016191489422, guid: 2a935d53c14a8eb0b8dc5f0a69ad92bf, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.0000076293945
+      value: -0.000015258789
       objectReference: {fileID: 0}
     - target: {fileID: 1755024659807398325, guid: 2a935d53c14a8eb0b8dc5f0a69ad92bf, type: 3}
       propertyPath: action
@@ -9544,7 +9561,10 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   soundManager: {fileID: 1593900403}
-  interactable: 1
+  interactableColor: {r: 1, g: 1, b: 1, a: 1}
+  nonInteractableColor: {r: 0.4619699, g: 0.4619699, b: 0.4619699, a: 1}
+  label: {fileID: 295030376}
+  glyphIcon: {fileID: 696492125}
 --- !u!1 &1690172069
 GameObject:
   m_ObjectHideFlags: 0
@@ -9652,7 +9672,10 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   soundManager: {fileID: 1593900403}
-  interactable: 1
+  interactableColor: {r: 1, g: 1, b: 1, a: 1}
+  nonInteractableColor: {r: 0.4619699, g: 0.4619699, b: 0.4619699, a: 1}
+  label: {fileID: 1097787952}
+  glyphIcon: {fileID: 0}
 --- !u!1001 &1697432189
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10174,7 +10197,10 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   soundManager: {fileID: 1593900403}
-  interactable: 1
+  interactableColor: {r: 1, g: 1, b: 1, a: 1}
+  nonInteractableColor: {r: 0.4619699, g: 0.4619699, b: 0.4619699, a: 1}
+  label: {fileID: 913855290}
+  glyphIcon: {fileID: 0}
 --- !u!114 &1748698205
 MonoBehaviour:
   m_ObjectHideFlags: 0

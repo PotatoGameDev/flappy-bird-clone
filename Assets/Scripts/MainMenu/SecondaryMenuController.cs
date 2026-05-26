@@ -26,7 +26,6 @@ public class SecondaryMenuController : MonoBehaviour
     [SerializeField] private GameObject[] showGlyphs;
     [SerializeField] private bool[] showGlyphsOnScreens;
 
-
     private int currentSelection;
 
     void Awake()
@@ -143,6 +142,11 @@ public class SecondaryMenuController : MonoBehaviour
         {
             selectionR.gameObject.SetActive(true);
             selectionLabelR.SetText(Loc.Get(availableOptions[currentSelection + 1]));
+
+            // We set this here for a reset - it gets overwritten in level select
+            // controller, and when we switch menu, it has to be reset to 
+            // interactable again.
+            selectionR.Interactable = true;
         }
         else
         {

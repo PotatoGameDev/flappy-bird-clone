@@ -112,13 +112,13 @@ public class UpgradesMenuController : SecondaryMenuDelegate
         startButton.gameObject.SetActive(true);
         if (GameManager.Instance.CanPlayLevel())
         {
-            startButton.interactable = true;
+            startButton.Interactable = true;
             startButtonLabel.SetText(Loc.Get("common_buttons_play"));
             startGlyphLabel.SetText(Loc.Get("common_glyphs_play"));
         }
         else
         {
-            startButton.interactable = false;
+            startButton.Interactable = false;
             startButtonLabel.SetText(Loc.Get("common_buttons_play_locked"));
             startGlyphLabel.SetText(Loc.Get("common_glyphs_play_locked"));
         }

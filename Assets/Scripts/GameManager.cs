@@ -126,9 +126,13 @@ public class GameManager : MonoBehaviour
         return energyToAdvance[State.CurrentLevel];
     }
 
-    public bool CanPlayLevel()
+    public bool CanPlayLevel(int level = -1)
     {
-        return State.CurrentLevel <= State.CivTypePassed;
+        if (level < 0)
+        {
+            level = State.CurrentLevel;
+        }
+        return level <= State.CivTypePassed;
     }
 
     public bool CanAdvanceLevel()
