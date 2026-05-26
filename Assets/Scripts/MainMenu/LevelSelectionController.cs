@@ -7,6 +7,8 @@ public class LevelSelectionController : SecondaryMenuDelegate
     [SerializeField] private TextMeshProUGUI startButtonLabel;
     [SerializeField] private TextMeshProUGUI startGlyphLabel;
 
+    [SerializeField] private FakeButton selectionR;
+
 
     void Start()
     {
@@ -48,20 +50,25 @@ public class LevelSelectionController : SecondaryMenuDelegate
 
     public override void UpdateMenu()
     {
+        GameManager gm = GameManager.Instance;
         // Update the start button, if the previous level has been completed, then this level can be started
         startButton.gameObject.SetActive(true);
-        if (GameManager.Instance.CanPlayLevel())
+        if (gm.CanPlayLevel())
         {
-            startButton.interactable = true;
+            startButton.Interactable = true;
             startButtonLabel.SetText(Loc.Get("common_buttons_play"));
             startGlyphLabel.SetText(Loc.Get("common_glyphs_play"));
         }
         else
         {
-            startButton.interactable = false;
+            startButton.Interactable = false;
             startButtonLabel.SetText(Loc.Get("common_buttons_play_locked"));
             startGlyphLabel.SetText(Loc.Get("common_glyphs_play_locked"));
+
+
         }
+
+        selectionR.Interactable = gm.CanPlayLevel(gm.CurrentLevel + 1);
     }
 }
 

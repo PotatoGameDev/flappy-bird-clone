@@ -56,7 +56,7 @@ namespace PotatoGameDev.InputGlyph
 
         void InputSchemeChanged(string scheme, GlyphMapping currentMapping)
         {
-            string bindingPath = GetBindingPath2(action.action, scheme);
+            string bindingPath = GetBindingPath(action.action, scheme);
 
             Sprite sprite = null;
             if (bindingPath != null && currentMapping != null)
@@ -84,19 +84,6 @@ namespace PotatoGameDev.InputGlyph
         }
 
         static string GetBindingPath(InputAction action, string scheme)
-        {
-
-            foreach (var binding in action.bindings)
-            {
-                if (binding.groups.Contains(scheme))
-                {
-                    return binding.effectivePath;
-                }
-            }
-            return null;
-        }
-
-        static string GetBindingPath2(InputAction action, string scheme)
         {
             if (scheme == null || action == null)
             {
