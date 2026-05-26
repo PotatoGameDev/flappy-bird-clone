@@ -13,7 +13,7 @@ public class MenusController : MonoBehaviour
 
     [SerializeField] private SecondaryMenuController[] mainSelectionContents;
 
-    [SerializeField] private InputActionReference backAction;
+    private InputAction backAction;
 
     [SerializeField] private string[] mainSelectionOptions;
 
@@ -39,7 +39,11 @@ public class MenusController : MonoBehaviour
     {
         GameManager.Instance.OnGameStateChanged += UpdateGameStateRelatedLabels;
 
-        backAction.action.performed += BackPressed;
+        // TODO: The normal action reference was ignored on mobile.
+        //       Nothing else worked :(
+        backAction = new InputAction("Back", binding: "<Keyboard>/escape");
+        backAction.performed += BackPressed;
+        backAction.Enable();
 
         // This is for when the player returns from the gameplay:
         if (GameManager.Instance.newLevelUnlocked)
@@ -60,7 +64,9 @@ public class MenusController : MonoBehaviour
     {
         GameManager.Instance.OnGameStateChanged -= UpdateGameStateRelatedLabels;
 
-        backAction.action.performed -= BackPressed;
+        backAction.performed -= BackPressed;
+        backAction.Disable();
+        backAction.Dispose();
 
         Loc.OnLanguageChanged -= UpdateMainSelectionMenus;
     }
