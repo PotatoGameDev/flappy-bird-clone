@@ -110,12 +110,12 @@ public class PlanetController : MonoBehaviour
 
     void OnEnable()
     {
-        jumpActionReference.action.performed += OnJump;
+        jumpActionReference.action.started += OnJump;
     }
 
     void OnDisable()
     {
-        jumpActionReference.action.performed -= OnJump;
+        jumpActionReference.action.started -= OnJump;
     }
 
     void Update()

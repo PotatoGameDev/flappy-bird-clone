@@ -48588,7 +48588,10 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   soundManager: {fileID: 457437700}
-  interactable: 1
+  interactableColor: {r: 1, g: 1, b: 1, a: 1}
+  nonInteractableColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  label: {fileID: 0}
+  glyphIcon: {fileID: 0}
 --- !u!1 &7580450834981021819
 GameObject:
   m_ObjectHideFlags: 0
@@ -48754,7 +48757,10 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   soundManager: {fileID: 0}
-  interactable: 1
+  interactableColor: {r: 1, g: 1, b: 1, a: 1}
+  nonInteractableColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  label: {fileID: 0}
+  glyphIcon: {fileID: 0}
 --- !u!1 &8149357429056811370
 GameObject:
   m_ObjectHideFlags: 0

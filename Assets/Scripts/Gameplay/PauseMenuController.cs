@@ -11,6 +11,10 @@ public class PauseMenuController : MonoBehaviour
 
     [SerializeField] private InputActionReference pauseMenuInputAction;
 
+#if UNITY_ANDROID
+    private InputAction backAction;
+#endif
+
     public bool IsPaused { get; set; } = false;
 
     private bool canPause = true;
@@ -19,12 +23,28 @@ public class PauseMenuController : MonoBehaviour
     {
         pauseMenuInputAction.action.performed += PauseTriggered;
         pauseMenuInputAction.action.canceled += PauseTriggered;
+
+#if UNITY_ANDROID
+        // Workaround for android:
+        backAction = new InputAction("Back", binding: "<Keyboard>/escape");
+        backAction.performed += PauseTriggered;
+        backAction.canceled += PauseTriggered;
+        backAction.Enable();
+#endif
     }
 
     void OnDisable()
     {
         pauseMenuInputAction.action.performed -= PauseTriggered;
         pauseMenuInputAction.action.canceled -= PauseTriggered;
+
+#if UNITY_ANDROID
+        // Workaround for android:
+        backAction.performed -= PauseTriggered;
+        backAction.canceled -= PauseTriggered;
+        backAction.Disable();
+        backAction.Dispose();
+#endif
     }
 
     public void TogglePause()
