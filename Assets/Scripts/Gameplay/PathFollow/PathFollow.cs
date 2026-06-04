@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using DG.Tweening;
+using UnityEngine.Events;
 
 public class PathFollow : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class PathFollow : MonoBehaviour
     [SerializeField] private Ease easeType = Ease.InOutSine;
     [SerializeField] private int curveResolution = 50;
     [SerializeField] private bool loopPath = true;
+
+    [SerializeField] private UnityEvent<int> onWaypointReached;
 
     private Tween moveTween;
 
@@ -35,8 +38,13 @@ public class PathFollow : MonoBehaviour
         .SetSpeedBased()
         .SetEase(easeType)
         .SetOptions(loopPath)
-        .SetLoops(-1, loopType);
+        .SetLoops(-1, loopType)
+        .OnWaypointChange(OnWaypointReached);
+    }
 
+    void OnWaypointReached(int waypointIndex)
+    {
+        onWaypointReached?.Invoke(waypointIndex);
     }
 
     void OnDestroy()

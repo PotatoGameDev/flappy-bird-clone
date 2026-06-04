@@ -145,7 +145,6 @@ public class GameManager : MonoBehaviour
     {
         int advanceEnergy = GetAdvanceEnergy();
         Debug.Assert(State.CurrentLevel == State.CivTypePassed, "Cannot upgrade level if not in the max level currently");
-        Debug.Assert(State.CollectedEnergy >= advanceEnergy, "Cannot upgrade level if not in the max level currently");
 
         State.CollectedEnergy -= advanceEnergy;
         State.CivTypePassed++;

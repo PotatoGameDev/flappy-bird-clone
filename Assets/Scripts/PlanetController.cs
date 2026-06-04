@@ -228,11 +228,16 @@ public class PlanetController : MonoBehaviour
         totalShake = Mathf.Clamp(totalShake, 0f, 2f);
         if (totalShake > 0f)
         {
-            EffectsManager.Instance.StartSustainedShake(totalShake);
+            EffectsManager.Instance.StartSustainedShake(
+                    ShakeSource.BoundaryDamage,
+                    totalShake
+                    );
         }
         else
         {
-            EffectsManager.Instance.StopSustainedShake();
+            EffectsManager.Instance.StopSustainedShake(
+                    ShakeSource.BoundaryDamage
+                    );
         }
 
         // Ufo Swarm Damage:
