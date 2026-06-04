@@ -19,9 +19,21 @@ public class FlyingSaucerSwarmBossController : MonoBehaviour
         totalBossHealth = 0f;
         foreach (SwarmFollow boid in swarmController.Boids)
         {
-            FlyingSaucerController flyingSaucer = boid.GetComponent<FlyingSaucerController>();
-            totalBossHealth += flyingSaucer.CurrentLife;
-            flyingSaucer.DamageTaken += OnSwarmChange;
+            boid.TryGetComponent(out FlyingSaucerController flyingSaucer);
+            if (flyingSaucer != null)
+            {
+                totalBossHealth += flyingSaucer.CurrentLife;
+                flyingSaucer.DamageTaken += OnSwarmChange;
+                continue;
+            }
+
+            boid.TryGetComponent(out MotherShipperController motherShipper);
+            if (motherShipper != null)
+            {
+                totalBossHealth += motherShipper.CurrentLife;
+                motherShipper.DamageTaken += OnSwarmChange;
+                continue;
+            }
         }
 
         GameplayManager.Instance.SetBossHealth(totalBossHealth, totalBossHealth);
@@ -41,8 +53,19 @@ public class FlyingSaucerSwarmBossController : MonoBehaviour
         {
             if (boid != null && boid.enabled && boid.gameObject.activeInHierarchy)
             {
-                FlyingSaucerController flyingSaucer = boid.GetComponent<FlyingSaucerController>();
-                total += flyingSaucer.CurrentLife;
+                boid.TryGetComponent(out FlyingSaucerController flyingSaucer);
+                if (flyingSaucer != null)
+                {
+                    total += flyingSaucer.CurrentLife;
+                }
+                else
+                {
+                    boid.TryGetComponent(out MotherShipperController motherShipper);
+                    if (motherShipper != null)
+                    {
+                        total += motherShipper.CurrentLife;
+                    }
+                }
             }
         }
         return total;

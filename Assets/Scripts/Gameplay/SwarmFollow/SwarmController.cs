@@ -114,7 +114,7 @@ public class SwarmController : MonoBehaviour
         foreach (SwarmFollow n in Boids)
         {
             if (boid == n) continue;
-            if (!n.Active) continue;  // was checking boid.Active instead of n.Active - bug fix
+            if (!n.Active) continue;
             if (boid.Distance(n) < neighborRadius)
                 neighbors.Add(n);
         }
