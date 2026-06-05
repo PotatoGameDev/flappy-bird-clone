@@ -35,9 +35,9 @@ public class EffectsManager : MonoBehaviour
         Instance = null;
     }
 
-    public void Shake()
+    public void Shake(float forceMultiplier = 1.0f)
     {
-        impulseSource.GenerateImpulse(baseImpulseForce);
+        impulseSource.GenerateImpulse(baseImpulseForce * forceMultiplier);
     }
 
     public void Shake(Vector2 direction)

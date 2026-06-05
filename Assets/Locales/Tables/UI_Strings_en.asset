@@ -123,14 +123,41 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 51488510177280
+    m_Localized: 'Again, we managed to survive, but don''t celebrate yet!
+
+      We
+      managed to exploit the whole planet''s energy.
+
+      So now we have to find
+      a way to fully gather the energy of our SunStar.
+
+      We have our top men
+      working on it.
+
+
+      But meanwhile it seems the motherships cried to their
+      mommy.
+
+      We have to defeat this new, formidable boss...
+
+
+      ---------
+
+
+      Type
+      II in the Kardashev scale means that the civilization managed to
+
+      fully
+      exploit the energy of their stellar system''s star.
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 51544466386944
     m_Localized: 'This version of the game has not yet implemented this level fully
       :D
 
       Early access, amarite?'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 51544466386944
-    m_Localized: This level is also not ready yet :/
     m_Metadata:
       m_Items: []
   - m_Id: 52693919592448
@@ -390,6 +417,18 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 436066827628544
     m_Localized: Irritating Motherships
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5574157536063488
+    m_Localized: Motherships' Mom
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5574446511026176
+    m_Localized: TODO
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5575115317964800
+    m_Localized: Motherships' Mom came to complain!
     m_Metadata:
       m_Items: []
   references:
