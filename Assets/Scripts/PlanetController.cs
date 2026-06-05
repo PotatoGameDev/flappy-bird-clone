@@ -110,12 +110,12 @@ public class PlanetController : MonoBehaviour
 
     void OnEnable()
     {
-        jumpActionReference.action.started += OnJump;
+        jumpActionReference.action.performed += OnJump;
     }
 
     void OnDisable()
     {
-        jumpActionReference.action.started -= OnJump;
+        jumpActionReference.action.performed -= OnJump;
     }
 
     void Update()
@@ -449,6 +449,8 @@ public class PlanetController : MonoBehaviour
 
                 totalLaserDamage += peopleDied;
                 timeToLaserDamageSummary = 1; // one second after last damage
+
+                EffectsManager.Instance.Shake(0.5f);
             }
         }
     }

@@ -236,7 +236,7 @@ public class FlyingSaucerController : MonoBehaviour
     }
 
 
-    private void TakeHit(float hit, bool stun = false)
+    public void TakeHit(float hit, bool stun = false)
     {
         if (dead)
         {

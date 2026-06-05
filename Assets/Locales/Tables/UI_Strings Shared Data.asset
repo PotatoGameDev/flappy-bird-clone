@@ -287,6 +287,18 @@ MonoBehaviour:
     m_Key: gameplay_boss_name_1
     m_Metadata:
       m_Items: []
+  - m_Id: 5574157536063488
+    m_Key: gameplay_boss_name_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5574446511026176
+    m_Key: gameplay_boss_name_3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5575115317964800
+    m_Key: gameplay_boss_intro_title_2
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -104,27 +104,35 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 51488510177280
-    m_Localized: "Ten poziom nie jest w pe\u0142ni gotowy w tej wersji gry.\nEarly
-      acces, co nie?"
+    m_Localized: "Zn\xF3w uda\u0142o nam si\u0119 przetrwa\u0107, ale nie otwieramy
+      szampana!\nWykorzystali\u015Bmy w pe\u0142ni energi\u0119\_planety.\nMusimy
+      wi\u0119c znale\u017A\u0107 spos\xF3b na pe\u0142n\u0105 utylizacj\u0119 energii
+      naszej S\u0142o\u0144coGwiazdy.\nPracuj\u0105 ju\u017C nad tym nasi najlepsi
+      ludzie.\n\nTymczasem wygl\u0105da na to, \u017Ce Matko-Statki posz\u0142y si\u0119
+      poskar\u017Cy\u0107 mamusi.\nTeraz musimy pokona\u0107 tego nowego, przera\u017Caj\u0105cego
+      wroga...\n\n---------\n\nTyp II w skali Kardaszowa oznacza, \u017Ce twoja cywilizacja
+      opanowa\u0142a zasoby energetyczne lokalnej gwiazdy.\nTwoja cywilizacja zbmierza
+      ku temu celowi!"
     m_Metadata:
       m_Items: []
   - m_Id: 51544466386944
-    m_Localized: "Ten level te\u017C nie jest gotowy :/"
+    m_Localized: "Ten poziom nie jest w pe\u0142ni gotowy w tej wersji gry.\nEarly
+      acces, co nie?"
     m_Metadata:
       m_Items: []
   - m_Id: 47947540328448
     m_Localized: "Wyszli\u015Bmy zwyci\u0119sko ze wszystkich tych wojen i kataklizm\xF3w.\nOd
       prostej kom\xF3rki do pot\u0119\u017Cnej cywilizacji, jednocz\u0105c ca\u0142\u0105
       planet\u0119\_w pokoju.\nBez jednego wodza, tyrana. Wsp\xF3lnota lud\xF3w.\nNiestety,
-      jeste\u015Bmy \u015Bcigani przez dzik\u0105 band\u0119 wkurzonych statk\xF3w
-      matek.\nTo chyba nie przelewki!\nWskoczyli\u015Bmy wi\u0119c do intergalaktycznego
-      tunelu czasoprzestrzennego aby im uciec (tak jak to si\u0119 robi w takich
-      sytuacjach).\n\nMusimy zebra\u0107 wystarczaj\u0105co du\u017Co kulek energii,
-      by wyj\u015B\u0107 z tunelu i przej\u015B\u0107 do nast\u0119pnego etapu.\n\n---------\n\n\"Ciekawy\"
-      fakt:\nSkala Kardaszowa to system mierz\u0105cy, jak zaawansowana technologicznie
-      jest twoja cywilizacja galaktyczna!\nStarasz si\u0119\_uko\u0144czy\u0107 Typ
-      I, wi\u0119c Twoja cywilizacja pr\xF3buje wykorzysta\u0107 zasoby energii ca\u0142ej
-      swojej planety."
+      jeste\u015Bmy \u015Bcigani przez dzik\u0105 band\u0119 wkurzonych matko-statk\xF3w.\nTo
+      chyba nie przelewki!\nWskoczyli\u015Bmy wi\u0119c do intergalaktycznego tunelu
+      czasoprzestrzennego aby im uciec (tak jak to si\u0119 robi w takich sytuacjach).\n\nMusimy
+      zebra\u0107 wystarczaj\u0105co du\u017Co kulek energii, by wyj\u015B\u0107
+      z tunelu i przej\u015B\u0107 do nast\u0119pnego etapu.\n\n---------\n\n\"Ciekawostka\":\nSkala
+      Kardaszowa to system mierz\u0105cy, jak zaawansowana technologicznie jest twoja
+      cywilizacja galaktyczna!\nStarasz si\u0119\_uko\u0144czy\u0107 Typ I, wi\u0119c
+      Twoja cywilizacja pr\xF3buje wykorzysta\u0107 zasoby energii ca\u0142ej swojej
+      planety."
     m_Metadata:
       m_Items: []
   - m_Id: 52693919592448
@@ -350,7 +358,19 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 436066827628544
-    m_Localized: "Irytuj\u0105ce Statki Matki"
+    m_Localized: "Irytuj\u0105ce Matko-Statki"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5574157536063488
+    m_Localized: "Mama Matko-Statk\xF3w"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5574446511026176
+    m_Localized: TODO
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5575115317964800
+    m_Localized: "Mama Matko-Statk\xF3w przysz\u0142a ze skarg\u0105!"
     m_Metadata:
       m_Items: []
   references:

@@ -10,9 +10,14 @@ public class BossManager : MonoBehaviour
     [SerializeField] private GameObject bossNameTag;
     [SerializeField] private TextMeshProUGUI bossNameTagLabel;
 
+
+    [SerializeField] private GameObject motherShipperBossContainer;
+    [SerializeField] private float motherShipperBossPlayerSpeed = 10.0f;
+
     private bool bossActive;
 
     private float flyingSaucersBossContainerOffset;
+    private float motherShipperBossContainerOffset;
 
     void Start()
     {
@@ -20,6 +25,12 @@ public class BossManager : MonoBehaviour
 
         flyingSaucersBossContainerOffset = (
                 flyingSaucersBossContainer.transform.position -
+                GameplayManager.Instance.Player.transform.position
+            ).x;
+
+        motherShipperBossContainer.SetActive(false);
+        motherShipperBossContainerOffset = (
+                motherShipperBossContainer.transform.position -
                 GameplayManager.Instance.Player.transform.position
             ).x;
     }
@@ -32,20 +43,44 @@ public class BossManager : MonoBehaviour
     public void ActivateBoss()
     {
         bossActive = true;
-        GameplayManager.Instance.Player.speed = flyingSaucersBossPlayerSpeed;
 
-        float newX = GameplayManager.Instance.Player.transform.position.x
-            + flyingSaucersBossContainerOffset;
-        Vector3 newPos = flyingSaucersBossContainer.transform.position;
-        newPos.x = newX;
+        int level = GameManager.Instance.CurrentLevel + 1;
 
-        flyingSaucersBossContainer.transform.position = newPos;
-        flyingSaucersBossContainer.SetActive(true);
+        switch (level)
+        {
+            case 1:
+                {
+                    GameplayManager.Instance.Player.speed = flyingSaucersBossPlayerSpeed;
+
+                    float newX = GameplayManager.Instance.Player.transform.position.x
+                        + flyingSaucersBossContainerOffset;
+                    Vector3 newPos = flyingSaucersBossContainer.transform.position;
+                    newPos.x = newX;
+
+                    flyingSaucersBossContainer.transform.position = newPos;
+                    flyingSaucersBossContainer.SetActive(true);
+                    break;
+                }
+            case 2:
+                {
+                    GameplayManager.Instance.Player.speed = motherShipperBossPlayerSpeed;
+
+                    float newX = GameplayManager.Instance.Player.transform.position.x
+                        + motherShipperBossContainerOffset;
+                    Vector3 newPos = motherShipperBossContainer.transform.position;
+                    newPos.x = newX;
+
+                    motherShipperBossContainer.transform.position = newPos;
+                    motherShipperBossContainer.SetActive(true);
+                    break;
+                }
+            default:
+                break;
+        }
 
         bossNameTag.SetActive(true);
-        bossNameTagLabel.SetText(Loc.Get("gameplay_boss_intro_title_1"));
+        bossNameTagLabel.SetText(Loc.Get("gameplay_boss_intro_title_" + level.ToString()));
         StartCoroutine(DestroyBossNameTag());
-
         SoundManager.Instance.PlayBossMusic();
     }
 

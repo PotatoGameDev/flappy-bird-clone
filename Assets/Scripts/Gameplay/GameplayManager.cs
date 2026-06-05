@@ -383,15 +383,21 @@ public class GameplayManager : MonoBehaviour
 
         long peopleDied = type switch
         {
-            HitType.Spin => (long)(fraction * 1_000_000L),
-            HitType.BorderProximity => (long)(fraction * 1_000_000L),
-            HitType.BossCollision => (long)(fraction * 1_000_000L),
+            HitType.Spin => 1_000_000L,
+            HitType.BorderProximity => 1_000_000L,
+            HitType.BossCollision => 1_000_000L,
             HitType.BossLaser => 1_000L,
             HitType.GateCollision => 1_000_000L,
+            HitType.BossPlasmaCannon => 1_000_000L,
             _ => 0L
         };
 
-        if (peopleDied > CurrentPopulation) peopleDied = CurrentPopulation;
+        peopleDied = (long)(fraction * peopleDied);
+
+        if (peopleDied > CurrentPopulation)
+        {
+            peopleDied = CurrentPopulation;
+        }
 
         long newPeopleDied = peopleDied > shieldLeft
             ? (peopleDied - shieldLeft)
@@ -523,5 +529,6 @@ public enum HitType
     BossCollision,
     BossLaser,
     BorderProximity,
-    Spin
+    Spin,
+    BossPlasmaCannon,
 }

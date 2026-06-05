@@ -3,9 +3,11 @@ using System;
 using System.Collections;
 using Random = UnityEngine.Random;
 
+[RequireComponent(typeof(SwarmFollow))]
 public class MotherShipperController : MonoBehaviour
 {
     private static readonly WaitForSeconds WAIT_ONE_SECOND = new(1f);
+    private static readonly WaitForSeconds WAIT_TENTH_OF_SECOND = new(0.1f);
 
     private SwarmFollow swarmFollow;
     [SerializeField] private SpriteRenderer spriteRenderer;
@@ -43,7 +45,7 @@ public class MotherShipperController : MonoBehaviour
 
     [Header("Plasma Cannon")]
     [SerializeField] private GameObject plasmaCannon;
-    [SerializeField] private SpriteRenderer plasmaBeamSprite;
+    [SerializeField] private LineRenderer plasmaBeamLineRenderer;
     [SerializeField] private float plasmaCannonRotationSpeed = 45f;
 
     [SerializeField] private float plasmaCannonRadiusMin;
@@ -54,15 +56,25 @@ public class MotherShipperController : MonoBehaviour
     [SerializeField] private float plasmaBeamTargettingWidthMax = 0.5f;
     private float plasmaBeamTargettingWidthCurrent;
 
+    [SerializeField] private float plasmaBeamWidthMax = 1f;
+    [SerializeField] private float plasmaBeamLengthMax = 30f;
+
     private Phase phase = Phase.Idle;
     private float cannonAngle;
-    private Vector2 orbitOffset;
+    private Vector3 orbitOffset;
 
 
     private int waypointsTillAttack;
 
+    [SerializeField] private float flyingSaucerDamage = 50f;
+
     [Header("Other")]
     [SerializeField] private EffectsManager effectsManager;
+
+    [SerializeField] private float explosionCooldownSeconds = 0.1f;
+    private float lastExplosionTime = -Mathf.Infinity;
+
+    private long totalBeamKills = 0L;
 
     void Awake()
     {
@@ -92,6 +104,13 @@ public class MotherShipperController : MonoBehaviour
         plasmaBeamTargettingWidthCurrent = plasmaBeamTargettingWidthMin;
 
         waypointsTillAttack = 5; // Initially we attack on the 5th waypoint
+
+        // Initially we set the beam line to start and end in the ship 0,0
+        plasmaBeamLineRenderer.SetPositions(
+                new Vector3[] {
+                    transform.position,
+                    transform.position
+                });
     }
 
     void Update()
@@ -126,6 +145,7 @@ public class MotherShipperController : MonoBehaviour
 
         if (!Active)
         {
+            // For this type of boss this is not needed.
             //return;
         }
 
@@ -135,7 +155,7 @@ public class MotherShipperController : MonoBehaviour
         orbitOffset = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad))
             * plasmaCannonRadiusCurrent;
         plasmaCannon.transform.position = transform.position
-            + (Vector3)orbitOffset;
+            + orbitOffset;
         plasmaCannon.transform.up = -orbitOffset.normalized;
 
         switch (phase)
@@ -153,7 +173,12 @@ public class MotherShipperController : MonoBehaviour
                         2f * Time.deltaTime
                         );
 
-                SetBeamWidth(plasmaBeamTargettingWidthCurrent);
+                SetBeam(
+                        orbitOffset.normalized,
+                        plasmaBeamLengthMax,
+                        plasmaBeamTargettingWidthCurrent,
+                        plasmaBeamTargettingWidthCurrent // used as opacity
+                        );
 
                 Vector3 toPlayer = playerTransform.position - transform.position;
 
@@ -163,6 +188,11 @@ public class MotherShipperController : MonoBehaviour
                 if (Mathf.Approximately(targetAngle, cannonAngle))
                 {
                     phase = Phase.StartFiring;
+
+                    plasmaCannonAudioSource.PlayOneShot(
+                            plasmaCannonFireSoundClip
+                            );
+                    plasmaCannonAudioSource.loop = false;
                     break;
                 }
 
@@ -176,20 +206,22 @@ public class MotherShipperController : MonoBehaviour
                 orbitOffset = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad))
                     * plasmaCannonRadiusCurrent;
                 plasmaCannon.transform.position = transform.position
-                    + (Vector3)orbitOffset;
+                    + orbitOffset;
                 plasmaCannon.transform.up = -orbitOffset.normalized;
 
 
                 break;
             case Phase.StartFiring:
                 StartCoroutine(FiringCoroutine());
-                phase = Phase.Firing;
+                phase = Phase.SignalFiring;
+                break;
+            case Phase.SignalFiring:
+                // Nothing
                 break;
             case Phase.Firing:
                 // Nothing
                 break;
             case Phase.Idle:
-                // TODO: Some better condition for this trigger:
                 plasmaCannonRadiusCurrent = Mathf.Lerp(
                         plasmaCannonRadiusCurrent,
                         plasmaCannonRadiusMin,
@@ -202,6 +234,76 @@ public class MotherShipperController : MonoBehaviour
         }
     }
 
+    void FixedUpdate()
+    {
+        if (phase == Phase.Firing)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(
+                    transform.position,
+                    orbitOffset,
+                    plasmaBeamLengthMax,
+                    LayerMask.GetMask("Player", "Ufos")
+                    );
+
+            if (hit)
+            {
+                SetBeam(
+                        orbitOffset.normalized,
+                        hit.distance,
+                        1f,
+                        1f
+                        );
+
+                if (hit.collider.CompareTag("Player"))
+                {
+                    if (Time.time - lastExplosionTime >= explosionCooldownSeconds)
+                    {
+                        ExplosionController explosion = InstancePoolsManager.Instance.ExplosionControllerPool.Get();
+                        explosion.transform.position = hit.point;
+                        explosion.Init();
+                        lastExplosionTime = Time.time;
+
+                        effectsManager.Shake();
+                    }
+
+                    long peopleDied = GameplayManager.Instance.TakeHit(HitType.BossPlasmaCannon, Time.deltaTime);
+
+                    totalBeamKills += peopleDied;
+                }
+                else
+                {
+                    // Ufos:
+                    FlyingSaucerController flyingSaucer = hit.collider.GetComponentInParent<FlyingSaucerController>();
+                    flyingSaucer.TakeHit(flyingSaucerDamage * Time.deltaTime);
+
+                    if (Time.time - lastExplosionTime >= explosionCooldownSeconds)
+                    {
+                        ExplosionController explosion = InstancePoolsManager.Instance.ExplosionControllerPool.Get();
+                        explosion.transform.position = hit.point;
+                        explosion.Init();
+                        lastExplosionTime = Time.time;
+                    }
+                }
+            }
+            else
+            {
+                SetBeam(
+                        orbitOffset.normalized,
+                        plasmaBeamLengthMax,
+                        1f,
+                        1f
+                        );
+
+                if (totalBeamKills > 0L)
+                {
+                    GameplayManager.Instance.AddPopulationLossText(peopleDied: totalBeamKills);
+                    totalBeamKills = 0L;
+                }
+            }
+
+        }
+    }
+
     public void WaypointReached(int _)
     {
         if (phase == Phase.Idle)
@@ -211,9 +313,18 @@ public class MotherShipperController : MonoBehaviour
                 cannonAngle = 0f; // Starts targetting on the oposite of the player
                 phase = Phase.Targetting;
                 waypointsTillAttack = Random.Range(3, 7);
-                SetBeamWidth(plasmaBeamTargettingWidthMin);
+                SetBeam(
+                        orbitOffset.normalized,
+                        plasmaBeamLengthMax,
+                        plasmaBeamTargettingWidthMin,
+                        0f
+                        );
 
-                plasmaBeamSprite.enabled = true;
+                plasmaBeamLineRenderer.enabled = true;
+                Debug.Log("Enabled");
+
+                plasmaCannonAudioSource.PlayOneShot(plasmaCannonBootUpSoundClip);
+                plasmaCannonAudioSource.loop = true;
             }
             else
             {
@@ -224,8 +335,34 @@ public class MotherShipperController : MonoBehaviour
 
     IEnumerator FiringCoroutine()
     {
+        Debug.Log("FiringCoroutine");
+
+        // The beam at min scale to signal danger to the player:
+        SetBeam(
+                orbitOffset.normalized,
+                plasmaBeamLengthMax,
+                plasmaBeamTargettingWidthMin,
+                1.0f
+                );
+
+        yield return WAIT_TENTH_OF_SECOND;
+
+        // Hide the beam for a moment:
+        plasmaBeamLineRenderer.enabled = false;
+
+        yield return WAIT_TENTH_OF_SECOND;
+
         // The beam at full scale
-        SetBeamWidth(1.0f);
+        plasmaBeamLineRenderer.enabled = true;
+
+        phase = Phase.Firing;
+
+        SetBeam(
+                orbitOffset.normalized,
+                plasmaBeamLengthMax,
+                1.0f,
+                1.0f
+                );
 
         effectsManager.StartSustainedShake(ShakeSource.PlasmaBeam, 2.0f);
 
@@ -233,7 +370,8 @@ public class MotherShipperController : MonoBehaviour
         yield return WAIT_ONE_SECOND;
 
         effectsManager.StopSustainedShake(ShakeSource.PlasmaBeam);
-        plasmaBeamSprite.enabled = false;
+        plasmaBeamLineRenderer.enabled = false;
+
         phase = Phase.Idle;
     }
 
@@ -242,15 +380,22 @@ public class MotherShipperController : MonoBehaviour
         return CurrentLife == maxLife;
     }
 
-    public void SetBeamWidth(float width)
+    public void SetBeam(
+            Vector3 direction,
+            float length,
+            float width,
+            float opacity)
     {
-        Vector3 beamScale = plasmaBeamSprite.transform.localScale;
-        beamScale.x = width;
-        plasmaBeamSprite.transform.localScale = beamScale;
+        // 1 is the end point of the line, we only have 2 points, start and end
+        plasmaBeamLineRenderer.SetPosition(0, transform.position);
+        plasmaBeamLineRenderer.SetPosition(1, transform.position + direction * length);
+        plasmaBeamLineRenderer.startWidth = width;
+        plasmaBeamLineRenderer.endWidth = width;
 
-        Color plasmaColor = plasmaBeamSprite.color;
-        plasmaColor.a = width;
-        plasmaBeamSprite.color = plasmaColor;
+        Color plasmaColor = plasmaBeamLineRenderer.startColor;
+        plasmaColor.a = opacity;
+        plasmaBeamLineRenderer.startColor = plasmaColor;
+        plasmaBeamLineRenderer.endColor = plasmaColor;
     }
 
     public void Repair(int energy)
@@ -290,8 +435,6 @@ public class MotherShipperController : MonoBehaviour
                 bullet.FromTo(transform.position, to);
                 bullet.speed = bulletSpeed;
 
-                AudioClip clip = plasmaCannonFireSoundClip;
-                plasmaCannonAudioSource.PlayOneShot(clip);
 
                 currentCooldown = bulletCooldown;
             }
@@ -400,5 +543,9 @@ public class MotherShipperController : MonoBehaviour
 
 enum Phase
 {
-    Idle, Targetting, StartFiring, Firing
+    Idle,
+    Targetting,
+    StartFiring,
+    SignalFiring,
+    Firing
 }
