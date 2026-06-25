@@ -22,6 +22,8 @@ public class PlanetController : MonoBehaviour
     internal float ToorboBoost { get; set; }
 
     [SerializeField] private float jumpForce = 10f;
+
+    // TODO Couldn't have this been just a bool?
     private float currentJumpForce = 0f;
 
     private Rigidbody2D rb;
@@ -78,6 +80,9 @@ public class PlanetController : MonoBehaviour
     private float timeToLaserDamageSummary;
     private long totalLaserDamage = 0;
 
+    // Boss
+    [SerializeField] private BossManager bossManager;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -106,6 +111,7 @@ public class PlanetController : MonoBehaviour
 
         // Damage for getting too close to the sun or to the black hole
         StartCoroutine(UpdateOutOfBoundsDamage());
+
     }
 
     void OnEnable()
@@ -346,11 +352,17 @@ public class PlanetController : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext ctx)
     {
-        if (pauseMenuController.IsPaused)
+        if (pauseMenuController.IsPaused || Dead)
         {
             return;
         }
         currentJumpForce += jumpForce;
+
+        if (bossManager.IsFinalBossActive())
+        {
+            bossManager.GetFinalBoss().RegisterJump(jumpForce);
+        }
+
     }
 
     // Collisions:
