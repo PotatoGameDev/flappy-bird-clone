@@ -12,12 +12,15 @@ public class GateController : PooledInstance
 
     [SerializeField] private Vector2 targetSpread = Vector2.one;
 
-    [SerializeField] private EnergyBallController energyBallPrefab;
+    [SerializeField] private bool generateEnergy;
 
 
     public new void Init()
     {
-        StartCoroutine(GenerateEnergyBalls());
+        if (generateEnergy)
+        {
+            StartCoroutine(GenerateEnergyBalls());
+        }
 
         base.Init();
     }
