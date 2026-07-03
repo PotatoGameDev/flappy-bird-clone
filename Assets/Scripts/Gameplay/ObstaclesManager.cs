@@ -18,7 +18,6 @@ public class ObstaclesManager : MonoBehaviour
     private InstancePool<GateController> poolDistant;
 
     [SerializeField] private BossManager bossManager;
-    public static Queue<SpawnLog> spawnQueue = new();
 
     void Awake()
     {
@@ -51,35 +50,19 @@ public class ObstaclesManager : MonoBehaviour
             gateInst.Init();
 
             obstacles.Add(gateInst);
-            RegisterSpawn(pos);
 
-        }
-
-        // Generating the 'evil' gate, for the boss, if needed
-        if (bossManager.IsFinalBossActive())
-        {
-            if (spawnQueue.Count > 0)
+            // And the final boss obstacles:
+            if (bossManager.IsFinalBossActive())
             {
-                var entry = spawnQueue.Peek();
+                Vector3 distantPos = pos + bossManager.GetFinalBoss().PlayerOffset;
+                distantPos.z = 0f;
 
-                if (Time.time - entry.timestamp >= bossManager.GetFinalBoss().GetDelaySeconds())
-                {
-                    spawnQueue.Dequeue();
+                GateController gateDistantInst = poolDistant.Get();
+                gateDistantInst.transform.position = distantPos;
+                gateDistantInst.Init();
 
-                    // We want previous spawn point y, but new x
-                    // So we have normally spawned gate, some defined time after the last one.
-                    Vector3 position = Camera.main.ViewportToWorldPoint(new Vector3(1.1f, 0.5f, 1f));
-                    position.z = 0f;
-                    position.y = entry.position.y;
-
-                    GateController gateDistantInst = poolDistant.Get();
-                    gateDistantInst.transform.position = position;
-                    gateDistantInst.Init();
-
-                    obstaclesDistant.Add(gateDistantInst);
-                }
+                obstaclesDistant.Add(gateDistantInst);
             }
-
         }
     }
 
@@ -89,6 +72,7 @@ public class ObstaclesManager : MonoBehaviour
         {
             return;
         }
+
         // Cleanup:
         for (int i = obstacles.Count - 1; i >= 0; i--)
         {
@@ -111,19 +95,4 @@ public class ObstaclesManager : MonoBehaviour
             }
         }
     }
-
-    public void RegisterSpawn(Vector3 position)
-    {
-        spawnQueue.Enqueue(new SpawnLog
-        {
-            position = position,
-            timestamp = Time.time,
-        });
-    }
-}
-
-public struct SpawnLog
-{
-    public float timestamp;
-    public Vector3 position;
 }

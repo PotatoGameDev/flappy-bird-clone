@@ -25,6 +25,10 @@ public class PlanetController : MonoBehaviour
 
     // TODO Couldn't have this been just a bool?
     private float currentJumpForce = 0f;
+    private float lastJumpedTime = 0f;
+    [SerializeField]
+    private float jumpRocketBounceMaxTime = 0.1f; // How long after jumping the player will bounce the rockets fired by FinalBoss.
+                                                  // Sort of invincibility frames.
 
     private Rigidbody2D rb;
     private SpriteRenderer rendr;
@@ -91,6 +95,7 @@ public class PlanetController : MonoBehaviour
 
         GameplayManager.Instance.Player = this;
 
+        // Selecting the sprite
         SpriteHolder = transform.Find("Sprite");
 
         string selectedPlanetName = "planet0" + GameManager.Instance.PlanetType.ToString();
@@ -124,7 +129,7 @@ public class PlanetController : MonoBehaviour
         jumpActionReference.action.performed -= OnJump;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (pauseMenuController.IsPaused)
         {
@@ -199,7 +204,7 @@ public class PlanetController : MonoBehaviour
             // We lerp from the original color to the half of the red (so not so much red)
             rendr.color = Color.Lerp(originalColor, Color.Lerp(originalColor, Color.red, 0.5f), outOfBoundsDamagePerSecond);
 
-            long peopleDied = GameplayManager.Instance.TakeHit(HitType.BorderProximity, outOfBoundsDamagePerSecond * Time.deltaTime);
+            long peopleDied = GameplayManager.Instance.TakeHit(HitType.BorderProximity, outOfBoundsDamagePerSecond * Time.fixedDeltaTime);
 
             if (peopleDied > 0)
             {
@@ -252,7 +257,7 @@ public class PlanetController : MonoBehaviour
             GameplayManager.Instance.AddPopulationLossText(totalLaserDamage, LaserHitTextsPrefix, LaserHitTextsCount, false);
             totalLaserDamage = 0;
         }
-        timeToLaserDamageSummary -= Time.deltaTime;
+        timeToLaserDamageSummary -= Time.fixedDeltaTime;
     }
 
     private IEnumerator UpdateRorationalPenalties()
@@ -357,12 +362,7 @@ public class PlanetController : MonoBehaviour
             return;
         }
         currentJumpForce += jumpForce;
-
-        if (bossManager.IsFinalBossActive())
-        {
-            bossManager.GetFinalBoss().RegisterJump(jumpForce);
-        }
-
+        lastJumpedTime = Time.time;
     }
 
     // Collisions:
@@ -386,13 +386,46 @@ public class PlanetController : MonoBehaviour
             hitType = HitType.BossCollision;
 
             // TODO May be more enemy types later
-            if (collision.gameObject.GetComponent<FlyingSaucerController>().Active)
+            // TODO This was == Active, why? Changed to != Active
+            if (!collision.gameObject.GetComponent<FlyingSaucerController>().Active)
             {
                 return;
             }
             // Nerfing damage, because UFOs seem lighter than the pipes, also it was hard to beat them.
             maxHitForce = 5f;
             maxHitPercent = 10f;
+        }
+        else if (collision.gameObject.CompareTag("FinalBoss"))
+        {
+            speed = initialSpeed;
+            bossManager.GetFinalBoss().OnPlayerHit();
+        }
+        else if (collision.gameObject.CompareTag("Rocket"))
+        {
+            hitType = HitType.Rocket;
+            RocketController rocket = collision.gameObject.GetComponent<RocketController>();
+
+            if (Time.time - lastJumpedTime < jumpRocketBounceMaxTime)
+            {
+                // TODO: Add satisfying 'parry' sound
+                maxHitForce = 1f;
+                maxHitPercent = 1f;
+
+                rocket.PlayerHit(true);
+            }
+            else
+            {
+                maxHitForce = 5f;
+                maxHitPercent = 10f;
+
+                rocket.PlayerHit(false);
+            }
+
+            if (rocket.type == RocketController.RocketType.Tiny)
+            {
+                maxHitForce = 0.1f;
+                maxHitPercent = 0.1f;
+            }
         }
 
         SoundManager.Instance.PlayRandomHit(hitAudioClips, hitVolume);
@@ -410,7 +443,6 @@ public class PlanetController : MonoBehaviour
 
         // This hit fraction will calculate the percent of population, that died.
         long peopleDied = GameplayManager.Instance.TakeHit(hitType, hitFraction);
-
 
         // Shaking the screen in direction of the collision
         // TODO: We should pass the shake in percent actually! RelativeVelocity means nothing to shake.

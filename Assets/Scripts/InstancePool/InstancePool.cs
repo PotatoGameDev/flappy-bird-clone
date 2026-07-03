@@ -8,6 +8,7 @@ namespace PotatoGameDev.Pool
     {
         private readonly T prefab;
         private readonly Queue<T> pool = new();
+        private readonly HashSet<T> active = new();
         private readonly Transform parent;
 
         public InstancePool(T prefab, Transform parent = null)
@@ -23,6 +24,16 @@ namespace PotatoGameDev.Pool
             for (int i = 0; i < prewarm; i++)
             {
                 pool.Enqueue(Create());
+            }
+        }
+
+        public void ReleaseAll()
+        {
+            // Copy first: Release() mutates the active set while we iterate.
+            var snapshot = new List<T>(active);
+            foreach (var inst in snapshot)
+            {
+                inst.Release();
             }
         }
 
@@ -46,6 +57,7 @@ namespace PotatoGameDev.Pool
             }
 
             var obj = pool.Dequeue();
+            active.Add(obj);
 
             obj.transform.SetParent(parent);
             // TODO I think init should go here... Not called in the user code.
@@ -58,6 +70,9 @@ namespace PotatoGameDev.Pool
 
         public void Release(T inst)
         {
+            // Guard against double-release corrupting the queue with duplicates.
+            if (!active.Remove(inst)) return;
+
             inst.gameObject.SetActive(false);
             inst.enabled = false;
             inst.transform.SetParent(parent);

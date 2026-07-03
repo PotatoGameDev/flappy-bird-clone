@@ -84,6 +84,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GateDistant
       objectReference: {fileID: 0}
+    - target: {fileID: 6037163735289081218, guid: 161dda93af069b949867802970020114, type: 3}
+      propertyPath: m_TagString
+      value: GateDistant
+      objectReference: {fileID: 0}
     - target: {fileID: 6937742846471120566, guid: 161dda93af069b949867802970020114, type: 3}
       propertyPath: m_Sprite
       value: 

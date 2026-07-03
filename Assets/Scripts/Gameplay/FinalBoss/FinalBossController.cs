@@ -1,122 +1,227 @@
 using UnityEngine;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Random = UnityEngine.Random;
+using System.Collections;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class FinalBossController : MonoBehaviour
 {
+    private readonly WaitForSeconds TINY_ROCKET_INTERVAL = new(0.1f);
+    private readonly WaitForSeconds BURST_INTERVAL = new(5f);
+
+    [SerializeField] private long life = 1_000_000_000L;
+    [SerializeField] private long maxLife = 1_000_000_000L;
+
+    // How much life has to go for every shield segment to fall off
+    private const float lifeStepFraction = 0.1f;
+
     [SerializeField] private float delaySeconds = 0.1f;
     public float GetDelaySeconds() => delaySeconds;
 
+    [SerializeField] private GameObject[] shieldChunks;
+
+    [SerializeField] private float chunkFallOffForce = 10;
+
+    public Transform SpriteHolder { get; private set; }
+
     public Vector3 PlayerOffset { get; private set; }
 
-    private bool jumpedThisFrame;
-    private float currentJumpForce = 0f;
-
-    public static Queue<JumpLog> jumpQueue = new();
-
     private Rigidbody2D rb;
+    private Transform playerTransform;
+    private Rigidbody2D playerRb;
 
-    private FinalBossPhase phase = FinalBossPhase.Init;
+    private int previousGateCount = 0;
+
+    private struct PlayerSample
+    {
+        public Vector3 position;
+        public float rotation;
+        public bool gatePassed;
+    }
+    private readonly Queue<PlayerSample> history = new();
+
+    private int delaySteps;
+
+    private Vector2 previousPosition;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        rb.bodyType = RigidbodyType2D.Kinematic;
+        rb.interpolation = RigidbodyInterpolation2D.None;
     }
 
     void Start()
     {
         PlanetController player = GameplayManager.Instance.Player;
-        Vector3 position = player.transform.position;
-        position.x += player.speed * delaySeconds;
-        transform.position = position;
-        PlayerOffset = transform.position - player.transform.position;
+        playerTransform = player.transform;
+        playerRb = player.GetComponent<Rigidbody2D>();
 
-        StartCoroutine(InitCoroutine());
-    }
+        delaySteps = Mathf.Max(0, Mathf.RoundToInt(delaySeconds / Time.fixedDeltaTime));
+        float effectiveDelay = delaySteps * Time.fixedDeltaTime;
 
-    private IEnumerator InitCoroutine()
-    {
-        rb.bodyType = RigidbodyType2D.Kinematic;
-        yield return new WaitForSeconds(delaySeconds);
+        float aheadDistance = player.speed * effectiveDelay;
+        PlayerOffset = new Vector3(2f * aheadDistance, 0f, 0f);
 
-        phase = FinalBossPhase.Chase;
-        rb.bodyType = RigidbodyType2D.Dynamic;
-    }
-
-    void Update()
-    {
-        float jumpForce = 0f;
-        if (phase != FinalBossPhase.Init)
+        Vector3 playerPos = playerTransform.position;
+        float startRotation = playerRb.rotation;
+        for (int i = delaySteps; i >= 1; i--)
         {
-            if (jumpQueue.Count > 0)
+            history.Enqueue(new PlayerSample
             {
-                var entry = jumpQueue.Peek();
+                position = playerPos - new Vector3(player.speed * i * Time.fixedDeltaTime, 0f, 0f),
+                rotation = startRotation,
+                gatePassed = false,
+            });
+        }
 
-                if (Time.time - entry.timestamp >= delaySeconds)
-                {
-                    jumpQueue.Dequeue();
+        rb.position = playerPos + new Vector3(aheadDistance, 0f, 0f);
+        rb.rotation = startRotation;
+        previousPosition = rb.position;
 
-                    if (entry.didJump)
-                    {
-                        jumpForce = entry.force;
-                    }
-                }
+        // Life
+        life = maxLife;
+
+        UpdateShield();
+
+        GameplayManager.Instance.SetBossHealth(life, maxLife);
+
+        // Selecting the sprite
+        SpriteHolder = transform.Find("Sprite");
+
+        string selectedPlanetName = "planet0" + GameManager.Instance.PlanetType.ToString();
+
+        for (int i = 0; i < SpriteHolder.childCount; i++)
+        {
+            Transform child = SpriteHolder.GetChild(i);
+            child.gameObject.SetActive(child.name == selectedPlanetName);
+        }
+
+        StartCoroutine(FireTinyRockets());
+    }
+
+    private IEnumerator FireTinyRockets()
+    {
+        yield return BURST_INTERVAL;
+        while (true)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                ShootRocket(RocketController.RocketType.Tiny);
+                yield return TINY_ROCKET_INTERVAL;
             }
-        }
-
-        float effectiveSpeed = GameplayManager.Instance.Player.speed;
-
-        // See PlanetController, the same logic:
-        if (jumpForce > 0f)
-        {
-            rb.linearVelocity = new Vector2(effectiveSpeed, jumpForce);
-        }
-        else
-        {
-            rb.linearVelocity = new Vector2(effectiveSpeed, rb.linearVelocity.y);
+            yield return BURST_INTERVAL;
         }
     }
 
-    public void RegisterJump(float force)
+    public void OnPlayerHit()
     {
-        currentJumpForce = force;
-        jumpedThisFrame = true;
+        // If the player hits the boss, it gives the boss full bar of damage
+        // TODO applay the "parry" logic, when the boss gets full bar if 
+        // the player pressed "jump" right before the hit.
+        GetDamage((long)(maxLife * lifeStepFraction));
     }
 
-    void LateUpdate()
+    private void GetDamage(long damage)
     {
-        if (phase == FinalBossPhase.Init)
+        if (damage > life)
+        {
+            damage = life;
+        }
+
+        life -= damage;
+
+        GameplayManager.Instance.SetBossHealth(life, maxLife);
+
+        UpdateShield();
+    }
+
+    private void UpdateShield()
+    {
+        float ratio = (float)life / maxLife;
+        int shieldLevel = (int)(ratio * shieldChunks.Length);
+        if (shieldLevel < 0 || shieldLevel >= shieldChunks.Length)
         {
             return;
         }
-        if (jumpedThisFrame)
-        {
-            jumpQueue.Enqueue(new JumpLog
-            {
-                timestamp = Time.time,
-                didJump = jumpedThisFrame,
-                force = currentJumpForce,
-            });
 
-            // Resetting
-            jumpedThisFrame = false;
-            currentJumpForce = 0f;
+        for (int i = shieldLevel; i < shieldChunks.Length; i++)
+        {
+            GameObject chunk = shieldChunks[i];
+            Rigidbody2D chunkRb = chunk.GetComponent<Rigidbody2D>();
+            chunkRb.simulated = true;
+            chunkRb.AddForce((rb.position - chunkRb.position) * chunkFallOffForce, ForceMode2D.Impulse);
+        }
+    }
+
+    private void ShootRocket(RocketController.RocketType type = RocketController.RocketType.Normal)
+    {
+        RocketController rocket = type == RocketController.RocketType.Normal
+            ? InstancePoolsManager.Instance.RocketControllerPool.Get()
+            : InstancePoolsManager.Instance.TinyRocketControllerPool.Get();
+
+        Vector2 velocity = rb.position - previousPosition;
+        velocity.y *= -20f;
+
+        if (type == RocketController.RocketType.Normal)
+        {
+            rocket.transform.position = transform.position + (Vector3.right * 1.2f);
+        }
+        else if (type == RocketController.RocketType.Tiny)
+        {
+            rocket.transform.position = transform.position - (Vector3.right * 1.2f);
+            rocket.transform.Rotate(0, 0, 180);
+        }
+
+        rocket.Boss = this;
+        rocket.InitialVelocity = velocity;
+        rocket.Init();
+    }
+
+    void FixedUpdate()
+    {
+        bool passedGate = GameplayManager.Instance.GateCount > previousGateCount;
+        history.Enqueue(new PlayerSample
+        {
+            position = playerTransform.position,
+            rotation = playerRb.rotation,
+            gatePassed = passedGate,
+        });
+        previousGateCount = GameplayManager.Instance.GateCount;
+
+        while (history.Count > delaySteps + 1)
+        {
+            history.Dequeue();
+        }
+
+        PlayerSample sample = history.Peek();
+        Vector3 targetPos = sample.position + PlayerOffset;
+
+        rb.MovePosition(targetPos);
+        rb.MoveRotation(sample.rotation);
+
+        if (sample.gatePassed)
+        {
+            ShootRocket();
+        }
+
+        previousPosition = rb.position;
+    }
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Rocket"))
+        {
+            RocketController rocket = collision.gameObject.GetComponent<RocketController>();
+
+            if (rocket.IsChasingBoss())
+            {
+                rocket.Explode();
+
+                if (rocket.type == RocketController.RocketType.Normal)
+                {
+                    GetDamage((long)(maxLife * lifeStepFraction));
+                }
+            }
         }
     }
 }
-
-public struct JumpLog
-{
-    public float timestamp;
-    public bool didJump;
-    public float force;
-}
-
-enum FinalBossPhase
-{
-    Init, Chase
-}
-

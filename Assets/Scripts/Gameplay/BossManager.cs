@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 
@@ -28,6 +29,10 @@ public class BossManager : MonoBehaviour
     [SerializeField] private bool forceBoss = false;
     [SerializeField] private int forceLevel = 1;
 
+
+    [SerializeField] private GameObject bossHealthBarContainer;
+    [SerializeField] private GameObject gateCounterContainer;
+
     void Start()
     {
         flyingSaucersBossContainer.SetActive(false);
@@ -48,7 +53,9 @@ public class BossManager : MonoBehaviour
                 GameplayManager.Instance.Player.transform.position
             ).x;
 
-        // TODO Do not commit, debug:
+        gateCounterContainer.SetActive(true);
+        bossHealthBarContainer.SetActive(false);
+
         if (forceBoss)
         {
             GameManager.Instance.CurrentLevel = forceLevel - 1;
@@ -127,6 +134,10 @@ public class BossManager : MonoBehaviour
         bossNameTagLabel.SetText(Loc.Get("gameplay_boss_intro_title_" + level.ToString()));
         StartCoroutine(DestroyBossNameTag());
         SoundManager.Instance.PlayBossMusic();
+
+
+        gateCounterContainer.SetActive(false);
+        bossHealthBarContainer.SetActive(true);
     }
 
     private IEnumerator DestroyBossNameTag()
