@@ -61,11 +61,8 @@ public class GameplayManager : MonoBehaviour
 
     [SerializeField] private Slider energyGoalSlider;
 
-    [Header("Boss")]
-    [SerializeField] private TextMeshProUGUI bossLabel;
     [SerializeField] private Slider bossHealthSlider;
     [SerializeField] private GameObject bossHealthSliderFill;
-    [SerializeField] private GameObject bossHealthBarContainer;
     [SerializeField] private BossManager bossManager;
 
     [SerializeField] private GameObject winAccomplishedPanel;
@@ -147,8 +144,6 @@ public class GameplayManager : MonoBehaviour
                 if (!bossManager.IsBossActive())
                 {
                     bossManager.ActivateBoss();
-                    gateCounterContainer.SetActive(false);
-                    bossHealthBarContainer.SetActive(true);
                 }
             }
         }
@@ -205,28 +200,12 @@ public class GameplayManager : MonoBehaviour
             shieldLevelSlider.value = shieldLeft;
         }
 
-        switch (GameManager.Instance.CurrentLevel)
-        {
-            case 0:
-                bossLabel.SetText(Loc.Get("gameplay_boss_name_1"));
-                break;
-            case 1:
-                bossLabel.SetText("TODO");
-                break;
-            case 2:
-                bossLabel.SetText("TODO");
-                break;
-            default:
-                break;
-        }
-        gateCounterContainer.SetActive(true);
-        bossHealthBarContainer.SetActive(false);
-
         energyGoalSlider.minValue = 0;
         energyGoalSlider.maxValue = GameManager.Instance.GetAdvanceEnergy();
         energyGoalSlider.value = 0;
     }
 
+    // TODO This should be in the boss manager...
     public void SetBossHealth(float health, float maxHealth)
     {
         if (health != bossHealthSlider.maxValue)
@@ -241,7 +220,6 @@ public class GameplayManager : MonoBehaviour
             bossHealthSliderFill.SetActive(false);
 
             StartCoroutine(BossFightWinSequence());
-
         }
     }
 
@@ -257,6 +235,7 @@ public class GameplayManager : MonoBehaviour
 
         GameManager.Instance.UnlockNextPhase();
 
+        InstancePoolsManager.Instance.ReleaseAll();
         SceneManager.LoadScene("NewMenu");
     }
 
@@ -389,6 +368,7 @@ public class GameplayManager : MonoBehaviour
             HitType.BossLaser => 1_000L,
             HitType.GateCollision => 1_000_000L,
             HitType.BossPlasmaCannon => 1_000_000L,
+            HitType.Rocket => 500_000,
             _ => 0L
         };
 
@@ -496,6 +476,7 @@ public class GameplayManager : MonoBehaviour
     private IEnumerator DeathSequence()
     {
         yield return WAIT_2_SECONDS;
+        InstancePoolsManager.Instance.ReleaseAll();
         SceneManager.LoadScene("NewMenu");
     }
 
@@ -531,4 +512,5 @@ public enum HitType
     BorderProximity,
     Spin,
     BossPlasmaCannon,
+    Rocket,
 }

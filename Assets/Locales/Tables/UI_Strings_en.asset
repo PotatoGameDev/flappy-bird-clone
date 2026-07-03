@@ -154,10 +154,40 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 51544466386944
-    m_Localized: 'This version of the game has not yet implemented this level fully
-      :D
+    m_Localized: 'No one can stop us! Now that we have defeated that Bad Mothershipper
 
-      Early access, amarite?'
+      we
+      are on the way to conquering the whole galaxy and gathering it''s energy.
+
+      Our
+      scientists already found a way to jump from four to five dimensions using that
+      energy.
+
+      You know what this means? Bagels!
+
+      So there is absolutely
+      no one who could stop... Wait, what''s that?
+
+      Is it some kind of small
+      moon? That''s no moon, that''s a rogue planet, and an angry one!
+
+      So
+      you know the drill, gather energy, defeat the Ultimate Enemy so we can
+
+      finally
+      push the whopper button!
+
+
+      ---------
+
+
+      Type III in the Kardashev
+      scale means that the civilization managed to
+
+      fully exploit the energy
+      of the whole galaxy. That''s a lot of energy!
+
+'
     m_Metadata:
       m_Items: []
   - m_Id: 52693919592448
@@ -424,11 +454,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 5574446511026176
-    m_Localized: TODO
+    m_Localized: Ultimate Enemy
     m_Metadata:
       m_Items: []
   - m_Id: 5575115317964800
     m_Localized: Motherships' Mom came to complain!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15712873009115136
+    m_Localized: You meet your Ultimate Enemy!
     m_Metadata:
       m_Items: []
   references:

@@ -14,6 +14,21 @@ public class InstancePoolsManager : MonoBehaviour
     [SerializeField] private ExplosionController explosionControllerPrefab;
     public InstancePool<ExplosionController> ExplosionControllerPool { get; private set; }
 
+    [SerializeField] private RocketController rocketControllerPrefab;
+    [SerializeField] private RocketController tinyRocketControllerPrefab;
+
+    public InstancePool<RocketController> RocketControllerPool { get; private set; }
+    public InstancePool<RocketController> TinyRocketControllerPool { get; private set; }
+
+    public void ReleaseAll()
+    {
+        EnergyBallControllerPool.ReleaseAll();
+        BulletControllerPool.ReleaseAll();
+        ExplosionControllerPool.ReleaseAll();
+        RocketControllerPool.ReleaseAll();
+        TinyRocketControllerPool.ReleaseAll();
+    }
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -35,5 +50,9 @@ public class InstancePoolsManager : MonoBehaviour
         BulletControllerPool = new(bulletControllerPrefab, transform);
 
         ExplosionControllerPool = new(explosionControllerPrefab, transform);
+
+        RocketControllerPool = new(rocketControllerPrefab, transform);
+
+        TinyRocketControllerPool = new(tinyRocketControllerPrefab, transform);
     }
 }

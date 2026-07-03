@@ -812,7 +812,7 @@ MonoBehaviour:
   topTarget: {fileID: 5688973695012318577}
   bottomTarget: {fileID: 1179603662151759131}
   targetSpread: {x: 1.5, y: 2}
-  energyBallPrefab: {fileID: 2164918874062921971, guid: 8ef246984dd6b7b12b760712181df773, type: 3}
+  generateEnergy: 1
 --- !u!1 &6447914222976409509
 GameObject:
   m_ObjectHideFlags: 0
