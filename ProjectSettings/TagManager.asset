@@ -15,6 +15,7 @@ TagManager:
   - FinalBoss
   - Rocket
   - GateDistant
+  - Mothershipper
   layers:
   - Default
   - TransparentFX
