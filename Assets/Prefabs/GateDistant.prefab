@@ -100,6 +100,10 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 8028266045150266681, guid: 161dda93af069b949867802970020114, type: 3}
+      propertyPath: generateEnergy
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8520416789643869658, guid: 161dda93af069b949867802970020114, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

@@ -88,6 +88,18 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: -8314891355249332808, guid: e08f6763dd6d7bed4a1b307eb75fa78f, type: 3}
+    - target: {fileID: 8100195580845332385, guid: 59151d610c1cbe131be876d37c3fd91c, type: 3}
+      propertyPath: m_Pitch
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8100195580845332385, guid: 59151d610c1cbe131be876d37c3fd91c, type: 3}
+      propertyPath: Priority
+      value: 241
+      objectReference: {fileID: 0}
+    - target: {fileID: 8100195580845332385, guid: 59151d610c1cbe131be876d37c3fd91c, type: 3}
+      propertyPath: m_Volume
+      value: 0.203
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -448,9 +448,15 @@ public class PlanetController : MonoBehaviour
                 maxHitPercent = 10f;
             }
         }
+        else if (collision.gameObject.CompareTag("Trash"))
+        {
+            maxHitForce = 5f;
+            maxHitPercent = 10f;
+            parried = false;
+        }
         else
         {
-            throw new System.Exception("Unknown hit: " + collision.gameObject.tag);
+            throw new System.Exception("Unknown hit: " + collision.gameObject.tag + " - " + collision.gameObject.name);
         }
 
         SoundManager.Instance.PlayRandomHit(hitAudioClips, hitVolume);
@@ -504,6 +510,7 @@ public class PlanetController : MonoBehaviour
             {
                 ExplosionController explosion = InstancePoolsManager.Instance.ExplosionControllerPool.Get();
                 explosion.transform.SetParent(SpriteHolder);
+
                 explosion.transform.position = collider.transform.position;
                 explosion.transform.localScale = Vector2.one * Random.Range(0.2f, 0.4f);
 
