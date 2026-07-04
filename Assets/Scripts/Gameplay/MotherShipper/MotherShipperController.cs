@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using Random = UnityEngine.Random;
 
+[RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(SwarmFollow))]
 public class MotherShipperController : MonoBehaviour
 {
@@ -59,6 +60,8 @@ public class MotherShipperController : MonoBehaviour
     [SerializeField] private float plasmaBeamWidthMax = 1f;
     [SerializeField] private float plasmaBeamLengthMax = 30f;
 
+    private Rigidbody2D rb;
+
     private Phase phase = Phase.Idle;
     private float cannonAngle;
     private Vector3 orbitOffset;
@@ -81,6 +84,8 @@ public class MotherShipperController : MonoBehaviour
         swarmFollow = GetComponent<SwarmFollow>();
         originalColor = spriteRenderer.color;
         CurrentLife = maxLife;
+
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void Start()
@@ -474,20 +479,18 @@ public class MotherShipperController : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    public void PlayerHit(bool parried)
     {
         if (dead || !Active)
         {
             return;
         }
-        if (!collision.gameObject.CompareTag("Player"))
-        {
-            return;
-        }
 
-        TakeHit(5 * collision.relativeVelocity.magnitude, true);
+        PlanetController player = GameplayManager.Instance.Player;
+        Vector2 relativeVelocity = rb.linearVelocity - player.GetVelocity();
+        float parriedFactor = parried ? 2f : 1f;
+        TakeHit(relativeVelocity.magnitude * parriedFactor, true);
     }
-
 
     private void TakeHit(float hit, bool stun = false)
     {

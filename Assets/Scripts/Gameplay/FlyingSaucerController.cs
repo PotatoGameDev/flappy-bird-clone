@@ -45,6 +45,8 @@ public class FlyingSaucerController : MonoBehaviour
 
     [SerializeField] private float maxSmokeEmission = 50f;
 
+    private Rigidbody2D rb;
+
     /*
     [Header("Border Damage")]
     [SerializeField] private float borderDangerMargin = 2f;
@@ -56,6 +58,8 @@ public class FlyingSaucerController : MonoBehaviour
         swarmFollow = GetComponent<SwarmFollow>();
         originalColor = spriteRenderer.color;
         CurrentLife = maxLife;
+
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void Start()
@@ -221,18 +225,17 @@ public class FlyingSaucerController : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    public void PlayerHit(bool parried)
     {
         if (dead || !Active)
         {
             return;
         }
-        if (!collision.gameObject.CompareTag("Player"))
-        {
-            return;
-        }
 
-        TakeHit(5 * collision.relativeVelocity.magnitude, true);
+        PlanetController player = GameplayManager.Instance.Player;
+        Vector2 relativeVelocity = rb.linearVelocity - player.GetVelocity();
+        float parriedFactor = parried ? 2f : 1f;
+        TakeHit(relativeVelocity.magnitude * parriedFactor, true);
     }
 
 

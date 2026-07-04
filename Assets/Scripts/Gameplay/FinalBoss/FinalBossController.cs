@@ -6,7 +6,6 @@ using System.Collections;
 public class FinalBossController : MonoBehaviour
 {
     private readonly WaitForSeconds TINY_ROCKET_INTERVAL = new(0.1f);
-    private readonly WaitForSeconds BURST_INTERVAL = new(5f);
 
     [SerializeField] private long life = 1_000_000_000L;
     [SerializeField] private long maxLife = 1_000_000_000L;
@@ -96,29 +95,23 @@ public class FinalBossController : MonoBehaviour
             child.gameObject.SetActive(child.name == selectedPlanetName);
         }
 
-        StartCoroutine(FireTinyRockets());
     }
 
-    private IEnumerator FireTinyRockets()
+    private IEnumerator FireTinyRockets(int count)
     {
-        yield return BURST_INTERVAL;
-        while (true)
+        for (int i = 0; i <= count; i++)
         {
-            for (int i = 0; i < 10; i++)
-            {
-                ShootRocket(RocketController.RocketType.Tiny);
-                yield return TINY_ROCKET_INTERVAL;
-            }
-            yield return BURST_INTERVAL;
+            ShootRocket(RocketController.RocketType.Tiny);
+            yield return TINY_ROCKET_INTERVAL;
         }
     }
 
-    public void OnPlayerHit()
+    public void PlayerHit(bool parried)
     {
         // If the player hits the boss, it gives the boss full bar of damage
-        // TODO applay the "parry" logic, when the boss gets full bar if 
-        // the player pressed "jump" right before the hit.
-        GetDamage((long)(maxLife * lifeStepFraction));
+
+        float parryMultiplier = parried ? 0.1f : 1f;
+        GetDamage((long)(maxLife * lifeStepFraction * parryMultiplier));
     }
 
     private void GetDamage(long damage)
@@ -201,7 +194,17 @@ public class FinalBossController : MonoBehaviour
 
         if (sample.gatePassed)
         {
-            ShootRocket();
+            int val = Random.Range(0, 2);
+            if (val == 0)
+            {
+                ShootRocket();
+            }
+            else
+            {
+                StartCoroutine(FireTinyRockets(
+                            GameplayManager.Instance.GateCount
+                            ));
+            }
         }
 
         previousPosition = rb.position;

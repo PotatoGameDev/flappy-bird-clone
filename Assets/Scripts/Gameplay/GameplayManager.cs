@@ -356,7 +356,7 @@ public class GameplayManager : MonoBehaviour
         rpmLabel.SetText("RPM: {0}", (int)Mathf.Abs(Player.GetRpm()));
     }
 
-    public long TakeHit(HitType type, float fraction = 1f)
+    public long TakeHit(HitType type, float fraction = 1f, bool parried = false)
     {
         fraction = Mathf.Clamp01(fraction);
 
@@ -368,11 +368,15 @@ public class GameplayManager : MonoBehaviour
             HitType.BossLaser => 1_000L,
             HitType.GateCollision => 1_000_000L,
             HitType.BossPlasmaCannon => 1_000_000L,
+            HitType.Mothershipper => 1_000_000L,
+            HitType.FinalBoss => 2_000_000L,
             HitType.Rocket => 500_000,
             _ => 0L
         };
 
-        peopleDied = (long)(fraction * peopleDied);
+        float parryFraction = parried ? 0.1f : 1f;
+
+        peopleDied = (long)(fraction * peopleDied * parryFraction);
 
         if (peopleDied > CurrentPopulation)
         {
@@ -512,5 +516,7 @@ public enum HitType
     BorderProximity,
     Spin,
     BossPlasmaCannon,
+    Mothershipper,
+    FinalBoss,
     Rocket,
 }

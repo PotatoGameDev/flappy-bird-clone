@@ -25,10 +25,6 @@ public class PlanetController : MonoBehaviour
 
     // TODO Couldn't have this been just a bool?
     private float currentJumpForce = 0f;
-    private float lastJumpedTime = 0f;
-    [SerializeField]
-    private float jumpRocketBounceMaxTime = 0.1f; // How long after jumping the player will bounce the rockets fired by FinalBoss.
-                                                  // Sort of invincibility frames.
 
     private Rigidbody2D rb;
     private SpriteRenderer rendr;
@@ -36,7 +32,6 @@ public class PlanetController : MonoBehaviour
     public Vector2 Velocity => rb.linearVelocity;
 
     [SerializeField] private float damageFlashingDurationSeconds = 1f;
-    [SerializeField] private float shieldFlashingDurationSeconds = 1f;
 
     private readonly float flashSpeed = 0.2f;
 
@@ -58,10 +53,6 @@ public class PlanetController : MonoBehaviour
     [SerializeField] private ParticleSystem[] spinDoctorParticleSystemsLeft;
     [SerializeField] private ParticleSystem[] spinDoctorParticleSystemsRight;
 
-    // Shield
-    [SerializeField] private SpriteRenderer shieldRenderer;
-    private Coroutine shieldCoroutine;
-
     // Burning Damage
     [SerializeField] private GameObject burningEffect;
     [SerializeField] private float borderDangerMargin = 1.0f;
@@ -71,8 +62,6 @@ public class PlanetController : MonoBehaviour
 
     private float rotationShake = 0f;
     private float boundaryDamageShake = 0f;
-    //private float speedShake = 0f;
-    //
 
     private const int LaserHitTextsCount = 4;
     private const string LaserHitTextsPrefix = "casualties_laser";
@@ -86,6 +75,10 @@ public class PlanetController : MonoBehaviour
 
     // Boss
     [SerializeField] private BossManager bossManager;
+
+    // Other
+    [SerializeField] private EnergyShieldController shieldController;
+
 
     void Awake()
     {
@@ -362,7 +355,8 @@ public class PlanetController : MonoBehaviour
             return;
         }
         currentJumpForce += jumpForce;
-        lastJumpedTime = Time.time;
+
+        shieldController.RegisterJump();
     }
 
     // Collisions:
@@ -372,66 +366,96 @@ public class PlanetController : MonoBehaviour
         if (Dead) return;
 
         // Calculate hit fraction:
-        float maxHitPercent = 100f;
-        float maxHitForce = 10f;
 
         HitType hitType = HitType.GateCollision;
+
+        float maxHitForce;
+        float maxHitPercent;
+        bool parried;
+
 
         if (collision.gameObject.CompareTag("GatePipe"))
         {
             maxHitForce = 20f;
+            maxHitPercent = 100f;
+            parried = false;
         }
         else if (collision.gameObject.CompareTag("Enemy"))
         {
+            // Enemy is the small flying saucer
             hitType = HitType.BossCollision;
 
-            // TODO May be more enemy types later
-            // TODO This was == Active, why? Changed to != Active
-            if (!collision.gameObject.GetComponent<FlyingSaucerController>().Active)
+            FlyingSaucerController flyingSaucer = collision.gameObject.GetComponent<FlyingSaucerController>();
+            if (flyingSaucer.Active)
             {
-                return;
+                parried = shieldController.TryParry();
+                maxHitForce = 10f;
+                maxHitPercent = 100f;
+
+                flyingSaucer.PlayerHit(parried);
             }
-            // Nerfing damage, because UFOs seem lighter than the pipes, also it was hard to beat them.
-            maxHitForce = 5f;
-            maxHitPercent = 10f;
+            else
+            {
+                maxHitForce = 0f;
+                maxHitPercent = 0f;
+                parried = false;
+            }
+        }
+        else if (collision.gameObject.CompareTag("Mothershipper"))
+        {
+            hitType = HitType.Mothershipper;
+
+            parried = shieldController.TryParry();
+
+            MotherShipperController motherShipper = collision.gameObject.GetComponent<MotherShipperController>();
+
+            motherShipper.PlayerHit(parried);
+            maxHitForce = 20f;
+            maxHitPercent = 100f;
         }
         else if (collision.gameObject.CompareTag("FinalBoss"))
         {
+            hitType = HitType.FinalBoss;
+
+            // Slowing down after every boss hit to give space for next sequence
             speed = initialSpeed;
-            bossManager.GetFinalBoss().OnPlayerHit();
+
+            parried = shieldController.TryParry();
+
+            FinalBossController finalBoss = collision.gameObject.GetComponent<FinalBossController>();
+            finalBoss.PlayerHit(parried);
+
+            maxHitForce = 20f;
+            maxHitPercent = 100f;
         }
         else if (collision.gameObject.CompareTag("Rocket"))
         {
             hitType = HitType.Rocket;
+
             RocketController rocket = collision.gameObject.GetComponent<RocketController>();
 
-            if (Time.time - lastJumpedTime < jumpRocketBounceMaxTime)
-            {
-                // TODO: Add satisfying 'parry' sound
-                maxHitForce = 1f;
-                maxHitPercent = 1f;
+            parried = shieldController.TryParry();
+            rocket.PlayerHit(parried);
 
-                rocket.PlayerHit(true);
+            if (rocket.type == RocketController.RocketType.Tiny)
+            {
+                maxHitForce = 1f;
+                maxHitPercent = 2f;
             }
             else
             {
                 maxHitForce = 5f;
                 maxHitPercent = 10f;
-
-                rocket.PlayerHit(false);
             }
-
-            if (rocket.type == RocketController.RocketType.Tiny)
-            {
-                maxHitForce = 0.1f;
-                maxHitPercent = 0.1f;
-            }
+        }
+        else
+        {
+            throw new System.Exception("Unknown hit: " + collision.gameObject.tag);
         }
 
         SoundManager.Instance.PlayRandomHit(hitAudioClips, hitVolume);
 
-        ShowShieldIfAvailable();
-
+        shieldController.StartFlashing();
 
         // Here we get the magnitude clamped by our max:
         float hitForce = Mathf.Clamp(collision.relativeVelocity.magnitude, 0f, maxHitForce);
@@ -442,7 +466,7 @@ public class PlanetController : MonoBehaviour
         float hitFraction = hitPercent / 100f;
 
         // This hit fraction will calculate the percent of population, that died.
-        long peopleDied = GameplayManager.Instance.TakeHit(hitType, hitFraction);
+        long peopleDied = GameplayManager.Instance.TakeHit(hitType, hitFraction, parried);
 
         // Shaking the screen in direction of the collision
         // TODO: We should pass the shake in percent actually! RelativeVelocity means nothing to shake.
@@ -462,14 +486,6 @@ public class PlanetController : MonoBehaviour
         }
     }
 
-    private void ShowShieldIfAvailable()
-    {
-        if (shieldCoroutine == null && GameplayManager.Instance.ShieldAvailable())
-        {
-            shieldCoroutine = StartCoroutine(ShieldFlashing(shieldRenderer));
-        }
-    }
-
     public void OnTriggerEnter2D(Collider2D collider)
     {
         if (Dead) return;
@@ -481,7 +497,7 @@ public class PlanetController : MonoBehaviour
 
         if (collider.CompareTag("Bullet"))
         {
-            ShowShieldIfAvailable();
+            shieldController.StartFlashing();
 
             long peopleDied = GameplayManager.Instance.TakeHit(HitType.BossLaser);
             if (peopleDied > 0f)
@@ -513,6 +529,11 @@ public class PlanetController : MonoBehaviour
         return rb.angularVelocity / 6f;
     }
 
+    public Vector2 GetVelocity()
+    {
+        return rb.linearVelocity;
+    }
+
     public void AddRpm(float rpm)
     {
         rb.angularVelocity += rpm * 6f;
@@ -536,25 +557,6 @@ public class PlanetController : MonoBehaviour
         r.color = originalColor;
     }
 
-    private IEnumerator ShieldFlashing(SpriteRenderer r)
-    {
-        float elapsed = 0f;
-        Color originalColor = r.color;
-
-        while (elapsed < shieldFlashingDurationSeconds)
-        {
-            elapsed += Time.deltaTime;
-
-            Color color = r.color;
-            color.a = Mathf.PingPong(Time.time * flashSpeed, 1f);
-
-            r.color = color;
-            yield return null;
-        }
-
-        r.color = originalColor;
-        shieldCoroutine = null;
-    }
 
     public void Death()
     {
