@@ -3,6 +3,8 @@ using PotatoGameDev.Pool;
 using System.Collections;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(ProximityBeeper))]
+[RequireComponent(typeof(AudioSource))]
 public class RocketController : PooledInstance
 {
     public enum RocketType
@@ -39,11 +41,13 @@ public class RocketController : PooledInstance
     [SerializeField] private float bounceBoostForce = 100f;
 
     private Rigidbody2D rb;
+    private ProximityBeeper beeper;
 
     public Vector3 InitialVelocity { get; set; }
 
     public FinalBossController Boss { get; set; }
 
+    [SerializeField] private AudioSource audioSource;
 
     public new void Init()
     {
@@ -56,12 +60,18 @@ public class RocketController : PooledInstance
         rb.SetRotation(0f);
         rb.AddForce(Vector3.right * initialBoostForce, ForceMode2D.Impulse);
 
+        beeper.enabled = true;
+
+        audioSource.Play();
+
         StartCoroutine(Timeout());
     }
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        beeper = GetComponent<ProximityBeeper>();
+        audioSource.loop = true;
     }
 
     public void PlayerHit(bool bounce)
@@ -86,7 +96,6 @@ public class RocketController : PooledInstance
 
     void FixedUpdate()
     {
-
         if (state == State.ChasingPlayer)
         {
             var player = GameplayManager.Instance.Player;
@@ -138,6 +147,8 @@ public class RocketController : PooledInstance
             Vector2 direction = (Vector2)Boss.transform.position - rb.position;
             direction.Normalize();
             rb.AddForce(direction * movementForceBoss, ForceMode2D.Force);
+
+            beeper.enabled = false;
         }
     }
 
@@ -148,6 +159,9 @@ public class RocketController : PooledInstance
         ExplosionController explosion = InstancePoolsManager.Instance.ExplosionControllerPool.Get();
 
         explosion.transform.position = transform.position;
+
+        audioSource.Stop();
+        SoundManager.Instance.PlayExplosion();
 
         Release();
     }

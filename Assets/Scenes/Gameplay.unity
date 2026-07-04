@@ -5933,7 +5933,7 @@ GameObject:
   - component: {fileID: 105911963}
   m_Layer: 0
   m_Name: planet-evil-chunk-3
-  m_TagString: Untagged
+  m_TagString: Trash
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6816,7 +6816,7 @@ GameObject:
   - component: {fileID: 135620418}
   m_Layer: 0
   m_Name: planet-evil-chunk-5
-  m_TagString: Untagged
+  m_TagString: Trash
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12633,7 +12633,7 @@ GameObject:
   - component: {fileID: 257772457}
   m_Layer: 0
   m_Name: planet-evil-chunk-6
-  m_TagString: Untagged
+  m_TagString: Trash
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -23202,7 +23202,7 @@ GameObject:
   - component: {fileID: 372249168}
   m_Layer: 0
   m_Name: planet-evil-chunk-8
-  m_TagString: Untagged
+  m_TagString: Trash
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29334,7 +29334,7 @@ GameObject:
   - component: {fileID: 505521670}
   m_Layer: 0
   m_Name: planet-evil-chunk-4
-  m_TagString: Untagged
+  m_TagString: Trash
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -33744,7 +33744,7 @@ GameObject:
   - component: {fileID: 1085985352}
   m_Layer: 0
   m_Name: planet-evil-chunk-1
-  m_TagString: Untagged
+  m_TagString: Trash
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -38209,7 +38209,7 @@ GameObject:
   - component: {fileID: 1549496982}
   m_Layer: 0
   m_Name: planet-evil-chunk-9
-  m_TagString: Untagged
+  m_TagString: Trash
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -44195,7 +44195,7 @@ GameObject:
   - component: {fileID: 1672836511}
   m_Layer: 0
   m_Name: planet-evil-chunk-2
-  m_TagString: Untagged
+  m_TagString: Trash
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -56832,7 +56832,7 @@ GameObject:
   - component: {fileID: 1954382479}
   m_Layer: 0
   m_Name: planet-evil-chunk-7
-  m_TagString: Untagged
+  m_TagString: Trash
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
