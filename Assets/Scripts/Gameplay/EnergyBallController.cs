@@ -113,7 +113,7 @@ public class EnergyBallController : PooledInstance
 
     void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.CompareTag("Enemy"))
+        if (collider.gameObject.CompareTag("FlyingSaucer"))
         {
             if (collider.transform == targetTransform)
             {
