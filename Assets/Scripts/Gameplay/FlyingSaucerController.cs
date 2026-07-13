@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(SwarmFollow))]
 [RequireComponent(typeof(AudioSource))]
-public class FlyingSaucerController : MonoBehaviour
+public class FlyingSaucerController : MonoBehaviour, IPlayerHitReceiver
 {
     private static readonly WaitForSeconds WAIT_ONE_SECOND = new(1f);
 
@@ -21,13 +21,12 @@ public class FlyingSaucerController : MonoBehaviour
 
     private float halfLife;
     public float CurrentLife { get; private set; }
-    private bool dead;
+    public FlyingSaucerState state = FlyingSaucerState.ACTIVE;
 
-    public bool Active
-    {
-        get => swarmFollow.Active;
-        set => swarmFollow.Active = value;
-    }
+    [SerializeField]
+    private float damageFactor = 100f;
+
+    private bool playerInShootingRange = false;
 
     [SerializeField] private float damageFlashingDurationSeconds = 1f;
     private Color originalColor;
@@ -70,7 +69,7 @@ public class FlyingSaucerController : MonoBehaviour
 
     void Update()
     {
-        if (dead) return;
+        if (state == FlyingSaucerState.DEAD) return;
 
         if (currentCooldown > 0f)
         {
@@ -105,7 +104,7 @@ public class FlyingSaucerController : MonoBehaviour
             StartCoroutine(DeathSequence());
         }
 
-        if (!Active)
+        if (state != FlyingSaucerState.ACTIVE)
         {
             return;
         }
@@ -140,6 +139,33 @@ public class FlyingSaucerController : MonoBehaviour
         TakeHit(outOfBoundsDamagePerSecond * borderDangerMultiplier * Time.deltaTime);
         */
 
+
+        if (playerInShootingRange)
+        {
+            if (currentCooldown <= 0)
+            {
+                BulletController bullet = InstancePoolsManager.Instance.BulletControllerPool.Get();
+                bullet.Init();
+
+                bullet.transform.position = transform.position;
+
+                // Adding spread when the UFO is dying
+                Vector2 to = GameplayManager.Instance.Player.transform.position;
+                if (CurrentLife <= halfLife)
+                {
+                    to += Random.insideUnitCircle * (5f * (CurrentLife / halfLife));
+                }
+
+                bullet.FromTo(transform.position, to);
+                bullet.speed = bulletSpeed;
+
+                AudioClip clip = laserSoundClips[Random.Range(0, laserSoundClips.Length)];
+                laserAudioSource.pitch = Random.Range(1f, 2f);
+                laserAudioSource.PlayOneShot(clip);
+
+                currentCooldown = bulletCooldown;
+            }
+        }
     }
 
     public bool IsFullHealth()
@@ -158,52 +184,42 @@ public class FlyingSaucerController : MonoBehaviour
         flashingCoroutine = StartCoroutine(HealthFlashing(false));
     }
 
-    void OnTriggerStay2D(Collider2D collider)
+    void OnTriggerEnter2D(Collider2D collider)
     {
-        if (dead || !Active)
+        if (state != FlyingSaucerState.ACTIVE)
         {
             return;
         }
         if (collider.CompareTag("Player"))
         {
-            if (currentCooldown <= 0)
-            {
-                BulletController bullet = InstancePoolsManager.Instance.BulletControllerPool.Get();
-                bullet.Init();
+            playerInShootingRange = true;
+        }
+    }
 
-                bullet.transform.position = transform.position;
+    void OnTriggerExit2D(Collider2D collider)
+    {
+        if (state != FlyingSaucerState.ACTIVE)
+        {
+            return;
+        }
 
-                // Adding spread when the UFO is dying
-                Vector2 to = collider.transform.position;
-                if (CurrentLife <= halfLife)
-                {
-                    to += Random.insideUnitCircle * (5f * (CurrentLife / halfLife));
-                }
-
-                bullet.FromTo(transform.position, to);
-                bullet.speed = bulletSpeed;
-
-                AudioClip clip = laserSoundClips[Random.Range(0, laserSoundClips.Length)];
-                laserAudioSource.pitch = Random.Range(1f, 2f);
-                laserAudioSource.PlayOneShot(clip);
-
-                currentCooldown = bulletCooldown;
-            }
+        if (collider.CompareTag("Player"))
+        {
+            playerInShootingRange = false;
         }
     }
 
     IEnumerator HitStun()
     {
-        Active = false;
+        state = FlyingSaucerState.STUNNED;
         yield return WAIT_ONE_SECOND;
 
-        Active = true;
+        state = FlyingSaucerState.ACTIVE;
     }
 
     IEnumerator DeathSequence()
     {
-        dead = true;
-        Active = false;
+        state = FlyingSaucerState.DEAD;
 
         yield return WAIT_ONE_SECOND;
 
@@ -225,23 +241,26 @@ public class FlyingSaucerController : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void PlayerHit(bool parried)
+    public void PlayerHit(PlayerHitType type)
     {
-        if (dead || !Active)
+        if (state != FlyingSaucerState.ACTIVE)
         {
             return;
         }
 
         PlanetController player = GameplayManager.Instance.Player;
         Vector2 relativeVelocity = rb.linearVelocity - player.GetVelocity();
-        float parriedFactor = parried ? 2f : 1f;
-        TakeHit(relativeVelocity.magnitude * parriedFactor, true);
+
+        long damage = (long)(relativeVelocity.magnitude * IPlayerHitReceiver.CalculateHitFraction(type) * damageFactor);
+
+        Debug.Log("Damage: " + gameObject.GetInstanceID() + " = " + damage);
+        TakeHit(damage, true);
     }
 
 
     public void TakeHit(float hit, bool stun = false)
     {
-        if (dead)
+        if (state == FlyingSaucerState.DEAD)
         {
             // Don't check for swarmFollow.Active, because we want to do accrued damage even when not.
             return;
@@ -289,4 +308,9 @@ public class FlyingSaucerController : MonoBehaviour
         flashingCoroutine = null;
     }
 
+}
+
+public enum FlyingSaucerState
+{
+    ACTIVE, STUNNED, DEAD
 }

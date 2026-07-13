@@ -47,6 +47,7 @@ public class PlanetController : MonoBehaviour
     [SerializeField] private AudioClip[] hitAudioClips;
     [SerializeField] private AudioClip[] quakeAudioClips;
 
+
     // Particles
     [SerializeField] private ParticleSystem peopleParticleSystem;
 
@@ -356,7 +357,7 @@ public class PlanetController : MonoBehaviour
         }
         currentJumpForce += jumpForce;
 
-        shieldController.RegisterJump();
+        shieldController.ActivateJumpShield();
     }
 
     // Collisions:
@@ -373,7 +374,6 @@ public class PlanetController : MonoBehaviour
         float maxHitPercent;
         bool parried;
 
-
         if (collision.gameObject.CompareTag("GatePipe"))
         {
             maxHitForce = 20f;
@@ -386,13 +386,11 @@ public class PlanetController : MonoBehaviour
             hitType = HitType.BossCollision;
 
             FlyingSaucerController flyingSaucer = collision.gameObject.GetComponent<FlyingSaucerController>();
-            if (flyingSaucer.Active)
+            if (flyingSaucer.state != FlyingSaucerState.DEAD)
             {
-                parried = shieldController.TryParry();
+                parried = shieldController.TryParry(flyingSaucer);
                 maxHitForce = 10f;
                 maxHitPercent = 100f;
-
-                flyingSaucer.PlayerHit(parried);
             }
             else
             {
@@ -405,11 +403,9 @@ public class PlanetController : MonoBehaviour
         {
             hitType = HitType.Mothershipper;
 
-            parried = shieldController.TryParry();
-
             MotherShipperController motherShipper = collision.gameObject.GetComponent<MotherShipperController>();
 
-            motherShipper.PlayerHit(parried);
+            parried = shieldController.TryParry(motherShipper);
             maxHitForce = 20f;
             maxHitPercent = 100f;
         }
@@ -420,10 +416,9 @@ public class PlanetController : MonoBehaviour
             // Slowing down after every boss hit to give space for next sequence
             speed = initialSpeed;
 
-            parried = shieldController.TryParry();
 
             FinalBossController finalBoss = collision.gameObject.GetComponent<FinalBossController>();
-            finalBoss.PlayerHit(parried);
+            parried = shieldController.TryParry(finalBoss);
 
             maxHitForce = 20f;
             maxHitPercent = 100f;
@@ -434,8 +429,7 @@ public class PlanetController : MonoBehaviour
 
             RocketController rocket = collision.gameObject.GetComponent<RocketController>();
 
-            parried = shieldController.TryParry();
-            rocket.PlayerHit(parried);
+            parried = shieldController.TryParry(rocket);
 
             if (rocket.type == RocketController.RocketType.Tiny)
             {
@@ -461,7 +455,7 @@ public class PlanetController : MonoBehaviour
 
         SoundManager.Instance.PlayRandomHit(hitAudioClips, hitVolume);
 
-        shieldController.StartFlashing();
+        shieldController.ActivateProtectShield();
 
         // Here we get the magnitude clamped by our max:
         float hitForce = Mathf.Clamp(collision.relativeVelocity.magnitude, 0f, maxHitForce);
@@ -503,7 +497,7 @@ public class PlanetController : MonoBehaviour
 
         if (collider.CompareTag("Bullet"))
         {
-            shieldController.StartFlashing();
+            shieldController.ActivateProtectShield();
 
             long peopleDied = GameplayManager.Instance.TakeHit(HitType.BossLaser);
             if (peopleDied > 0f)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class FinalBossController : MonoBehaviour
+public class FinalBossController : MonoBehaviour, IPlayerHitReceiver
 {
     private readonly WaitForSeconds TINY_ROCKET_INTERVAL = new(0.1f);
 
@@ -19,6 +19,12 @@ public class FinalBossController : MonoBehaviour
     [SerializeField] private GameObject[] shieldChunks;
 
     [SerializeField] private float chunkFallOffForce = 10;
+
+    [SerializeField]
+    private int tinyRocketsCountInitial = 3;
+    [SerializeField]
+    private int tinyRocketsCountIncrease = 1;
+    private int tinyRocketsCount;
 
     public Transform SpriteHolder { get; private set; }
 
@@ -95,23 +101,35 @@ public class FinalBossController : MonoBehaviour
             child.gameObject.SetActive(child.name == selectedPlanetName);
         }
 
+        tinyRocketsCount = tinyRocketsCountInitial;
     }
 
-    private IEnumerator FireTinyRockets(int count)
+    private IEnumerator FireTinyRockets()
     {
-        for (int i = 0; i <= count; i++)
+        for (int i = 0; i <= tinyRocketsCount; i++)
         {
             ShootRocket(RocketController.RocketType.Tiny);
             yield return TINY_ROCKET_INTERVAL;
         }
+
+        tinyRocketsCount += tinyRocketsCountInitial;
     }
 
-    public void PlayerHit(bool parried)
+    public void PlayerHit(PlayerHitType type)
     {
-        // If the player hits the boss, it gives the boss full bar of damage
+        // Boss gets a certain fraction of one 'segment' of his max life.
+        // So, say boss has 100 life and 10 segments of it.
+        // If the player perfectly timed the hit with the jump, the boss will get one full segment,
+        // which is 10 damage. 
+        // If the player just touched the boss, the boss will lose a tiny amount of the segment.
+        // TODO: This is not hit velocity based, is that bad?
+        long damage = (long)(
+                IPlayerHitReceiver.CalculateHitFraction(type)
+                * lifeStepFraction
+                * maxLife
+                );
 
-        float parryMultiplier = parried ? 0.1f : 1f;
-        GetDamage((long)(maxLife * lifeStepFraction * parryMultiplier));
+        GetDamage(damage);
     }
 
     private void GetDamage(long damage)
@@ -201,9 +219,7 @@ public class FinalBossController : MonoBehaviour
             }
             else
             {
-                StartCoroutine(FireTinyRockets(
-                            GameplayManager.Instance.GateCount
-                            ));
+                StartCoroutine(FireTinyRockets());
             }
         }
 
