@@ -10,13 +10,13 @@ TagManager:
   - BlackHoleBoundary
   - GatePipe
   - Bullet
-  - Enemy
   - Energy
   - FinalBoss
   - Rocket
   - GateDistant
   - Mothershipper
   - Trash
+  - FlyingSaucer
   layers:
   - Default
   - TransparentFX

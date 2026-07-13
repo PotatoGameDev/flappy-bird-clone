@@ -380,7 +380,7 @@ public class PlanetController : MonoBehaviour
             maxHitPercent = 100f;
             parried = false;
         }
-        else if (collision.gameObject.CompareTag("Enemy"))
+        else if (collision.gameObject.CompareTag("FlyingSaucer"))
         {
             // Enemy is the small flying saucer
             hitType = HitType.BossCollision;
