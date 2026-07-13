@@ -5185,7 +5185,7 @@ MonoBehaviour:
   finalBossContainer: {fileID: 1086831020}
   finalBossPlayerSpeed: 5
   finalBoss: {fileID: 1885914594}
-  forceBoss: 1
+  forceBoss: 0
   forceLevel: 3
   bossHealthBarContainer: {fileID: 1262686247}
   gateCounterContainer: {fileID: 1694599427}
@@ -5601,7 +5601,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 430, y: -0.000061035156}
+  m_AnchoredPosition: {x: 430, y: -0.00012207031}
   m_SizeDelta: {x: 462.66, y: 90}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &99888005
@@ -7134,7 +7134,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 387, y: -0.000061035156}
+  m_AnchoredPosition: {x: 387, y: -0.00012207031}
   m_SizeDelta: {x: 462.66, y: 90}
   m_Pivot: {x: 0, y: 1}
 --- !u!4 &148050846 stripped
@@ -35382,7 +35382,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1153, y: 0.000061035156}
+  m_AnchoredPosition: {x: 1153, y: 0.00012207031}
   m_SizeDelta: {x: 462.66, y: 90}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1221503358
@@ -37348,6 +37348,7 @@ GameObject:
   - component: {fileID: 1476349417}
   - component: {fileID: 1476349416}
   - component: {fileID: 1476349418}
+  - component: {fileID: 1476349419}
   m_Layer: 0
   m_Name: EnergyShield
   m_TagString: Untagged
@@ -37464,9 +37465,106 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   shieldFlashingDurationSeconds: 1
-  parryExpandTime: 0.5
   parryTimeMax: 0.2
   maxScale: {x: 1.3, y: 1.3, z: 1.3}
+  parrySound: {fileID: 8300000, guid: 2bba036dbc363a863b62a5a2b5581c3c, type: 3}
+--- !u!82 &1476349419
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1476349414}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 1404047878373043671, guid: d06778051fb33e19c93c3cb4ab9aadd6, type: 2}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 116
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1487053131
 GameObject:
   m_ObjectHideFlags: 0
@@ -38004,6 +38102,7 @@ MonoBehaviour:
   bulletCooldown: 0.5
   bulletSpeed: 15
   maxLife: 10000
+  damageFactor: 100
   damageFlashingDurationSeconds: 1
   smokeEmitter: {fileID: 271066284}
   plasmaCannonAudioSource: {fileID: 1524372872}
@@ -56173,6 +56272,8 @@ MonoBehaviour:
   - {fileID: 1672836507}
   - {fileID: 1085985348}
   chunkFallOffForce: 10
+  tinyRocketsCountInitial: 3
+  tinyRocketsCountIncrease: 1
 --- !u!50 &1885914596
 Rigidbody2D:
   serializedVersion: 5
@@ -59242,7 +59343,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00024414062, y: -0.05999756}
+  m_AnchoredPosition: {x: -0.00024414062, y: -0.059936523}
   m_SizeDelta: {x: 0.0006, y: 0.099975586}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &4065301455101948390

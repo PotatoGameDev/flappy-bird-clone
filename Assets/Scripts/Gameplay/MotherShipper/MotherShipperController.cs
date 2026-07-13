@@ -5,10 +5,11 @@ using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(SwarmFollow))]
-public class MotherShipperController : MonoBehaviour
+public class MotherShipperController : MonoBehaviour, IPlayerHitReceiver
 {
     private static readonly WaitForSeconds WAIT_ONE_SECOND = new(1f);
     private static readonly WaitForSeconds WAIT_TENTH_OF_SECOND = new(0.1f);
+    private static readonly float MAGNITUDE_DAMAGE_FACTOR = 20f;
 
     private SwarmFollow swarmFollow;
     [SerializeField] private SpriteRenderer spriteRenderer;
@@ -22,6 +23,10 @@ public class MotherShipperController : MonoBehaviour
     private float halfLife;
     public float CurrentLife { get; private set; }
     private bool dead;
+
+    [SerializeField]
+    private float damageFactor = 100f;
+
 
     public bool Active
     {
@@ -326,7 +331,6 @@ public class MotherShipperController : MonoBehaviour
                         );
 
                 plasmaBeamLineRenderer.enabled = true;
-                Debug.Log("Enabled");
 
                 plasmaCannonAudioSource.PlayOneShot(plasmaCannonBootUpSoundClip);
                 plasmaCannonAudioSource.loop = true;
@@ -340,8 +344,6 @@ public class MotherShipperController : MonoBehaviour
 
     IEnumerator FiringCoroutine()
     {
-        Debug.Log("FiringCoroutine");
-
         // The beam at min scale to signal danger to the player:
         SetBeam(
                 orbitOffset.normalized,
@@ -414,38 +416,6 @@ public class MotherShipperController : MonoBehaviour
         flashingCoroutine = StartCoroutine(HealthFlashing(false));
     }
 
-    void OnTriggerStay2D(Collider2D collider)
-    {
-        if (dead || !Active)
-        {
-            return;
-        }
-
-        if (collider.CompareTag("Player"))
-        {
-            if (currentCooldown <= 0)
-            {
-                BulletController bullet = InstancePoolsManager.Instance.BulletControllerPool.Get();
-                bullet.Init();
-
-                bullet.transform.position = transform.position;
-
-                // Adding spread when the UFO is dying
-                Vector2 to = collider.transform.position;
-                if (CurrentLife <= halfLife)
-                {
-                    to += Random.insideUnitCircle * (5f * (CurrentLife / halfLife));
-                }
-
-                bullet.FromTo(transform.position, to);
-                bullet.speed = bulletSpeed;
-
-
-                currentCooldown = bulletCooldown;
-            }
-        }
-    }
-
     IEnumerator HitStun()
     {
         Active = false;
@@ -479,7 +449,7 @@ public class MotherShipperController : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void PlayerHit(bool parried)
+    public void PlayerHit(PlayerHitType type)
     {
         if (dead || !Active)
         {
@@ -488,8 +458,9 @@ public class MotherShipperController : MonoBehaviour
 
         PlanetController player = GameplayManager.Instance.Player;
         Vector2 relativeVelocity = rb.linearVelocity - player.GetVelocity();
-        float parriedFactor = parried ? 2f : 1f;
-        TakeHit(relativeVelocity.magnitude * parriedFactor, true);
+
+        long damage = (long)(relativeVelocity.magnitude * IPlayerHitReceiver.CalculateHitFraction(type) * damageFactor);
+        TakeHit(damage, true);
     }
 
     private void TakeHit(float hit, bool stun = false)

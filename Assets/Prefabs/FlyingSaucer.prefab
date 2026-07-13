@@ -356,6 +356,7 @@ MonoBehaviour:
   bulletCooldown: 1
   bulletSpeed: 25
   maxLife: 100
+  damageFactor: 10
   damageFlashingDurationSeconds: 1
   smokeEmitter: {fileID: 8017984363257697828}
   laserAudioSource: {fileID: 3286544182892661564}

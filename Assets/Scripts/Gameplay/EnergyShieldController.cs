@@ -1,18 +1,19 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(AudioSource))]
 public class EnergyShieldController : MonoBehaviour
 {
     [SerializeField] private float shieldFlashingDurationSeconds = 1f;
-    [SerializeField] private float parryExpandTime = 0.5f;
 
     private readonly float flashSpeed = 0.2f;
 
     private float lastJumpedTime = 0f;
-    [SerializeField]
-    private float parryTimeMax = 0.2f; // How long after jumping the player will bounce the rockets fired by FinalBoss.
-                                       // Sort of invincibility frames.
+
+    [SerializeField] private float parryTimeMax = 0.2f; // How long after jumping the player will bounce the rockets fired by FinalBoss.
+                                                        // Sort of invincibility frames.
 
     private SpriteRenderer shieldRenderer;
     private Coroutine shieldCoroutine;
@@ -22,6 +23,12 @@ public class EnergyShieldController : MonoBehaviour
     private Vector3 originalScale;
 
     [SerializeField] private Vector3 maxScale = Vector3.one * 1.3f;
+
+    private AudioSource audioSource;
+    [SerializeField] private AudioClip parrySound;
+
+    private ContactFilter2D contactFilter;
+    private readonly List<Collider2D> contacts = new(32);
 
     private enum ShieldState
     {
@@ -33,6 +40,7 @@ public class EnergyShieldController : MonoBehaviour
     void Awake()
     {
         shieldRenderer = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Start()
@@ -43,12 +51,18 @@ public class EnergyShieldController : MonoBehaviour
         state = ShieldState.OFF;
     }
 
-    public void RegisterJump()
+    public void ActivateJumpShield()
     {
         lastJumpedTime = Time.time;
+
+        if (shieldCoroutine != null)
+        {
+            StopAllCoroutines();
+        }
+        shieldCoroutine = StartCoroutine(ShieldParry());
     }
 
-    public void StartFlashing()
+    public void ActivateProtectShield()
     {
         if (GameplayManager.Instance.ShieldAvailable())
         {
@@ -65,17 +79,18 @@ public class EnergyShieldController : MonoBehaviour
         }
     }
 
-    public bool TryParry()
+    public bool TryParry(IPlayerHitReceiver receiver)
     {
         if (!IsInShieldITime())
         {
             return false;
         }
 
-        // TODO: Add satisfying 'parry' sound
         state = ShieldState.PARRY;
 
-        shieldCoroutine = StartCoroutine(ShieldParry());
+        audioSource.PlayOneShot(parrySound);
+
+        receiver.PlayerHit(PlayerHitType.PARRY);
 
         return true;
     }
@@ -111,26 +126,43 @@ public class EnergyShieldController : MonoBehaviour
         shieldRenderer.color = originalColor;
         transform.localScale = originalScale;
 
-        while (elapsed < parryExpandTime)
+        while (elapsed < parryTimeMax)
         {
             elapsed += Time.deltaTime;
+            float elapsedFraction = elapsed / parryTimeMax;
 
-            Color color = shieldRenderer.color;
-            Color red = Color.red;
-
-            color = Color.Lerp(color, red, parryExpandTime * Time.deltaTime);
+            Color color = Color.Lerp(originalColor, Color.red, elapsedFraction);
             shieldRenderer.color = color;
 
-            Vector3 localScale = transform.localScale;
-            transform.localScale = Vector3.Lerp(localScale, maxScale, parryExpandTime * Time.deltaTime);
+            transform.localScale = Vector3.Lerp(originalScale, maxScale, elapsedFraction);
+
+            DamageNearbyEnemies(transform.localScale.magnitude);
 
             yield return null;
         }
 
         shieldRenderer.color = originalColor;
+        transform.localScale = originalScale;
+
         shieldCoroutine = null;
 
         state = ShieldState.OFF;
+    }
+
+
+    private void DamageNearbyEnemies(float radius)
+    {
+        contacts.Clear();
+
+        int count = Physics2D.OverlapCircle(transform.position, radius, contactFilter, contacts);
+
+        for (int i = 0; i < count; i++)
+        {
+            if (contacts[i].TryGetComponent<IPlayerHitReceiver>(out var enemy))
+            {
+                enemy.PlayerHit(PlayerHitType.SHIELD);
+            }
+        }
     }
 
     // Right after pressing jump there is a short invincibility time

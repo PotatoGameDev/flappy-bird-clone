@@ -6,7 +6,7 @@ public class EnergySuckerController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collider)
     {
-        if (!flyingSaucerController.Active)
+        if (flyingSaucerController.state != FlyingSaucerState.ACTIVE)
         {
             return;
         }

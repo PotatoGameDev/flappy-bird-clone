@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
         levelType = LevelType.Normal
     };
 
-    public bool newLevelUnlocked;
+    internal bool newLevelUnlocked;
 
     // 0 based! So there is level 0, 1, 2
     public int CurrentLevel

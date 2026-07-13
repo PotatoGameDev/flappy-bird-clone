@@ -5,7 +5,7 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(ProximityBeeper))]
 [RequireComponent(typeof(AudioSource))]
-public class RocketController : PooledInstance
+public class RocketController : PooledInstance, IPlayerHitReceiver
 {
     public enum RocketType
     {
@@ -18,6 +18,7 @@ public class RocketController : PooledInstance
     {
         ChasingPlayer,
         ChasingBoss,
+        Inactive
     }
 
     private State state = State.ChasingPlayer;
@@ -74,9 +75,9 @@ public class RocketController : PooledInstance
         audioSource.loop = true;
     }
 
-    public void PlayerHit(bool bounce)
+    public void PlayerHit(PlayerHitType type)
     {
-        if (bounce)
+        if (type == PlayerHitType.PARRY)
         {
             state = State.ChasingBoss;
 
@@ -87,6 +88,11 @@ public class RocketController : PooledInstance
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
             rb.rotation = angle;
+        }
+        else if (type == PlayerHitType.SHIELD)
+        {
+            state = State.Inactive;
+            rb.angularVelocity = Random.Range(-90.0f, 90.0f);
         }
         else
         {

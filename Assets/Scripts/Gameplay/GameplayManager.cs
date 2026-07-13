@@ -174,7 +174,7 @@ public class GameplayManager : MonoBehaviour
         StartCoroutine(DoEverySecondActions());
 
         // SpinDoctor
-        int spinDoctorLeft = UpgradesManager.Instance.GetSpinDoctorMaxRpmPerSecond();
+        spinDoctorLeft = UpgradesManager.Instance.GetSpinDoctorMaxRpmPerSecond();
 
         if (spinDoctorLeft == 0)
         {
@@ -188,7 +188,7 @@ public class GameplayManager : MonoBehaviour
         }
 
         // EnergyShield
-        long shieldLeft = UpgradesManager.Instance.GetEnergyShieldMax();
+        shieldLeft = UpgradesManager.Instance.GetEnergyShieldMax();
         if (shieldLeft == 0)
         {
             shieldLevelSliderFill.SetActive(false);
@@ -330,7 +330,6 @@ public class GameplayManager : MonoBehaviour
             UpdateRpmLabel();
 
             SpinDoctorUsagePerSecond = rpmDamped / Time.deltaTime;
-
         }
     }
 
