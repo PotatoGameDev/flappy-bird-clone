@@ -7,6 +7,7 @@ public class BossManager : MonoBehaviour
 {
     [SerializeField] private GameObject bossNameTag;
     [SerializeField] private TextMeshProUGUI bossNameTagLabel;
+    [SerializeField] private TextMeshProUGUI bossNameLabel;
     private bool bossActive;
 
     // Boss 1
@@ -132,9 +133,9 @@ public class BossManager : MonoBehaviour
 
         bossNameTag.SetActive(true);
         bossNameTagLabel.SetText(Loc.Get("gameplay_boss_intro_title_" + level.ToString()));
+        bossNameLabel.SetText(Loc.Get("gameplay_boss_name_" + level.ToString()));
         StartCoroutine(DestroyBossNameTag());
         SoundManager.Instance.PlayBossMusic();
-
 
         gateCounterContainer.SetActive(false);
         bossHealthBarContainer.SetActive(true);

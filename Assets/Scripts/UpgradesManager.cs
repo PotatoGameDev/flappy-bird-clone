@@ -5,7 +5,8 @@ using System;
 [DefaultExecutionOrder(-100)]
 public class UpgradesManager : MonoBehaviour
 {
-    private static readonly long SHIELD_AMOUNT_PER_LEVEL = 1000000;
+    private static readonly long SHIELD_AMOUNT_PER_LEVEL = 10_000;
+    internal static readonly long SHIELD_AMOUNT_PER_ENERGY = 100;
     private static readonly int SPIN_DOCTOR_RPM_PER_LEVEL = 100;
     private static readonly int TOORBO_BOOST_SECONDS_PER_LEVEL = 5;
 

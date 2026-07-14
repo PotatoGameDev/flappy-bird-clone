@@ -4,7 +4,7 @@ using PotatoGameDev.Pool;
 
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(Collider2D))]
-public class BulletController : PooledInstance
+public class BulletController : PooledInstance, IPlayerHitReceiver
 {
     [SerializeField] private Sprite[] sprites;
     [SerializeField] internal float speed = 5;
@@ -27,7 +27,6 @@ public class BulletController : PooledInstance
     public void FromTo(Vector2 from, Vector2 to)
     {
         direction = (to - from).normalized;
-
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
         transform.rotation = Quaternion.Euler(0f, 0f, angle);
     }
@@ -64,11 +63,12 @@ public class BulletController : PooledInstance
         // TODO maybe stop all coroutines in base?
     }
 
-    void OnTriggerEnter2D(Collider2D collider)
+    public void PlayerHit(Damage damage)
     {
-        if (collider.CompareTag("Player"))
-        {
-            Release();
-        }
+        Release();
     }
+
+    public bool IsHittable() => true;
+
+    public long GetLifeUnit() => (long)speed;
 }

@@ -17,10 +17,11 @@ public class FlyingSaucerController : MonoBehaviour, IPlayerHitReceiver
     [SerializeField] private float bulletSpeed = 15f;
     private float currentCooldown = 0f;
 
-    [SerializeField] private float maxLife = 100f;
+    [SerializeField] private long maxLife = 100L;
 
-    private float halfLife;
-    public float CurrentLife { get; private set; }
+    private long halfLife;
+    public long CurrentLife { get; private set; }
+
     public FlyingSaucerState state = FlyingSaucerState.ACTIVE;
 
     [SerializeField]
@@ -46,12 +47,6 @@ public class FlyingSaucerController : MonoBehaviour, IPlayerHitReceiver
 
     private Rigidbody2D rb;
 
-    /*
-    [Header("Border Damage")]
-    [SerializeField] private float borderDangerMargin = 2f;
-    [SerializeField] private float borderDangerMultiplier = 100f;
-    */
-
     void Awake()
     {
         swarmFollow = GetComponent<SwarmFollow>();
@@ -64,7 +59,7 @@ public class FlyingSaucerController : MonoBehaviour, IPlayerHitReceiver
     void Start()
     {
         CurrentLife = maxLife;
-        halfLife = maxLife * 0.5f;
+        halfLife = (long)(maxLife * 0.5f);
     }
 
     void Update()
@@ -84,7 +79,7 @@ public class FlyingSaucerController : MonoBehaviour, IPlayerHitReceiver
             {
                 // This whole accruedDamage logic is so that we don't send damage event to UI every frame
                 accruedDamage -= 1f;
-                TakeHit(1f);// 1 HP per second
+                TakeHit(1L);// 1 HP per second
             }
 
             if (!smokeEmitter.isPlaying)
@@ -175,7 +170,7 @@ public class FlyingSaucerController : MonoBehaviour, IPlayerHitReceiver
 
     public void Repair(int energy)
     {
-        CurrentLife = Mathf.Clamp(CurrentLife + energy, 0f, maxLife);
+        CurrentLife = (long)Mathf.Clamp(CurrentLife + energy, 0L, maxLife);
 
         if (flashingCoroutine != null)
         {
@@ -212,9 +207,11 @@ public class FlyingSaucerController : MonoBehaviour, IPlayerHitReceiver
     IEnumerator HitStun()
     {
         state = FlyingSaucerState.STUNNED;
+        swarmFollow.Active = false;
         yield return WAIT_ONE_SECOND;
 
         state = FlyingSaucerState.ACTIVE;
+        swarmFollow.Active = true;
     }
 
     IEnumerator DeathSequence()
@@ -241,28 +238,33 @@ public class FlyingSaucerController : MonoBehaviour, IPlayerHitReceiver
         Destroy(gameObject);
     }
 
-    public void PlayerHit(PlayerHitType type)
+    public void PlayerHit(Damage damage)
     {
-        if (state != FlyingSaucerState.ACTIVE)
+        if (IsHittable())
         {
             return;
         }
 
-        PlanetController player = GameplayManager.Instance.Player;
-        Vector2 relativeVelocity = rb.linearVelocity - player.GetVelocity();
+        TakeHit(damage.enemy, true);
+    }
 
-        long damage = (long)(relativeVelocity.magnitude * IPlayerHitReceiver.CalculateHitFraction(type) * damageFactor);
+    public bool IsHittable()
+    {
+        return state != FlyingSaucerState.ACTIVE;
+    }
 
-        Debug.Log("Damage: " + gameObject.GetInstanceID() + " = " + damage);
-        TakeHit(damage, true);
+    public long GetLifeUnit()
+    {
+        return maxLife;
     }
 
 
-    public void TakeHit(float hit, bool stun = false)
+    public void TakeHit(long hit, bool stun = false)
     {
         if (state == FlyingSaucerState.DEAD)
         {
-            // Don't check for swarmFollow.Active, because we want to do accrued damage even when not.
+            // Don't check for swarmFollow.Active, 
+            // because we want to do accrued damage even when not.
             return;
         }
 
@@ -292,14 +294,21 @@ public class FlyingSaucerController : MonoBehaviour, IPlayerHitReceiver
             elapsed += Time.deltaTime;
             float t = Mathf.PingPong(elapsed * flashSpeed, 1f);
 
-            // We lerp from the original color to the half of the red (so not so much red) (or green)
+            // We lerp from the original color to the half of the red 
+            // (so not so much red) (or green)
             if (damage)
             {
-                spriteRenderer.color = Color.Lerp(originalColor, Color.red, t);
+                spriteRenderer.color = Color.Lerp(
+                        originalColor,
+                        Color.red,
+                        t);
             }
             else
             {
-                spriteRenderer.color = Color.Lerp(originalColor, Color.green, t);
+                spriteRenderer.color = Color.Lerp(
+                        originalColor,
+                        Color.green,
+                        t);
             }
             yield return null;
         }

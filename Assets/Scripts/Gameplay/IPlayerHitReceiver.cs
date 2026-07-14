@@ -1,25 +1,11 @@
 public interface IPlayerHitReceiver
 {
+    void PlayerHit(Damage damage);
 
-    private const float MAGNITUDE_DAMAGE_FACTOR = 20f;
+    long GetLifeUnit();
 
-    public static float CalculateHitFraction(PlayerHitType type)
-    {
-        float parriedFactor = type switch
-        {
-            PlayerHitType.PARRY => 1f, // Promote risky gameplay...
-            PlayerHitType.HIT => 0.1f,
-            PlayerHitType.SHIELD => 0.5f, // ...against playing safe
-            _ => 0f,
-        };
-        return parriedFactor;
-    }
+    bool IsHittable();
 
-    public void PlayerHit(PlayerHitType type);
-
+    bool CanBeDamaged() => true;
 }
 
-public enum PlayerHitType
-{
-    HIT, PARRY, SHIELD
-}

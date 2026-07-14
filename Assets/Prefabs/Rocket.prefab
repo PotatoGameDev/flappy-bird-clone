@@ -56,6 +56,7 @@ MonoBehaviour:
   movementForceBoss: 200
   turnSpeedDegreesPerSecond: 500
   maxSpeed: 10
+  life: 10000
   initialBoostForce: 5000
   avoidRayDistance: 10
   avoidAngleOffset: 45

@@ -94,11 +94,15 @@ public class GameplayManager : MonoBehaviour
             if (shieldLeft < maxEnergyShield)
             {
                 long shieldToRefill = maxEnergyShield - shieldLeft;
-                if (shieldToRefill > amount)
+                long recalculatedAmount = amount
+                    * UpgradesManager.SHIELD_AMOUNT_PER_ENERGY;
+
+                if (shieldToRefill > recalculatedAmount)
                 {
-                    shieldToRefill = amount;
+                    shieldToRefill = recalculatedAmount;
                 }
-                amount -= shieldToRefill;
+                amount -= shieldToRefill
+                    / UpgradesManager.SHIELD_AMOUNT_PER_ENERGY;
                 shieldLeft += shieldToRefill;
 
                 shieldLevelSlider.SetValueWithoutNotify(shieldLeft);
@@ -244,6 +248,12 @@ public class GameplayManager : MonoBehaviour
         return shieldLeft > 0;
     }
 
+    public float ShieldAvailableRatio()
+    {
+        long maxEnergyShield = UpgradesManager.Instance.GetEnergyShieldMax();
+        return (float)shieldLeft / maxEnergyShield;
+    }
+
     IEnumerator DoEverySecondActions()
     {
         long slaveryIncrease = UpgradesManager.Instance.GetPopulationNumberPerSecond(UpgradeId.AndroidSlavery);
@@ -355,27 +365,9 @@ public class GameplayManager : MonoBehaviour
         rpmLabel.SetText("RPM: {0}", (int)Mathf.Abs(Player.GetRpm()));
     }
 
-    public long TakeHit(HitType type, float fraction = 1f, bool parried = false)
+    public long TakeHit(Damage damage)
     {
-        fraction = Mathf.Clamp01(fraction);
-
-        long peopleDied = type switch
-        {
-            HitType.Spin => 1_000_000L,
-            HitType.BorderProximity => 1_000_000L,
-            HitType.BossCollision => 1_000_000L,
-            HitType.BossLaser => 1_000L,
-            HitType.GateCollision => 1_000_000L,
-            HitType.BossPlasmaCannon => 1_000_000L,
-            HitType.Mothershipper => 1_000_000L,
-            HitType.FinalBoss => 2_000_000L,
-            HitType.Rocket => 500_000,
-            _ => 0L
-        };
-
-        float parryFraction = parried ? 0.1f : 1f;
-
-        peopleDied = (long)(fraction * peopleDied * parryFraction);
+        long peopleDied = damage.player;
 
         if (peopleDied > CurrentPopulation)
         {
@@ -385,10 +377,20 @@ public class GameplayManager : MonoBehaviour
         long newPeopleDied = peopleDied > shieldLeft
             ? (peopleDied - shieldLeft)
             : 0;
-        long newShieldLeft = shieldLeft > peopleDied
-            ? (shieldLeft - peopleDied)
-            : 0;
+        UseUpShield(peopleDied);
+
         peopleDied = newPeopleDied;
+
+        KillPopulation(peopleDied);
+
+        return peopleDied;
+    }
+
+    internal void UseUpShield(long shieldLoss)
+    {
+        long newShieldLeft = shieldLeft > shieldLoss
+            ? (shieldLeft - shieldLoss)
+            : 0;
         shieldLeft = newShieldLeft;
 
         shieldLevelSlider.SetValueWithoutNotify(shieldLeft);
@@ -396,10 +398,6 @@ public class GameplayManager : MonoBehaviour
         {
             shieldLevelSliderFill.SetActive(false);
         }
-
-        KillPopulation(peopleDied);
-
-        return peopleDied;
     }
 
     private void KillPopulation(long dead)
@@ -421,9 +419,12 @@ public class GameplayManager : MonoBehaviour
         }
     }
 
-    public void RotationalDamage(float fraction)
+    public void RotationalDamage(long damage)
     {
-        long peopleDied = TakeHit(HitType.Spin, fraction);
+        long peopleDied = TakeHit(
+                // Unshielded, unparried, enemy-less rotational damage:
+                new(0, damage, false, false, Vector2.zero)
+                );
 
         AddPopulationLossTextShort(peopleDied);
     }
