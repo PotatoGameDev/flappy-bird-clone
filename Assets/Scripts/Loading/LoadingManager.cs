@@ -22,7 +22,15 @@ public class LoadingManager : MonoBehaviour
 
         if (GameManager.Instance.levelSettings.levelType == LevelType.BossFight)
         {
-            InstancePoolsManager.Instance.BulletControllerPool.Preheat(50);
+            if (GameManager.Instance.CurrentLevel < 2)
+            {
+                InstancePoolsManager.Instance.BulletControllerPool.Preheat(50);
+            }
+            else
+            {
+                InstancePoolsManager.Instance.RocketControllerPool.Preheat(5);
+                InstancePoolsManager.Instance.TinyRocketControllerPool.Preheat(10);
+            }
         }
 
         while (!operation.isDone)
