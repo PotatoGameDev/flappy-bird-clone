@@ -30,11 +30,13 @@ public class FlyingSaucerSwarmBossController : MonoBehaviour
             boid.TryGetComponent(out MotherShipperController motherShipper);
             if (motherShipper != null)
             {
+                Debug.Log("Attaching event");
                 totalBossHealth += motherShipper.CurrentLife;
                 motherShipper.DamageTaken += OnSwarmChange;
                 continue;
             }
         }
+        Debug.Log("End Attaching event");
 
         GameplayManager.Instance.SetBossHealth(totalBossHealth, totalBossHealth);
     }
@@ -42,6 +44,9 @@ public class FlyingSaucerSwarmBossController : MonoBehaviour
     private void OnSwarmChange()
     {
         float currentTotal = GetTotalHealth(swarmController.Boids);
+
+
+        Debug.Log("event fired");
 
         GameplayManager.Instance.SetBossHealth(currentTotal, totalBossHealth);
     }

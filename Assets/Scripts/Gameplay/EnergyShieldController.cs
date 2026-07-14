@@ -18,17 +18,20 @@ public class EnergyShieldController : MonoBehaviour
     private SpriteRenderer shieldRenderer;
     private Coroutine shieldCoroutine;
 
+    private Coroutine shieldParryCoroutine;
 
     private Color originalColor;
-    private Vector3 originalScale;
-
-    [SerializeField] private Vector3 maxScale = Vector3.one * 1.3f;
 
     private AudioSource audioSource;
     [SerializeField] private AudioClip parrySound;
 
+    private CircleCollider2D playerCollider;
+    private Rigidbody2D playerRb;
+
     private ContactFilter2D contactFilter;
     private readonly List<Collider2D> contacts = new(32);
+
+    private DamageCalculator damageCalculator;
 
     private enum ShieldState
     {
@@ -37,29 +40,65 @@ public class EnergyShieldController : MonoBehaviour
 
     private ShieldState state;
 
+    [SerializeField]
+    private float shieldAlphaMax = 0.5f;
+
+    public float GetBaseRadius()
+    {
+        return transform.localScale.magnitude;
+    }
+
     void Awake()
     {
         shieldRenderer = GetComponent<SpriteRenderer>();
         audioSource = GetComponent<AudioSource>();
+        playerCollider = GetComponentInParent<CircleCollider2D>();
+        playerRb = GetComponentInParent<Rigidbody2D>();
+
+        damageCalculator = GetComponentInParent<DamageCalculator>();
     }
 
     void Start()
     {
         originalColor = shieldRenderer.color;
-        originalScale = transform.localScale;
 
         state = ShieldState.OFF;
     }
 
-    public void ActivateJumpShield()
+    void Update()
+    {
+        float shieldLevelRatio = GameplayManager.Instance.ShieldAvailableRatio();
+
+        Color rendererColor = shieldRenderer.color;
+        rendererColor.a = shieldLevelRatio * shieldAlphaMax;
+
+        shieldRenderer.color = rendererColor;
+    }
+
+    internal void RegisterJump()
     {
         lastJumpedTime = Time.time;
 
-        if (shieldCoroutine != null)
+        // There could be 2 aproaches:
+        // - hit the enemies inside the shield interval
+        // - hit the enemies once on every jump.
+        // I chose the latter, we'll se how it plays.
+
+        if (GameplayManager.Instance.ShieldAvailable())
+        {
+            DamageNearbyEnemies();
+        }
+    }
+
+    public void ActivateJumpShieldVisual(bool parry)
+    {
+        if (shieldParryCoroutine != null)
         {
             StopAllCoroutines();
+            shieldParryCoroutine = null;
+            shieldCoroutine = null;
         }
-        shieldCoroutine = StartCoroutine(ShieldParry());
+        shieldParryCoroutine = StartCoroutine(ShieldParry(parry));
     }
 
     public void ActivateProtectShield()
@@ -79,20 +118,18 @@ public class EnergyShieldController : MonoBehaviour
         }
     }
 
-    public bool TryParry(IPlayerHitReceiver receiver)
+    public void TryParry()
     {
+        /*
         if (!IsInShieldITime())
         {
-            return false;
+            return;
         }
+        */
 
         state = ShieldState.PARRY;
 
         audioSource.PlayOneShot(parrySound);
-
-        receiver.PlayerHit(PlayerHitType.PARRY);
-
-        return true;
     }
 
     private IEnumerator ShieldFlashing()
@@ -100,7 +137,6 @@ public class EnergyShieldController : MonoBehaviour
         float elapsed = 0f;
 
         shieldRenderer.color = originalColor;
-        transform.localScale = originalScale;
 
         while (elapsed < shieldFlashingDurationSeconds)
         {
@@ -119,48 +155,87 @@ public class EnergyShieldController : MonoBehaviour
         state = ShieldState.OFF;
     }
 
-    private IEnumerator ShieldParry()
+    private IEnumerator ShieldParry(bool parry)
     {
         float elapsed = 0f;
 
         shieldRenderer.color = originalColor;
-        transform.localScale = originalScale;
+
+        Color finalColor = parry ? Color.red : Color.blue;
 
         while (elapsed < parryTimeMax)
         {
             elapsed += Time.deltaTime;
             float elapsedFraction = elapsed / parryTimeMax;
 
-            Color color = Color.Lerp(originalColor, Color.red, elapsedFraction);
+            Color color = Color.Lerp(originalColor, finalColor, elapsedFraction);
             shieldRenderer.color = color;
 
-            transform.localScale = Vector3.Lerp(originalScale, maxScale, elapsedFraction);
-
-            DamageNearbyEnemies(transform.localScale.magnitude);
+            // This changed to single check on jump:
+            //DamageNearbyEnemies(transform.localScale.magnitude);
 
             yield return null;
         }
 
         shieldRenderer.color = originalColor;
-        transform.localScale = originalScale;
 
-        shieldCoroutine = null;
+        shieldParryCoroutine = null;
 
         state = ShieldState.OFF;
     }
 
 
-    private void DamageNearbyEnemies(float radius)
+    private void DamageNearbyEnemies()
     {
         contacts.Clear();
 
-        int count = Physics2D.OverlapCircle(transform.position, radius, contactFilter, contacts);
+        int count = Physics2D.OverlapCircle(
+                transform.position,
+                GetBaseRadius(),
+                contactFilter,
+                contacts);
+
+        long shieldUsed = 0L;
+        bool parried = false;
 
         for (int i = 0; i < count; i++)
         {
             if (contacts[i].TryGetComponent<IPlayerHitReceiver>(out var enemy))
             {
-                enemy.PlayerHit(PlayerHitType.SHIELD);
+                if (!enemy.CanBeDamaged())
+                {
+                    continue;
+                }
+
+                Rigidbody2D enemyRb = contacts[i].attachedRigidbody;
+
+                Vector2 relativeVelocity = enemyRb.linearVelocity
+                    - playerRb.linearVelocity;
+
+                Damage damage = damageCalculator.CalculateDamage(
+                        contacts[i].Distance(playerCollider).distance,
+                        enemy.GetLifeUnit(),
+                        relativeVelocity,
+                        true
+                        );
+
+                enemy.PlayerHit(damage);
+
+                shieldUsed += damage.enemy;
+                if (damage.parried)
+                {
+                    parried = true;
+                }
+            }
+        }
+
+        if (shieldUsed > 0L)
+        {
+            GameplayManager.Instance.UseUpShield(shieldUsed);
+            ActivateJumpShieldVisual(parried);
+            if (parried)
+            {
+                audioSource.PlayOneShot(parrySound);
             }
         }
     }
@@ -169,8 +244,11 @@ public class EnergyShieldController : MonoBehaviour
     // that reduces damage to the planet on contact with enemy
     // and increases the damage to the enemy.
     // Sort of "parry" mechanic.
+    // EDIT: No more time based, purely distance based.
+    // TODO: maybe this could be used for coyoting the parry.
     public bool IsInShieldITime()
     {
-        return (Time.time - lastJumpedTime) < parryTimeMax;
+        return false;
+        //return (Time.time - lastJumpedTime) < parryTimeMax;
     }
 }

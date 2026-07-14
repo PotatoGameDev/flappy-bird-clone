@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(DamageCalculator))]
 public class PlanetController : MonoBehaviour
 {
     private readonly float RPM_PENALTY_THRESHOLD = 20f;
@@ -80,7 +81,7 @@ public class PlanetController : MonoBehaviour
     // Other
     [SerializeField] private EnergyShieldController shieldController;
 
-
+    private DamageCalculator damageCalculator;
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -99,6 +100,8 @@ public class PlanetController : MonoBehaviour
             Transform child = SpriteHolder.GetChild(i);
             child.gameObject.SetActive(child.name == selectedPlanetName);
         }
+
+        damageCalculator = GetComponent<DamageCalculator>();
     }
 
     void Start()
@@ -172,7 +175,7 @@ public class PlanetController : MonoBehaviour
         float deathHeightBottom = Camera.main.transform.position.y - height / 2;
         float dangerHeightBottom = deathHeightBottom + borderDangerMargin;
 
-        float outOfBoundsDamagePerSecond = 0f;
+        long outOfBoundsDamagePerSecond = 0L;
         bool blackHoleDamage = false;
 
         if (transform.position.y <= dangerHeightBottom)
@@ -180,7 +183,7 @@ public class PlanetController : MonoBehaviour
             // The planet is below damage threshold, should start getting damage
             //
             float distance = Mathf.Abs(transform.position.y - dangerHeightBottom);
-            outOfBoundsDamagePerSecond = distance / borderDangerMargin;
+            outOfBoundsDamagePerSecond = (long)(distance / borderDangerMargin);
             blackHoleDamage = false;
         }
         else if (transform.position.y >= dangerHeightTop)
@@ -189,7 +192,7 @@ public class PlanetController : MonoBehaviour
             //
             float distance = Mathf.Abs(transform.position.y - dangerHeightTop);
 
-            outOfBoundsDamagePerSecond = distance / borderDangerMargin;
+            outOfBoundsDamagePerSecond = (long)(distance / borderDangerMargin);
             blackHoleDamage = true;
         }
 
@@ -198,7 +201,14 @@ public class PlanetController : MonoBehaviour
             // We lerp from the original color to the half of the red (so not so much red)
             rendr.color = Color.Lerp(originalColor, Color.Lerp(originalColor, Color.red, 0.5f), outOfBoundsDamagePerSecond);
 
-            long peopleDied = GameplayManager.Instance.TakeHit(HitType.BorderProximity, outOfBoundsDamagePerSecond * Time.fixedDeltaTime);
+            long peopleDied = GameplayManager.Instance.TakeHit(
+                    new(
+                        0L,
+                        (long)(outOfBoundsDamagePerSecond * Time.fixedDeltaTime),
+                        false,
+                        false,
+                        Vector2.zero
+                    ));
 
             if (peopleDied > 0)
             {
@@ -284,7 +294,7 @@ public class PlanetController : MonoBehaviour
                     {
 
                         GameplayManager.Instance.RotationalDamage(
-                                rpmAbs / RPM_MAX
+                                (long)(rpmAbs / RPM_MAX)
                                 );
                     }
 
@@ -357,7 +367,7 @@ public class PlanetController : MonoBehaviour
         }
         currentJumpForce += jumpForce;
 
-        shieldController.ActivateJumpShield();
+        shieldController.RegisterJump();
     }
 
     // Collisions:
@@ -366,115 +376,65 @@ public class PlanetController : MonoBehaviour
     {
         if (Dead) return;
 
-        // Calculate hit fraction:
+        // =======================
+        // TODO IMPORTANT
+        // Currently the shield only works in the frame the player jumps.
+        // This makes sense and the parry/shield is decided basing on the
+        // distance between the colliders. 
+        // It's handled in EnergyShieldController.
+        // But if the player HITS something, whichis handled here,
+        // we should not shield it at all (or apply the passive shield?)
+        // When I figure out how to design the jump shield vs the passive
+        // shield, I should remove the leftovers from the time based
+        // shield handling here, it's not used.
+        // =======================
+        collision.gameObject.TryGetComponent(out IPlayerHitReceiver enemyController);
 
-        HitType hitType = HitType.GateCollision;
-
-        float maxHitForce;
-        float maxHitPercent;
-        bool parried;
-
-        if (collision.gameObject.CompareTag("GatePipe"))
+        if (enemyController == null)
         {
-            maxHitForce = 20f;
-            maxHitPercent = 100f;
-            parried = false;
+            Debug.Log("No IPlayerHitReceiver on " + collision.gameObject.name);
+            return;
         }
-        else if (collision.gameObject.CompareTag("FlyingSaucer"))
-        {
-            // Enemy is the small flying saucer
-            hitType = HitType.BossCollision;
 
-            FlyingSaucerController flyingSaucer = collision.gameObject.GetComponent<FlyingSaucerController>();
-            if (flyingSaucer.state != FlyingSaucerState.DEAD)
-            {
-                parried = shieldController.TryParry(flyingSaucer);
-                maxHitForce = 10f;
-                maxHitPercent = 100f;
-            }
-            else
-            {
-                maxHitForce = 0f;
-                maxHitPercent = 0f;
-                parried = false;
-            }
+        if (!enemyController.IsHittable())
+        {
+            return;
         }
-        else if (collision.gameObject.CompareTag("Mothershipper"))
+
+        Damage damage = damageCalculator.CalculateDamage(
+                0f,
+                enemyController.GetLifeUnit(),
+                collision.relativeVelocity,
+                shieldController.IsInShieldITime()
+                );
+
+        Debug.Log("Enemy: " + ((MonoBehaviour)enemyController).gameObject.name + " life: " + enemyController.GetLifeUnit() + " damage: " + damage.enemy);
+
+        enemyController.PlayerHit(damage);
+
+        if (damage.shielded)
         {
-            hitType = HitType.Mothershipper;
-
-            MotherShipperController motherShipper = collision.gameObject.GetComponent<MotherShipperController>();
-
-            parried = shieldController.TryParry(motherShipper);
-            maxHitForce = 20f;
-            maxHitPercent = 100f;
-        }
-        else if (collision.gameObject.CompareTag("FinalBoss"))
-        {
-            hitType = HitType.FinalBoss;
-
-            // Slowing down after every boss hit to give space for next sequence
-            speed = initialSpeed;
-
-
-            FinalBossController finalBoss = collision.gameObject.GetComponent<FinalBossController>();
-            parried = shieldController.TryParry(finalBoss);
-
-            maxHitForce = 20f;
-            maxHitPercent = 100f;
-        }
-        else if (collision.gameObject.CompareTag("Rocket"))
-        {
-            hitType = HitType.Rocket;
-
-            RocketController rocket = collision.gameObject.GetComponent<RocketController>();
-
-            parried = shieldController.TryParry(rocket);
-
-            if (rocket.type == RocketController.RocketType.Tiny)
-            {
-                maxHitForce = 1f;
-                maxHitPercent = 2f;
-            }
-            else
-            {
-                maxHitForce = 5f;
-                maxHitPercent = 10f;
-            }
-        }
-        else if (collision.gameObject.CompareTag("Trash"))
-        {
-            maxHitForce = 5f;
-            maxHitPercent = 10f;
-            parried = false;
-        }
-        else
-        {
-            throw new System.Exception("Unknown hit: " + collision.gameObject.tag + " - " + collision.gameObject.name);
+            // Also, since the rocket hit, maybe this is never possible?
+            // TODO Actually, this could still work in the "coyoted" mode.
+            // Leaving it here for that.
+            shieldController.ActivateJumpShieldVisual(damage.parried);
+            // TODO also, if coyote works, then no damage should be done,
+            // just the shield
         }
 
         SoundManager.Instance.PlayRandomHit(hitAudioClips, hitVolume);
 
-        shieldController.ActivateProtectShield();
-
-        // Here we get the magnitude clamped by our max:
-        float hitForce = Mathf.Clamp(collision.relativeVelocity.magnitude, 0f, maxHitForce);
-        // Here we calculate how much of the maxHitPercent we get.
-        // If we hit with the maxHitForce we get 1 * maxHitPercent:
-        float hitPercent = maxHitPercent * Mathf.Clamp01(hitForce / maxHitForce);
-        //This means, that if maxHitPercent is 20, and we hit full force, we get 1 * 20 / 100, meaning 0.2.
-        float hitFraction = hitPercent / 100f;
-
-        // This hit fraction will calculate the percent of population, that died.
-        long peopleDied = GameplayManager.Instance.TakeHit(hitType, hitFraction, parried);
+        long peopleDied = GameplayManager.Instance.TakeHit(damage);
 
         // Shaking the screen in direction of the collision
         // TODO: We should pass the shake in percent actually! RelativeVelocity means nothing to shake.
-        // % means everything, like 100% means crazy shake, meanwhile 20% is mid.:w
+        // % means everything, like 100% means crazy shake, meanwhile 20% is mid.
         EffectsManager.Instance.Shake(collision.relativeVelocity);
 
         if (peopleDied > 0)
         {
+            shieldController.ActivateProtectShield();
+
             SoundManager.Instance.PlayScreams(screamsVolume);
             SoundManager.Instance.PlayRandomQuake(quakeAudioClips, quakeVolume);
 
@@ -486,20 +446,37 @@ public class PlanetController : MonoBehaviour
         }
     }
 
+    internal void ResetSpeed()
+    {
+        speed = initialSpeed;
+    }
+
     public void OnTriggerEnter2D(Collider2D collider)
     {
         if (Dead) return;
-        if (collider.CompareTag("BoundaryBack") || collider.CompareTag("BlackHoleBoundary") || collider.CompareTag("SunStarBoundary"))
+        if (collider.CompareTag("BoundaryBack")
+                || collider.CompareTag("BlackHoleBoundary")
+                || collider.CompareTag("SunStarBoundary"))
         {
             Death();
             return;
         }
 
+        // TODO Rename to laser actually...
         if (collider.CompareTag("Bullet"))
         {
             shieldController.ActivateProtectShield();
 
-            long peopleDied = GameplayManager.Instance.TakeHit(HitType.BossLaser);
+            BulletController bullet = collider.GetComponent<BulletController>();
+
+            Damage damage = damageCalculator.CalculateDamage(
+
+                    0f,
+                    bullet.GetLifeUnit(),
+                    bullet.transform.up * bullet.speed,
+                    false);
+
+            long peopleDied = GameplayManager.Instance.TakeHit(damage);
             if (peopleDied > 0f)
             {
                 ExplosionController explosion = InstancePoolsManager.Instance.ExplosionControllerPool.Get();

@@ -24,6 +24,9 @@ public class FinalBossController : MonoBehaviour, IPlayerHitReceiver
     private int tinyRocketsCountInitial = 3;
     [SerializeField]
     private int tinyRocketsCountIncrease = 1;
+    [SerializeField]
+    private int tinyRocketsCountMax = 10;
+
     private int tinyRocketsCount;
 
     public Transform SpriteHolder { get; private set; }
@@ -35,6 +38,9 @@ public class FinalBossController : MonoBehaviour, IPlayerHitReceiver
     private Rigidbody2D playerRb;
 
     private int previousGateCount = 0;
+
+    [SerializeField]
+    private DamageCalculator damageCalculator;
 
     private struct PlayerSample
     {
@@ -112,25 +118,42 @@ public class FinalBossController : MonoBehaviour, IPlayerHitReceiver
             yield return TINY_ROCKET_INTERVAL;
         }
 
-        tinyRocketsCount += tinyRocketsCountInitial;
+        tinyRocketsCount += tinyRocketsCountIncrease;
     }
 
-    public void PlayerHit(PlayerHitType type)
+    public void PlayerHit(Damage damage)
     {
         // Boss gets a certain fraction of one 'segment' of his max life.
         // So, say boss has 100 life and 10 segments of it.
         // If the player perfectly timed the hit with the jump, the boss will get one full segment,
         // which is 10 damage. 
         // If the player just touched the boss, the boss will lose a tiny amount of the segment.
-        // TODO: This is not hit velocity based, is that bad?
-        long damage = (long)(
-                IPlayerHitReceiver.CalculateHitFraction(type)
-                * lifeStepFraction
-                * maxLife
-                );
+        long finalDamage = (long)Mathf.Clamp(damage.enemy, 0, GetLifeUnit());
+        GetDamage(finalDamage);
 
-        GetDamage(damage);
+        // After every planet hit the fight slows down,
+        // to allow the distance to reset. Otherwise the player would 
+        // "stunlock" the boss in constant contact
+        // and the fight would be over soon.
+        // This is because the distance is calculated for the smallest speed
+        // and it stays the same when the player speed grows. 
+        // This causes the distance to shrink.
+        GameplayManager.Instance.Player.ResetSpeed();
+
+        tinyRocketsCount = tinyRocketsCountInitial;
     }
+
+    public long GetLifeUnit()
+    {
+        return (long)(maxLife * lifeStepFraction);
+    }
+
+    public bool IsHittable()
+    {
+        // Fishy... Maybe we should handle some state?
+        return true;
+    }
+
 
     private void GetDamage(long damage)
     {

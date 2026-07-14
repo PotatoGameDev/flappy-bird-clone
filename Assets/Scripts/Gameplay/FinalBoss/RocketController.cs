@@ -32,6 +32,8 @@ public class RocketController : PooledInstance, IPlayerHitReceiver
     [SerializeField]
     private float maxSpeed = 3f;
 
+    [SerializeField] private long life = 1000L;
+
     [SerializeField]
     private float initialBoostForce = 300f;
 
@@ -75,9 +77,9 @@ public class RocketController : PooledInstance, IPlayerHitReceiver
         audioSource.loop = true;
     }
 
-    public void PlayerHit(PlayerHitType type)
+    public void PlayerHit(Damage damage)
     {
-        if (type == PlayerHitType.PARRY)
+        if (damage.parried)
         {
             state = State.ChasingBoss;
 
@@ -89,7 +91,7 @@ public class RocketController : PooledInstance, IPlayerHitReceiver
 
             rb.rotation = angle;
         }
-        else if (type == PlayerHitType.SHIELD)
+        else if (damage.shielded)
         {
             state = State.Inactive;
             rb.angularVelocity = Random.Range(-90.0f, 90.0f);
@@ -99,6 +101,17 @@ public class RocketController : PooledInstance, IPlayerHitReceiver
             Explode();
         }
     }
+
+    public bool IsHittable()
+    {
+        return state == State.ChasingPlayer;
+    }
+
+    public long GetLifeUnit()
+    {
+        return life;
+    }
+
 
     void FixedUpdate()
     {

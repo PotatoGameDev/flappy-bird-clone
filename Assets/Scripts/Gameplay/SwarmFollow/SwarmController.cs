@@ -44,7 +44,9 @@ public class SwarmController : MonoBehaviour
     {
         if (Boids.Count == 0) return;
 
-        int removed = Boids.RemoveAll(boid => boid == null || !boid.enabled || !boid.gameObject.activeInHierarchy);
+        int removed = Boids.RemoveAll(boid => boid == null
+                || !boid.enabled
+                || !boid.gameObject.activeInHierarchy);
         if (removed > 0)
             SwarmBoidDied?.Invoke();
 
