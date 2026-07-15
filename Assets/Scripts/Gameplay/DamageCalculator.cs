@@ -9,6 +9,10 @@ public class DamageCalculator : MonoBehaviour
     // how many people die each second if we reach RPM_MAX:
     private readonly long PEOPLE_DIED_MAX_RPM = 1_000_000;
 
+    // how many people die per second of being at the min dist to the edge
+    // up or down.
+    private readonly long PEOPLE_DIED_MAX_OUT_OF_BOUNDS = 100_000;
+
     // TODO move to PlanetController?
     [SerializeField] private EnergyShieldController energyShieldController;
 
@@ -110,6 +114,22 @@ public class DamageCalculator : MonoBehaviour
 
             long totalPeopleDied = (long)(
                     (float)(penaltyRpm / maxRpm) * PEOPLE_DIED_MAX_RPM
+                    );
+
+            return new(0, totalPeopleDied, false, false, Vector2.zero);
+        }
+
+        return Damage.zero;
+    }
+
+    public Damage CalculateOutOfBoundsDamage(float outOfBoundsFraction)
+    {
+        outOfBoundsFraction = Mathf.Clamp01(outOfBoundsFraction);
+
+        if (outOfBoundsFraction > 0f)
+        {
+            long totalPeopleDied = (long)(
+                    outOfBoundsFraction * PEOPLE_DIED_MAX_OUT_OF_BOUNDS
                     );
 
             return new(0, totalPeopleDied, false, false, Vector2.zero);

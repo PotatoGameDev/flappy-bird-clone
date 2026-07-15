@@ -172,7 +172,7 @@ public class PlanetController : MonoBehaviour
         float deathHeightBottom = Camera.main.transform.position.y - height / 2;
         float dangerHeightBottom = deathHeightBottom + borderDangerMargin;
 
-        long outOfBoundsDamagePerSecond = 0L;
+        float outOfBoundsFraction = 0f;
         bool blackHoleDamage = false;
 
         if (transform.position.y <= dangerHeightBottom)
@@ -180,7 +180,7 @@ public class PlanetController : MonoBehaviour
             // The planet is below damage threshold, should start getting damage
             //
             float distance = Mathf.Abs(transform.position.y - dangerHeightBottom);
-            outOfBoundsDamagePerSecond = (long)(distance / borderDangerMargin);
+            outOfBoundsFraction = distance / borderDangerMargin;
             blackHoleDamage = false;
         }
         else if (transform.position.y >= dangerHeightTop)
@@ -189,23 +189,22 @@ public class PlanetController : MonoBehaviour
             //
             float distance = Mathf.Abs(transform.position.y - dangerHeightTop);
 
-            outOfBoundsDamagePerSecond = (long)(distance / borderDangerMargin);
+            outOfBoundsFraction = distance / borderDangerMargin;
             blackHoleDamage = true;
         }
 
-        if (outOfBoundsDamagePerSecond > 0f)
+        if (outOfBoundsFraction > 0f)
         {
-            // We lerp from the original color to the half of the red (so not so much red)
-            rendr.color = Color.Lerp(originalColor, Color.Lerp(originalColor, Color.red, 0.5f), outOfBoundsDamagePerSecond);
+            // We lerp from the original color to the half of the red 
+            // (so not so much red)
+            rendr.color = Color.Lerp(
+                    originalColor,
+                    Color.Lerp(originalColor, Color.red, 0.5f),
+                    outOfBoundsFraction);
 
-            long peopleDied = GameplayManager.Instance.TakeHit(
-                    new(
-                        0L,
-                        (long)(outOfBoundsDamagePerSecond * Time.fixedDeltaTime),
-                        false,
-                        false,
-                        Vector2.zero
-                    ));
+            long peopleDied = GameplayManager.Instance.OutOfBoundsDamage(
+                    outOfBoundsFraction
+                    );
 
             if (peopleDied > 0)
             {
