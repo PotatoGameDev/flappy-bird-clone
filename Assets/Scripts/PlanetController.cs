@@ -6,9 +6,6 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(DamageCalculator))]
 public class PlanetController : MonoBehaviour
 {
-    private readonly float RPM_PENALTY_THRESHOLD = 20f;
-    private readonly float RPM_MAX = 80f; // This is when the damage is maximal
-
     private readonly WaitForSeconds EVERY_SECOND = new(1);
 
     [SerializeField] private InputActionReference jumpActionReference;
@@ -285,22 +282,10 @@ public class PlanetController : MonoBehaviour
 
             if (rpmAbs > 0f)
             {
-                if (rpmAbs > RPM_PENALTY_THRESHOLD)
-                {
-                    penaltyRpm = rpmAbs - RPM_PENALTY_THRESHOLD;
+                GameplayManager.Instance.RotationalDamage(rpmAbs);
 
-                    // for each rpmAbs above threshold we kill people
-                    if (penaltyRpm > 0)
-                    {
-
-                        GameplayManager.Instance.RotationalDamage(
-                                (long)(rpmAbs / RPM_MAX)
-                                );
-                    }
-
-                    // Add shake, max 1 for 50RPM, starting with 10 RPM 
-                    rotationShake = Mathf.Lerp(0, 1, (penaltyRpm - 10) / 50f);
-                }
+                // Add shake, max 1 for 50RPM, starting with 10 RPM 
+                rotationShake = Mathf.Lerp(0, 1, (rpmAbs - 10) / 50f);
 
                 float rpmDamped = GameplayManager.Instance.SpinDoctorUsagePerSecond;
                 if (rb.angularVelocity < 0f)

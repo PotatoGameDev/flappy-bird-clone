@@ -2,6 +2,13 @@ using UnityEngine;
 
 public class DamageCalculator : MonoBehaviour
 {
+    private readonly float RPM_PENALTY_THRESHOLD = 20f;
+    // This is when the damage is maximal:
+    private readonly float RPM_MAX = 80f;
+
+    // how many people die each second if we reach RPM_MAX:
+    private readonly long PEOPLE_DIED_MAX_RPM = 1_000_000;
+
     // TODO move to PlanetController?
     [SerializeField] private EnergyShieldController energyShieldController;
 
@@ -90,6 +97,25 @@ public class DamageCalculator : MonoBehaviour
         Debug.Log("baseDamageFactor: " + baseDamageFactor + " hitForceFactor: " + hitForceFactor + " finally = " + result);
 
         return result;
+    }
+
+    public Damage CalculateRotationalDamage(float rpm)
+    {
+        float rpmAbs = Mathf.Abs(rpm);
+
+        if (rpmAbs > RPM_PENALTY_THRESHOLD)
+        {
+            float penaltyRpm = rpmAbs - RPM_PENALTY_THRESHOLD;
+            float maxRpm = RPM_MAX - RPM_PENALTY_THRESHOLD;
+
+            long totalPeopleDied = (long)(
+                    (float)(penaltyRpm / maxRpm) * PEOPLE_DIED_MAX_RPM
+                    );
+
+            return new(0, totalPeopleDied, false, false, Vector2.zero);
+        }
+
+        return Damage.zero;
     }
 
     private float GetMaxDistance()

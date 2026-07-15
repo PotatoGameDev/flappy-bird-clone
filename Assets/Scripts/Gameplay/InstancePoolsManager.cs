@@ -3,22 +3,28 @@ using PotatoGameDev.Pool;
 
 public class InstancePoolsManager : MonoBehaviour
 {
-    public static InstancePoolsManager Instance { get; private set; }
+    public static InstancePoolsManager Instance
+    { get; private set; }
 
     [SerializeField] internal EnergyBallController energyBallControllerPrefab;
-    public InstancePool<EnergyBallController> EnergyBallControllerPool { get; private set; }
+    public InstancePool<EnergyBallController> EnergyBallControllerPool
+    { get; private set; }
 
     [SerializeField] private BulletController bulletControllerPrefab;
-    public InstancePool<BulletController> BulletControllerPool { get; private set; }
+    public InstancePool<BulletController> BulletControllerPool
+    { get; private set; }
 
     [SerializeField] private ExplosionController explosionControllerPrefab;
-    public InstancePool<ExplosionController> ExplosionControllerPool { get; private set; }
+    public InstancePool<ExplosionController> ExplosionControllerPool
+    { get; private set; }
 
     [SerializeField] private RocketController rocketControllerPrefab;
     [SerializeField] private RocketController tinyRocketControllerPrefab;
 
-    public InstancePool<RocketController> RocketControllerPool { get; private set; }
-    public InstancePool<RocketController> TinyRocketControllerPool { get; private set; }
+    public InstancePool<RocketController> RocketControllerPool
+    { get; private set; }
+    public InstancePool<RocketController> TinyRocketControllerPool
+    { get; private set; }
 
     public void ReleaseAll()
     {
@@ -43,7 +49,8 @@ public class InstancePoolsManager : MonoBehaviour
 
         // Non singleton stuff
 
-        // Create the new pool, setting this transform as a parent for the pooled instances,
+        // Create the new pool, setting this transform as a parent for 
+        // the pooled instances,
         // otherwise they will be erased when the scene unloads
         EnergyBallControllerPool = new(energyBallControllerPrefab, transform);
 
