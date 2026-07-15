@@ -293,9 +293,36 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 66369527476224
-    m_Localized: "Absorbs some damage from collisions. \nAlso absorbs black hole
-      and SunStar damage.\nDoes not protect from spin damage tho...\n\nCurrent max
-      population damage absorbed: {0}\nNext max population damage absorbed: {1}"
+    m_Localized: 'Energy Shield has two modes:
+
+      Active - when there are enemies
+      in it''s radius and press jump
+
+      the shield can damage them or even ''parry''
+      if close enough - dealing a lot of damage!
+
+      Passive - reduces damage
+      on collision.
+
+
+      Also absorbs black hole and SunStar damage.
+
+      Does
+      not protect from spin damage tho...
+
+
+      Regenerated with energy.
+
+
+      Current
+      max population damage absorbed: {0}
+
+      Next max population damage absorbed:
+      {1}
+
+      Current shield radius: {2}
+
+      Next shield radius: {3}'
     m_Metadata:
       m_Items: []
   - m_Id: 66368713781248
@@ -313,7 +340,7 @@ MonoBehaviour:
       being ejected into the void of space.
 
 
-      Works automatically until depleted.
+      Regenerated with energy.
 
 
       Current
@@ -343,10 +370,14 @@ MonoBehaviour:
       planet will speed up only until it reaches the initial position.
 
 
-      Current
-      max boost usage time: {0}
+      Regenerated
+      with energy.
 
-      Next max boost usage time: {1}'
+
+      Current max boost usage time: {0}
+
+      Next max boost
+      usage time: {1}'
     m_Metadata:
       m_Items: []
   - m_Id: 64396300382208

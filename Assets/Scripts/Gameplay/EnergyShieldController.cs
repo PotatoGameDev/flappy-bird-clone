@@ -63,6 +63,9 @@ public class EnergyShieldController : MonoBehaviour
         originalColor = shieldRenderer.color;
 
         state = ShieldState.OFF;
+
+        float maxShieldSize = UpgradesManager.Instance.GetEnergyShieldSizeMax();
+        transform.localScale = Vector2.one.normalized * maxShieldSize;
     }
 
     void Update()

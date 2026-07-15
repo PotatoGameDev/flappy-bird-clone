@@ -2,11 +2,11 @@ using UnityEngine;
 using System.Collections;
 using System;
 using Random = UnityEngine.Random;
+using PotatoGameDev.Pool;
 
-[RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(SwarmFollow))]
 [RequireComponent(typeof(AudioSource))]
-public class FlyingSaucerController : MonoBehaviour, IPlayerHitReceiver
+public class FlyingSaucerController : PooledInstance, IPlayerHitReceiver
 {
     private static readonly WaitForSeconds WAIT_ONE_SECOND = new(1f);
 
@@ -45,21 +45,31 @@ public class FlyingSaucerController : MonoBehaviour, IPlayerHitReceiver
 
     [SerializeField] private float maxSmokeEmission = 50f;
 
-    private Rigidbody2D rb;
-
     void Awake()
     {
         swarmFollow = GetComponent<SwarmFollow>();
         originalColor = spriteRenderer.color;
         CurrentLife = maxLife;
+    }
 
-        rb = GetComponent<Rigidbody2D>();
+    public new void Release()
+    {
+        StopAllCoroutines();
+        base.Release();
+    }
+
+    public new void Init()
+    {
+        CurrentLife = maxLife;
+        halfLife = (long)(maxLife * 0.5f);
+        spriteRenderer.enabled = true;
+
+        state = FlyingSaucerState.ACTIVE;
     }
 
     void Start()
     {
-        CurrentLife = maxLife;
-        halfLife = (long)(maxLife * 0.5f);
+        Init();
     }
 
     void Update()
@@ -235,7 +245,7 @@ public class FlyingSaucerController : MonoBehaviour, IPlayerHitReceiver
 
     public void DeathAnimationEnded()
     {
-        Destroy(gameObject);
+        Release();
     }
 
     public void PlayerHit(Damage damage)
