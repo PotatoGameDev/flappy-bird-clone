@@ -69,6 +69,8 @@ public class GameplayManager : MonoBehaviour
 
     private long scoopedEnergy = 0;
 
+    private DamageCalculator damageCalculator;
+
     public void AddScoopedEnergy(long amount)
     {
         // This is for the upgrades:
@@ -207,6 +209,8 @@ public class GameplayManager : MonoBehaviour
         energyGoalSlider.minValue = 0;
         energyGoalSlider.maxValue = GameManager.Instance.GetAdvanceEnergy();
         energyGoalSlider.value = 0;
+
+        damageCalculator = Player.GetComponent<DamageCalculator>();
     }
 
     // TODO This should be in the boss manager...
@@ -368,6 +372,7 @@ public class GameplayManager : MonoBehaviour
     public long TakeHit(Damage damage)
     {
         long peopleDied = damage.player;
+        Debug.Log("Dam: " + damage);
 
         if (peopleDied > CurrentPopulation)
         {
@@ -419,19 +424,29 @@ public class GameplayManager : MonoBehaviour
         }
     }
 
-    public void RotationalDamage(long damage)
+    public Damage RotationalDamage(float rpm)
     {
-        long peopleDied = TakeHit(
-                // Unshielded, unparried, enemy-less rotational damage:
-                new(0, damage, false, false, Vector2.zero)
-                );
+        Damage damage = damageCalculator.CalculateRotationalDamage(rpm);
 
-        AddPopulationLossTextShort(peopleDied);
+        long peopleDied = TakeHit(damage);
+
+        if (peopleDied > 0L)
+        {
+            AddPopulationLossTextShort(peopleDied);
+        }
+
+        return damage;
     }
 
-    public void AddPopulationLossText(long peopleDied, string prefixOverride = "casualties", int countOverride = CasualtiesTextsCount, bool showPercent = true)
+    public void AddPopulationLossText(
+            long peopleDied,
+            string prefixOverride = "casualties",
+            int countOverride = CasualtiesTextsCount,
+            bool showPercent = true)
     {
-        float diedPercent = Mathf.Floor(peopleDied / (float)(peopleDied + CurrentPopulation) * 100f);
+        float diedPercent = Mathf.Floor(
+                peopleDied / (float)(peopleDied + CurrentPopulation)
+                * 100f);
 
         string text;
 
