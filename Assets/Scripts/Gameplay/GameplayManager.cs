@@ -424,6 +424,16 @@ public class GameplayManager : MonoBehaviour
         }
     }
 
+    public long OutOfBoundsDamage(float outOfBoundsFraction)
+    {
+        Damage damage = damageCalculator.CalculateOutOfBoundsDamage(
+                outOfBoundsFraction
+                );
+        long peopleDied = TakeHit(damage);
+
+        return peopleDied;
+    }
+
     public Damage RotationalDamage(float rpm)
     {
         Damage damage = damageCalculator.CalculateRotationalDamage(rpm);
