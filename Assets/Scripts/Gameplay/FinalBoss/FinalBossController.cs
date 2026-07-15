@@ -37,8 +37,6 @@ public class FinalBossController : MonoBehaviour, IPlayerHitReceiver
     private Transform playerTransform;
     private Rigidbody2D playerRb;
 
-    private int previousGateCount = 0;
-
     [SerializeField]
     private DamageCalculator damageCalculator;
 
@@ -46,7 +44,6 @@ public class FinalBossController : MonoBehaviour, IPlayerHitReceiver
     {
         public Vector3 position;
         public float rotation;
-        public bool gatePassed;
     }
     private readonly Queue<PlayerSample> history = new();
 
@@ -81,7 +78,6 @@ public class FinalBossController : MonoBehaviour, IPlayerHitReceiver
             {
                 position = playerPos - new Vector3(player.speed * i * Time.fixedDeltaTime, 0f, 0f),
                 rotation = startRotation,
-                gatePassed = false,
             });
         }
 
@@ -108,6 +104,13 @@ public class FinalBossController : MonoBehaviour, IPlayerHitReceiver
         }
 
         tinyRocketsCount = tinyRocketsCountInitial;
+
+        GameplayManager.Instance.OnGatePassed += GatePassed;
+    }
+
+    void OnDestroy()
+    {
+        GameplayManager.Instance.OnGatePassed -= GatePassed;
     }
 
     private IEnumerator FireTinyRockets()
@@ -213,14 +216,11 @@ public class FinalBossController : MonoBehaviour, IPlayerHitReceiver
 
     void FixedUpdate()
     {
-        bool passedGate = GameplayManager.Instance.GateCount > previousGateCount;
         history.Enqueue(new PlayerSample
         {
             position = playerTransform.position,
             rotation = playerRb.rotation,
-            gatePassed = passedGate,
         });
-        previousGateCount = GameplayManager.Instance.GateCount;
 
         while (history.Count > delaySteps + 1)
         {
@@ -233,20 +233,20 @@ public class FinalBossController : MonoBehaviour, IPlayerHitReceiver
         rb.MovePosition(targetPos);
         rb.MoveRotation(sample.rotation);
 
-        if (sample.gatePassed)
-        {
-            int val = Random.Range(0, 2);
-            if (val == 0)
-            {
-                ShootRocket();
-            }
-            else
-            {
-                StartCoroutine(FireTinyRockets());
-            }
-        }
-
         previousPosition = rb.position;
+    }
+
+    private void GatePassed()
+    {
+        int val = Random.Range(0, 2);
+        if (val == 0)
+        {
+            ShootRocket();
+        }
+        else
+        {
+            StartCoroutine(FireTinyRockets());
+        }
     }
 
     public void OnCollisionEnter2D(Collision2D collision)

@@ -68,7 +68,8 @@ public class MotherShipperController : MonoBehaviour, IPlayerHitReceiver
     [SerializeField] private float plasmaBeamWidthMax = 1f;
     [SerializeField] private float plasmaBeamLengthMax = 30f;
 
-    private Rigidbody2D rb;
+    [SerializeField]
+    private SwarmController[] swarmControllers;
 
     private Phase phase = Phase.Idle;
     private float cannonAngle;
@@ -92,8 +93,6 @@ public class MotherShipperController : MonoBehaviour, IPlayerHitReceiver
         swarmFollow = GetComponent<SwarmFollow>();
         originalColor = spriteRenderer.color;
         CurrentLife = maxLife;
-
-        rb = GetComponent<Rigidbody2D>();
     }
 
     void Start()
@@ -124,6 +123,13 @@ public class MotherShipperController : MonoBehaviour, IPlayerHitReceiver
                     transform.position,
                     transform.position
                 });
+
+        GameplayManager.Instance.OnGatePassed += GatePassed;
+    }
+
+    void OnDestroy()
+    {
+        GameplayManager.Instance.OnGatePassed -= GatePassed;
     }
 
     void Update()
@@ -533,6 +539,22 @@ public class MotherShipperController : MonoBehaviour, IPlayerHitReceiver
         flashingCoroutine = null;
     }
 
+    private void GatePassed()
+    {
+        FlyingSaucerController flyingSaucer = InstancePoolsManager.Instance.
+            FlyingSaucerControllerPool.Get();
+
+        flyingSaucer.Init();
+
+        flyingSaucer.transform.position = transform.position +
+            Vector3.left * 2f;
+
+        SwarmController swarmController = swarmControllers[
+            Random.Range(0, swarmControllers.Length)
+        ];
+
+        swarmController.AddBoid(flyingSaucer.GetComponent<SwarmFollow>());
+    }
 }
 
 enum Phase

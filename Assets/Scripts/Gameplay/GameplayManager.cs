@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.UI;
+using System;
 
 [DefaultExecutionOrder(-500)]
 public class GameplayManager : MonoBehaviour
@@ -31,6 +32,8 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] private FadingMessagesManager populationMessagesManager;
     [SerializeField] private FadingMessagesManager energyMessagesManager;
     [SerializeField] private FadingMessagesManager rpmMessagesManager;
+
+    public event Action OnGatePassed;
 
     private long _currentPopulation = 0;
     private long CurrentPopulation
@@ -87,72 +90,75 @@ public class GameplayManager : MonoBehaviour
     }
 
     public long collectedEnergy = 0;
+    public long advanceEnergy = 0; // Energy for the boss, counted separately
+                                   // so the repairs don't slow down the 
+                                   // boss progress
 
     public void AddCollectedEnergy(long amount)
     {
-        if (bossManager.IsBossActive())
+        advanceEnergy += amount;
+        // Separate stash for the advance energy, so the player can
+        // collect energy to start the boss fight, and still have repairs
+        // to the shield and stuff. More forgiving, less frustrating.
+        if (advanceEnergy >= GameManager.Instance.GetRequiredAdvanceEnergy())
         {
-            long maxEnergyShield = UpgradesManager.Instance.GetEnergyShieldMax();
-            if (shieldLeft < maxEnergyShield)
+            if (!bossManager.IsBossActive())
             {
-                long shieldToRefill = maxEnergyShield - shieldLeft;
-                long recalculatedAmount = amount
-                    * UpgradesManager.SHIELD_AMOUNT_PER_ENERGY;
-
-                if (shieldToRefill > recalculatedAmount)
-                {
-                    shieldToRefill = recalculatedAmount;
-                }
-                amount -= shieldToRefill
-                    / UpgradesManager.SHIELD_AMOUNT_PER_ENERGY;
-                shieldLeft += shieldToRefill;
-
-                shieldLevelSlider.SetValueWithoutNotify(shieldLeft);
-                shieldLevelSliderFill.SetActive(true);
-            }
-
-            float maxSpinDoctorRpmPerSec = UpgradesManager.Instance.GetSpinDoctorMaxRpmPerSecond();
-            if (amount > 0 && spinDoctorLeft < maxSpinDoctorRpmPerSec)
-            {
-                float spinDoctorToRefill = maxSpinDoctorRpmPerSec - spinDoctorLeft;
-                if (spinDoctorToRefill > amount)
-                {
-                    spinDoctorToRefill = amount;
-                }
-                // TODO This should be somehow converted between energy <> RPM
-                amount -= (long)spinDoctorToRefill;
-                spinDoctorLeft += spinDoctorToRefill;
-
-                spinDoctorLevelSlider.SetValueWithoutNotify(spinDoctorLeft);
-                spinDoctorLevelSliderFill.SetActive(true);
-            }
-            // TODO The same here, this should be somehow converted between energy <> a second of toorbo 
-            long toorboMax = (long)toorboBoostController.MaxToorboBoost;
-            long toorboLeft = (long)toorboBoostController.ToorboBoostLeft;
-            if (amount > 0 && toorboLeft < toorboMax)
-            {
-                long toorboRefill = toorboMax - toorboLeft;
-                if (toorboRefill > amount)
-                {
-                    toorboRefill = amount;
-                }
-                amount -= toorboRefill;
-                toorboBoostController.ToorboBoostLeft += toorboRefill;
-                toorboBoostController.UpdateSlider();
+                bossManager.ActivateBoss();
             }
         }
-        else
-        {
-            collectedEnergy += amount;
 
-            if (collectedEnergy >= GameManager.Instance.GetAdvanceEnergy())
+        long maxEnergyShield = UpgradesManager.Instance.GetEnergyShieldPowerMax();
+        if (shieldLeft < maxEnergyShield)
+        {
+            long shieldToRefill = maxEnergyShield - shieldLeft;
+            long recalculatedAmount = amount
+                * UpgradesManager.SHIELD_AMOUNT_PER_ENERGY;
+
+            if (shieldToRefill > recalculatedAmount)
             {
-                if (!bossManager.IsBossActive())
-                {
-                    bossManager.ActivateBoss();
-                }
+                shieldToRefill = recalculatedAmount;
             }
+            amount -= shieldToRefill
+                / UpgradesManager.SHIELD_AMOUNT_PER_ENERGY;
+            shieldLeft += shieldToRefill;
+
+            shieldLevelSlider.SetValueWithoutNotify(shieldLeft);
+            shieldLevelSliderFill.SetActive(true);
         }
+
+        float maxSpinDoctorRpmPerSec = UpgradesManager.Instance.GetSpinDoctorMaxRpmPerSecond();
+        if (amount > 0 && spinDoctorLeft < maxSpinDoctorRpmPerSec)
+        {
+            float spinDoctorToRefill = maxSpinDoctorRpmPerSec - spinDoctorLeft;
+            if (spinDoctorToRefill > amount)
+            {
+                spinDoctorToRefill = amount;
+            }
+            // TODO This should be somehow converted between energy <> RPM
+            amount -= (long)spinDoctorToRefill;
+            spinDoctorLeft += spinDoctorToRefill;
+
+            spinDoctorLevelSlider.SetValueWithoutNotify(spinDoctorLeft);
+            spinDoctorLevelSliderFill.SetActive(true);
+        }
+        // TODO The same here, this should be somehow converted between energy <> a second of toorbo 
+        long toorboMax = (long)toorboBoostController.MaxToorboBoost;
+        long toorboLeft = (long)toorboBoostController.ToorboBoostLeft;
+        if (amount > 0 && toorboLeft < toorboMax)
+        {
+            long toorboRefill = toorboMax - toorboLeft;
+            if (toorboRefill > amount)
+            {
+                toorboRefill = amount;
+            }
+            amount -= toorboRefill;
+            toorboBoostController.ToorboBoostLeft += toorboRefill;
+            toorboBoostController.UpdateSlider();
+        }
+
+        collectedEnergy += amount;
+
     }
 
     private const string CasualtiesTextsTableName = "Casualties_Strings";
@@ -194,7 +200,7 @@ public class GameplayManager : MonoBehaviour
         }
 
         // EnergyShield
-        shieldLeft = UpgradesManager.Instance.GetEnergyShieldMax();
+        shieldLeft = UpgradesManager.Instance.GetEnergyShieldPowerMax();
         if (shieldLeft == 0)
         {
             shieldLevelSliderFill.SetActive(false);
@@ -207,7 +213,7 @@ public class GameplayManager : MonoBehaviour
         }
 
         energyGoalSlider.minValue = 0;
-        energyGoalSlider.maxValue = GameManager.Instance.GetAdvanceEnergy();
+        energyGoalSlider.maxValue = GameManager.Instance.GetRequiredAdvanceEnergy();
         energyGoalSlider.value = 0;
 
         damageCalculator = Player.GetComponent<DamageCalculator>();
@@ -254,7 +260,7 @@ public class GameplayManager : MonoBehaviour
 
     public float ShieldAvailableRatio()
     {
-        long maxEnergyShield = UpgradesManager.Instance.GetEnergyShieldMax();
+        long maxEnergyShield = UpgradesManager.Instance.GetEnergyShieldPowerMax();
         return (float)shieldLeft / maxEnergyShield;
     }
 
@@ -372,7 +378,6 @@ public class GameplayManager : MonoBehaviour
     public long TakeHit(Damage damage)
     {
         long peopleDied = damage.player;
-        Debug.Log("Dam: " + damage);
 
         if (peopleDied > CurrentPopulation)
         {
@@ -514,6 +519,8 @@ public class GameplayManager : MonoBehaviour
         GateCount++;
 
         UpdateLabels();
+
+        OnGatePassed?.Invoke();
     }
 
     private void AddEnergyCollectedText(long energyAdded)

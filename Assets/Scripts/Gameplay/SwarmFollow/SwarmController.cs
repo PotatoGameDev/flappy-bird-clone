@@ -40,6 +40,11 @@ public class SwarmController : MonoBehaviour
 
     private readonly List<Vector2> pendingPositions = new();
 
+    public void AddBoid(SwarmFollow boid)
+    {
+        Boids.Add(boid);
+    }
+
     void FixedUpdate()
     {
         if (Boids.Count == 0) return;

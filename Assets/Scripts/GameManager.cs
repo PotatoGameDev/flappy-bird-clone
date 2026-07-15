@@ -10,9 +10,9 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance { get; private set; }
 
-    private readonly int[] energyToAdvance = { 100, 1000, 10000 };
+    //private readonly int[] energyToAdvance = { 100, 1000, 10000 };
     // For testing:
-    //private readonly int[] energyToAdvance = { 100, 100, 100 };
+    private readonly int[] energyToAdvance = { 100, 100, 100 };
 
 
     // State things
@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviour
         return State.Upgrades;
     }
 
-    public int GetAdvanceEnergy()
+    public int GetRequiredAdvanceEnergy()
     {
         return energyToAdvance[CurrentLevel];
     }
@@ -140,12 +140,12 @@ public class GameManager : MonoBehaviour
     public bool CanAdvanceLevel()
     {
         return CurrentLevel == State.CivTypePassed
-            && State.CollectedEnergy >= GetAdvanceEnergy();
+            && State.CollectedEnergy >= GetRequiredAdvanceEnergy();
     }
 
     public void UnlockNextPhase()
     {
-        int advanceEnergy = GetAdvanceEnergy();
+        int advanceEnergy = GetRequiredAdvanceEnergy();
         Debug.Assert(CurrentLevel == State.CivTypePassed, "Cannot upgrade level if not in the max level currently");
 
         State.CollectedEnergy -= advanceEnergy;

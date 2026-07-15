@@ -19,11 +19,16 @@ public class InstancePoolsManager : MonoBehaviour
     { get; private set; }
 
     [SerializeField] private RocketController rocketControllerPrefab;
-    [SerializeField] private RocketController tinyRocketControllerPrefab;
-
     public InstancePool<RocketController> RocketControllerPool
     { get; private set; }
+
+    [SerializeField] private RocketController tinyRocketControllerPrefab;
     public InstancePool<RocketController> TinyRocketControllerPool
+    { get; private set; }
+
+    [SerializeField]
+    private FlyingSaucerController flyingSaucerControllerPrefab;
+    public InstancePool<FlyingSaucerController> FlyingSaucerControllerPool
     { get; private set; }
 
     public void ReleaseAll()
@@ -33,6 +38,7 @@ public class InstancePoolsManager : MonoBehaviour
         ExplosionControllerPool.ReleaseAll();
         RocketControllerPool.ReleaseAll();
         TinyRocketControllerPool.ReleaseAll();
+        FlyingSaucerControllerPool.ReleaseAll();
     }
 
     void Awake()
@@ -61,5 +67,9 @@ public class InstancePoolsManager : MonoBehaviour
         RocketControllerPool = new(rocketControllerPrefab, transform);
 
         TinyRocketControllerPool = new(tinyRocketControllerPrefab, transform);
+
+        FlyingSaucerControllerPool = new(
+                flyingSaucerControllerPrefab, transform
+                );
     }
 }
