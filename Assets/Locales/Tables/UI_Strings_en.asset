@@ -221,8 +221,9 @@ MonoBehaviour:
     m_Localized: "Detects the energy particles that are radiated from that big, gaping
       black hole at the top.\nThe higher the level, the more energy particles are
       observed to eject.\nThe higher the gate number, the bigger the chance for a
-      high level energy particle, \ngiving more energy.\n\nCurrent black hole energy
-      particles: {0}\nNext black hole energy particles: {1}"
+      high level energy particle, \ngiving more energy.\n\nBlack hole has bigger
+      chance for high level energy!\n\nCurrent black hole energy particles: {0}\nNext
+      black hole energy particles: {1}"
     m_Metadata:
       m_Items: []
   - m_Id: 64025406468096
@@ -233,8 +234,9 @@ MonoBehaviour:
     m_Localized: "Detects the energy particles that are radiated from our SunStar
       at the bottom.\nThe higher level, the more energy particles are observed to
       eject.\nThe higher the gate number, the bigger the chance for a high level
-      energy particle, \ngiving more energy.\n\nCurrent SunStar energy particles:
-      {0}\nNext SunStar energy particles: {1}"
+      energy particle, \ngiving more energy.\n\nSunStar has bigger chance for high
+      level energy!\n\nCurrent SunStar energy particles: {0}\nNext SunStar energy
+      particles: {1}"
     m_Metadata:
       m_Items: []
   - m_Id: 64571504848896

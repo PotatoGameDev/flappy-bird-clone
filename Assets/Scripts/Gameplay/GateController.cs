@@ -14,6 +14,8 @@ public class GateController : PooledInstance
 
     [SerializeField] private bool generateEnergy;
 
+    [SerializeField] private float chancesMultiplier = 1.0f;
+
 
     public new void Init()
     {
@@ -40,7 +42,9 @@ public class GateController : PooledInstance
 
         for (int i = 0; i < energyPerGate; i++)
         {
-            EnergyBallController ball = EnergyBallManager.Instance.GetRandom(GameplayManager.Instance.GateCount);
+            EnergyBallController ball = EnergyBallManager.Instance.GetRandom(
+                    GameplayManager.Instance.GateCount * chancesMultiplier
+                    );
             if (i % 2 == 0)
             {
                 ball.Init(bottomEnergyBallSpawner.position

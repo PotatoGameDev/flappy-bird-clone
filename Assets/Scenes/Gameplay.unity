@@ -55573,6 +55573,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1485268937479584667, guid: d66d24d49968afa8c8625e850668ae30, type: 3}
+      propertyPath: chancesMultiplier
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1485268937479584667, guid: d66d24d49968afa8c8625e850668ae30, type: 3}
       propertyPath: destinationPosition
       value: 
       objectReference: {fileID: 820271544}
@@ -56186,6 +56190,7 @@ MonoBehaviour:
   bossManager: {fileID: 45899577}
   winAccomplishedPanel: {fileID: 847232012}
   collectedEnergy: 0
+  advanceEnergy: 0
 --- !u!4 &2009740623
 Transform:
   m_ObjectHideFlags: 0
@@ -57908,6 +57913,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1485268937479584667, guid: d66d24d49968afa8c8625e850668ae30, type: 3}
       propertyPath: upgradeId
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1485268937479584667, guid: d66d24d49968afa8c8625e850668ae30, type: 3}
+      propertyPath: chancesMultiplier
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1485268937479584667, guid: d66d24d49968afa8c8625e850668ae30, type: 3}
