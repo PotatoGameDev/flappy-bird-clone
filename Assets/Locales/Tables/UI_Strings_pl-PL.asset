@@ -180,7 +180,8 @@ MonoBehaviour:
     m_Localized: "Wykrywa cz\u0105stki energii emitowane z tej ogromniastej czarnej
       dziury na g\xF3rze.\nIm wy\u017Cszy poziom tego usprawnienia, tym wi\u0119cej
       cz\u0105steczek jest wydzielanych.\nIm wy\u017Cszy numer bramki, tym wi\u0119ksza
-      szansa na energi\u0119 wysokiego poziomu.\n\nObecna liczba wykrywanych cz\u0105setk:
+      szansa na energi\u0119 wysokiego poziomu.\n\nCzarne dziura ma wi\u0119ksze
+      szanse na wy\u017Cszy poziom energii!\n\nObecna liczba wykrywanych cz\u0105setk:
       {0}\nNast\u0119pna liczba wykrywanych cz\u0105stek: {1}"
     m_Metadata:
       m_Items: []
@@ -236,7 +237,8 @@ MonoBehaviour:
     m_Localized: "Wykrywa cz\u0105stki energii emitowane z tej naszej S\u0142o\u0144coGwiazdy
       na dole.\nIm wy\u017Cszy poziom tego usprawnienia, tym wi\u0119cej cz\u0105steczek
       jest wydzielanych.\nIm wy\u017Cszy numer bramki, tym wi\u0119ksza szansa na
-      energi\u0119 wysokiego poziomu.\n\nObecna liczba wykrywanych cz\u0105setk:
+      energi\u0119 wysokiego poziomu.\n\nS\u0142o\u0144coGwiazda ma wi\u0119ksze
+      szanse na wy\u017Cszy poziom energii!\n\nObecna liczba wykrywanych cz\u0105setk:
       {0}\nNast\u0119pna liczba wykrywanych cz\u0105stek: {1}"
     m_Metadata:
       m_Items: []

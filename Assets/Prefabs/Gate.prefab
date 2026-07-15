@@ -839,6 +839,7 @@ MonoBehaviour:
   bottomTarget: {fileID: 1179603662151759131}
   targetSpread: {x: 1.5, y: 2}
   generateEnergy: 1
+  chancesMultiplier: 1
 --- !u!1 &6447914222976409509
 GameObject:
   m_ObjectHideFlags: 0

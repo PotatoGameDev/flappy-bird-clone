@@ -10,9 +10,9 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance { get; private set; }
 
-    //private readonly int[] energyToAdvance = { 100, 1000, 10000 };
+    private readonly int[] energyToAdvance = { 100, 1000, 10000 };
     // For testing:
-    private readonly int[] energyToAdvance = { 100, 100, 100 };
+    //private readonly int[] energyToAdvance = { 100, 100, 100 };
 
 
     // State things
