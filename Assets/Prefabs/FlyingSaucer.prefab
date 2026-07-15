@@ -242,7 +242,7 @@ GameObject:
   - component: {fileID: 3251786853193112335}
   m_Layer: 6
   m_Name: FlyingSaucer
-  m_TagString: Enemy
+  m_TagString: FlyingSaucer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -317,7 +317,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0
   m_GravityScale: 0
-  m_Material: {fileID: 6200000, guid: d9f2026a7d0d51e129f7f2310f43e6b4, type: 2}
+  m_Material: {fileID: 6200000, guid: 5c63ffddee5e4edc5bca9c2923eddfe1, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -356,6 +356,8 @@ MonoBehaviour:
   bulletCooldown: 1
   bulletSpeed: 25
   maxLife: 100
+  state: 0
+  damageFactor: 10
   damageFlashingDurationSeconds: 1
   smokeEmitter: {fileID: 8017984363257697828}
   laserAudioSource: {fileID: 3286544182892661564}
@@ -365,6 +367,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: f88efd78a5055f602877a222620bf489, type: 3}
   - {fileID: 8300000, guid: 038aca0eff3477c449fb49d3006ffb8d, type: 3}
   maxSmokeEmission: 50
+  damageCalculator: {fileID: 0}
 --- !u!58 &4360674346030133539
 CircleCollider2D:
   m_ObjectHideFlags: 0

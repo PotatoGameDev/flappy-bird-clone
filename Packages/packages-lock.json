@@ -370,6 +370,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.walcht.ide.neovim": {
+      "version": "https://github.com/PotatoGameDev/com.walcht.ide.neovim.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "10fdd2b065eeaf385867e07970bf00ac7486ed2f"
+    },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
       "depth": 0,

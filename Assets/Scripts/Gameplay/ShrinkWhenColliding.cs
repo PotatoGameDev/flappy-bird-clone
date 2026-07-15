@@ -15,6 +15,8 @@ public class ShrinkWhenColliding : MonoBehaviour
 
     private int originalSortingOrder;
 
+    private bool collidingWithGate;
+
     void Awake()
     {
         circleCollider = GetComponent<CircleCollider2D>();
@@ -27,6 +29,13 @@ public class ShrinkWhenColliding : MonoBehaviour
 
     void Update()
     {
+        if (collidingWithGate)
+        {
+            float direction = GetDirection(circleCollider);
+            float dist = Mathf.Abs(transform.position.x - circleCollider.transform.position.x);
+            targetScale = Vector2.Lerp(originalScale + (direction * addedScale), originalScale, dist / circleCollider.radius);
+        }
+
         if ((Vector2)transform.localScale != targetScale)
         {
             transform.localScale = Vector2.Lerp(transform.localScale, targetScale, 10 * Time.deltaTime);
@@ -41,16 +50,8 @@ public class ShrinkWhenColliding : MonoBehaviour
             // and from the back on the top of the screen, like they are circling
             float direction = GetDirection(collider);
             rendr.sortingOrder = originalSortingOrder + (int)(direction * 5);
-        }
-    }
 
-    void OnTriggerStay2D(Collider2D collider)
-    {
-        if (collider.CompareTag("GatePipe"))
-        {
-            float direction = GetDirection(collider);
-            float dist = Mathf.Abs(transform.position.x - collider.transform.position.x);
-            targetScale = Vector2.Lerp(originalScale + (direction * addedScale), originalScale, dist / circleCollider.radius);
+            collidingWithGate = true;
         }
     }
 
@@ -64,6 +65,8 @@ public class ShrinkWhenColliding : MonoBehaviour
         if (collider.CompareTag("GatePipe"))
         {
             targetScale = originalScale;
+
+            collidingWithGate = false;
         }
     }
 }

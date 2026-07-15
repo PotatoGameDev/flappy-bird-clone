@@ -2,11 +2,11 @@ using UnityEngine;
 using System.Collections;
 using System;
 using Random = UnityEngine.Random;
+using PotatoGameDev.Pool;
 
-[RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(SwarmFollow))]
 [RequireComponent(typeof(AudioSource))]
-public class FlyingSaucerController : MonoBehaviour
+public class FlyingSaucerController : PooledInstance, IPlayerHitReceiver
 {
     private static readonly WaitForSeconds WAIT_ONE_SECOND = new(1f);
 
@@ -17,17 +17,17 @@ public class FlyingSaucerController : MonoBehaviour
     [SerializeField] private float bulletSpeed = 15f;
     private float currentCooldown = 0f;
 
-    [SerializeField] private float maxLife = 100f;
+    [SerializeField] private long maxLife = 100L;
 
-    private float halfLife;
-    public float CurrentLife { get; private set; }
-    private bool dead;
+    private long halfLife;
+    public long CurrentLife { get; private set; }
 
-    public bool Active
-    {
-        get => swarmFollow.Active;
-        set => swarmFollow.Active = value;
-    }
+    public FlyingSaucerState state = FlyingSaucerState.ACTIVE;
+
+    [SerializeField]
+    private float damageFactor = 100f;
+
+    private bool playerInShootingRange = false;
 
     [SerializeField] private float damageFlashingDurationSeconds = 1f;
     private Color originalColor;
@@ -45,12 +45,6 @@ public class FlyingSaucerController : MonoBehaviour
 
     [SerializeField] private float maxSmokeEmission = 50f;
 
-    /*
-    [Header("Border Damage")]
-    [SerializeField] private float borderDangerMargin = 2f;
-    [SerializeField] private float borderDangerMultiplier = 100f;
-    */
-
     void Awake()
     {
         swarmFollow = GetComponent<SwarmFollow>();
@@ -58,15 +52,29 @@ public class FlyingSaucerController : MonoBehaviour
         CurrentLife = maxLife;
     }
 
-    void Start()
+    public new void Release()
+    {
+        StopAllCoroutines();
+        base.Release();
+    }
+
+    public new void Init()
     {
         CurrentLife = maxLife;
-        halfLife = maxLife * 0.5f;
+        halfLife = (long)(maxLife * 0.5f);
+        spriteRenderer.enabled = true;
+
+        state = FlyingSaucerState.ACTIVE;
+    }
+
+    void Start()
+    {
+        Init();
     }
 
     void Update()
     {
-        if (dead) return;
+        if (state == FlyingSaucerState.DEAD) return;
 
         if (currentCooldown > 0f)
         {
@@ -81,7 +89,7 @@ public class FlyingSaucerController : MonoBehaviour
             {
                 // This whole accruedDamage logic is so that we don't send damage event to UI every frame
                 accruedDamage -= 1f;
-                TakeHit(1f);// 1 HP per second
+                TakeHit(1L);// 1 HP per second
             }
 
             if (!smokeEmitter.isPlaying)
@@ -101,7 +109,7 @@ public class FlyingSaucerController : MonoBehaviour
             StartCoroutine(DeathSequence());
         }
 
-        if (!Active)
+        if (state != FlyingSaucerState.ACTIVE)
         {
             return;
         }
@@ -136,31 +144,8 @@ public class FlyingSaucerController : MonoBehaviour
         TakeHit(outOfBoundsDamagePerSecond * borderDangerMultiplier * Time.deltaTime);
         */
 
-    }
 
-    public bool IsFullHealth()
-    {
-        return CurrentLife == maxLife;
-    }
-
-    public void Repair(int energy)
-    {
-        CurrentLife = Mathf.Clamp(CurrentLife + energy, 0f, maxLife);
-
-        if (flashingCoroutine != null)
-        {
-            StopCoroutine(flashingCoroutine);
-        }
-        flashingCoroutine = StartCoroutine(HealthFlashing(false));
-    }
-
-    void OnTriggerStay2D(Collider2D collider)
-    {
-        if (dead || !Active)
-        {
-            return;
-        }
-        if (collider.CompareTag("Player"))
+        if (playerInShootingRange)
         {
             if (currentCooldown <= 0)
             {
@@ -170,7 +155,7 @@ public class FlyingSaucerController : MonoBehaviour
                 bullet.transform.position = transform.position;
 
                 // Adding spread when the UFO is dying
-                Vector2 to = collider.transform.position;
+                Vector2 to = GameplayManager.Instance.Player.transform.position;
                 if (CurrentLife <= halfLife)
                 {
                     to += Random.insideUnitCircle * (5f * (CurrentLife / halfLife));
@@ -188,18 +173,60 @@ public class FlyingSaucerController : MonoBehaviour
         }
     }
 
+    public bool IsFullHealth()
+    {
+        return CurrentLife == maxLife;
+    }
+
+    public void Repair(int energy)
+    {
+        CurrentLife = (long)Mathf.Clamp(CurrentLife + energy, 0L, maxLife);
+
+        if (flashingCoroutine != null)
+        {
+            StopCoroutine(flashingCoroutine);
+        }
+        flashingCoroutine = StartCoroutine(HealthFlashing(false));
+    }
+
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (state != FlyingSaucerState.ACTIVE)
+        {
+            return;
+        }
+        if (collider.CompareTag("Player"))
+        {
+            playerInShootingRange = true;
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D collider)
+    {
+        if (state != FlyingSaucerState.ACTIVE)
+        {
+            return;
+        }
+
+        if (collider.CompareTag("Player"))
+        {
+            playerInShootingRange = false;
+        }
+    }
+
     IEnumerator HitStun()
     {
-        Active = false;
+        state = FlyingSaucerState.STUNNED;
+        swarmFollow.Active = false;
         yield return WAIT_ONE_SECOND;
 
-        Active = true;
+        state = FlyingSaucerState.ACTIVE;
+        swarmFollow.Active = true;
     }
 
     IEnumerator DeathSequence()
     {
-        dead = true;
-        Active = false;
+        state = FlyingSaucerState.DEAD;
 
         yield return WAIT_ONE_SECOND;
 
@@ -218,29 +245,36 @@ public class FlyingSaucerController : MonoBehaviour
 
     public void DeathAnimationEnded()
     {
-        Destroy(gameObject);
+        Release();
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    public void PlayerHit(Damage damage)
     {
-        if (dead || !Active)
-        {
-            return;
-        }
-        if (!collision.gameObject.CompareTag("Player"))
+        if (IsHittable())
         {
             return;
         }
 
-        TakeHit(5 * collision.relativeVelocity.magnitude, true);
+        TakeHit(damage.enemy, true);
+    }
+
+    public bool IsHittable()
+    {
+        return state != FlyingSaucerState.ACTIVE;
+    }
+
+    public long GetLifeUnit()
+    {
+        return maxLife;
     }
 
 
-    public void TakeHit(float hit, bool stun = false)
+    public void TakeHit(long hit, bool stun = false)
     {
-        if (dead)
+        if (state == FlyingSaucerState.DEAD)
         {
-            // Don't check for swarmFollow.Active, because we want to do accrued damage even when not.
+            // Don't check for swarmFollow.Active, 
+            // because we want to do accrued damage even when not.
             return;
         }
 
@@ -270,14 +304,21 @@ public class FlyingSaucerController : MonoBehaviour
             elapsed += Time.deltaTime;
             float t = Mathf.PingPong(elapsed * flashSpeed, 1f);
 
-            // We lerp from the original color to the half of the red (so not so much red) (or green)
+            // We lerp from the original color to the half of the red 
+            // (so not so much red) (or green)
             if (damage)
             {
-                spriteRenderer.color = Color.Lerp(originalColor, Color.red, t);
+                spriteRenderer.color = Color.Lerp(
+                        originalColor,
+                        Color.red,
+                        t);
             }
             else
             {
-                spriteRenderer.color = Color.Lerp(originalColor, Color.green, t);
+                spriteRenderer.color = Color.Lerp(
+                        originalColor,
+                        Color.green,
+                        t);
             }
             yield return null;
         }
@@ -286,4 +327,9 @@ public class FlyingSaucerController : MonoBehaviour
         flashingCoroutine = null;
     }
 
+}
+
+public enum FlyingSaucerState
+{
+    ACTIVE, STUNNED, DEAD
 }

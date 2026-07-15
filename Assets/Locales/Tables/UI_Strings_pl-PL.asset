@@ -116,8 +116,17 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 51544466386944
-    m_Localized: "Ten poziom nie jest w pe\u0142ni gotowy w tej wersji gry.\nEarly
-      acces, co nie?"
+    m_Localized: "Nikt nas nie pokona! Teraz, gdy rozwalili\u015Bmy Mam\u0119\_Matko-Statk\xF3w
+      jeste\u015Bmy\nna ostatniej prostej do podboju ca\u0142ej galaktyki i zgromadzenia
+      ca\u0142ej jej energii.\nNasi naukowcy ju\u017C opracowali spos\xF3b jak za
+      jej pomoc\u0105 przeskoczy\u0107 z czterech wymiar\xF3w do pi\u0119ciu!\nStary,
+      wiesz co si\u0119\_dzieje? Zapiekanki i wiele innych rzeczy!\nJak m\xF3wi\u0142em,
+      nie ma ju\u017C absolutnie nikogo, kto m\xF3g\u0142by nas powst...\nCzekaj,
+      co to? To chyba tylko jaki\u015B ma\u0142y ksi\u0119\u017Cyc. To nie ksi\u0119\u017Cyc,
+      to jaka\u015B samotna, wkurzona planeta!\nWiesz co robi\u0107, pokonaj Ostatecznego
+      Wroga, \u017Ceby\u015Bmy mogli i\u015B\u0107 na zapiekanki.\n\n---------\n\nTyp
+      III w skali Kardaszowa oznacza, \u017Ce twoja cywilizacja opanowa\u0142a zasoby
+      energetyczne ca\u0142ej galaktyki!\nTo ca\u0142kiem sporo energii!"
     m_Metadata:
       m_Items: []
   - m_Id: 47947540328448
@@ -171,7 +180,8 @@ MonoBehaviour:
     m_Localized: "Wykrywa cz\u0105stki energii emitowane z tej ogromniastej czarnej
       dziury na g\xF3rze.\nIm wy\u017Cszy poziom tego usprawnienia, tym wi\u0119cej
       cz\u0105steczek jest wydzielanych.\nIm wy\u017Cszy numer bramki, tym wi\u0119ksza
-      szansa na energi\u0119 wysokiego poziomu.\n\nObecna liczba wykrywanych cz\u0105setk:
+      szansa na energi\u0119 wysokiego poziomu.\n\nCzarne dziura ma wi\u0119ksze
+      szanse na wy\u017Cszy poziom energii!\n\nObecna liczba wykrywanych cz\u0105setk:
       {0}\nNast\u0119pna liczba wykrywanych cz\u0105stek: {1}"
     m_Metadata:
       m_Items: []
@@ -227,7 +237,8 @@ MonoBehaviour:
     m_Localized: "Wykrywa cz\u0105stki energii emitowane z tej naszej S\u0142o\u0144coGwiazdy
       na dole.\nIm wy\u017Cszy poziom tego usprawnienia, tym wi\u0119cej cz\u0105steczek
       jest wydzielanych.\nIm wy\u017Cszy numer bramki, tym wi\u0119ksza szansa na
-      energi\u0119 wysokiego poziomu.\n\nObecna liczba wykrywanych cz\u0105setk:
+      energi\u0119 wysokiego poziomu.\n\nS\u0142o\u0144coGwiazda ma wi\u0119ksze
+      szanse na wy\u017Cszy poziom energii!\n\nObecna liczba wykrywanych cz\u0105setk:
       {0}\nNast\u0119pna liczba wykrywanych cz\u0105stek: {1}"
     m_Metadata:
       m_Items: []
@@ -274,10 +285,14 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 66369527476224
-    m_Localized: "Absorbuje cz\u0119\u015B\u0107 uszkodze\u0144 spowodowanych kolizjami.\nDzia\u0142a
-      te\u017C na uszkodzenia spowodowane blisko\u015Bci\u0105 S\u0142o\u0144coGwiazdy
-      i czarnej dziury.\n\nNie chroni przed stratami spowodowanymi obracaniem.\n\nObecna
-      chroniona populacja: {0}\nNast\u0119pna chroniona populacja: {1}"
+    m_Localized: "Tarcza Energetyczna ma dwa tryby dzia\u0142ania:\nAktywny - kiedy
+      w jej promieniu s\u0105 przeciwnicy, tarcza zadaje im obra\u017Cenia.\nGdy
+      przeciwnicy s\u0105 bardzo blisko, tarcza wykonule \"parad\u0119\", kt\xF3ra
+      zadaje najwy\u017Csze obra\u017Cenia!\nPasywny - redukuje obra\u017Cenia z
+      kolizji.\n\nDzia\u0142a te\u017C na uszkodzenia spowodowane blisko\u015Bci\u0105
+      S\u0142o\u0144coGwiazdy i czarnej dziury.\nNie chroni przed stratami spowodowanymi
+      obracaniem.\n\nRegenerowana energi\u0105.\n\nObecna chroniona populacja: {0}\nNast\u0119pna
+      chroniona populacja: {1}\nObecny rozmiar: {2}\nNast\u0119pny rozmiar: {3}"
     m_Metadata:
       m_Items: []
   - m_Id: 66605591293952
@@ -289,9 +304,8 @@ MonoBehaviour:
       nadmierne obroty.\nSilniki co prawda zabij\u0105 pomijaln\u0105 liczb\u0119\_ludzi
       \u017Cyj\u0105cych nieopodal (oraz niekt\xF3re zagro\u017Cone gatunki),\nale
       reszta z nas mo\u017Ce si\u0119 cieszy\u0107 nie byciem wystrzelonymi w pr\xF3\u017Cni\u0119\_kosmosu
-      z powodu obrot\xF3w.\n\nDzia\u0142a automatycznie do wyczerpania.\n\nObecna
-      maksymalna ilo\u015B\u0107 RPM: {0}\nNast\u0119pna maksymalna ilo\u015B\u0107
-      RPM: {1}"
+      z powodu obrot\xF3w.\n\nRegenerowana energi\u0105.\n\nObecna maksymalna ilo\u015B\u0107
+      RPM: {0}\nNast\u0119pna maksymalna ilo\u015B\u0107 RPM: {1}"
     m_Metadata:
       m_Items: []
   - m_Id: 66865961103360
@@ -303,8 +317,9 @@ MonoBehaviour:
       planet\u0119 je\u017Celi zacznie zamula\u0107.\nPozwala zapobiega\u0107\_przedwczesnemu
       wystrzeleniu z tunelu czasoprzestrzennego.\nKa\u017Cdy poziom dodaje sekundy
       dzia\u0142ania przyspieszenia.\nPlaneta przyspiesza automatycznie do wyczerpania
-      lub osi\u0105gni\u0119cia pozycji startowej.\n\nObecny maksymalny czas przyspieszenia:
-      {0}\nNast\u0119pny maksymalny czas przyspieszenia: {1}"
+      lub osi\u0105gni\u0119cia pozycji startowej.\n\nRegenerowana energi\u0105.\n\nObecny
+      maksymalny czas przyspieszenia: {0}\nNast\u0119pny maksymalny czas przyspieszenia:
+      {1}"
     m_Metadata:
       m_Items: []
   - m_Id: 429829096468480
@@ -366,11 +381,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 5574446511026176
-    m_Localized: TODO
+    m_Localized: "Ostateczny Wr\xF3g"
     m_Metadata:
       m_Items: []
   - m_Id: 5575115317964800
     m_Localized: "Mama Matko-Statk\xF3w przysz\u0142a ze skarg\u0105!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15712873009115136
+    m_Localized: Spotykasz swojego Ostatecznego Wroga!
     m_Metadata:
       m_Items: []
   references:

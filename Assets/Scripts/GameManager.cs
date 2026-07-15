@@ -10,7 +10,9 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance { get; private set; }
 
-    private readonly int[] energyToAdvance = { 100, 10000, 100000 };
+    private readonly int[] energyToAdvance = { 100, 1000, 10000 };
+    // For testing:
+    //private readonly int[] energyToAdvance = { 100, 100, 100 };
 
 
     // State things
@@ -22,18 +24,18 @@ public class GameManager : MonoBehaviour
         levelType = LevelType.Normal
     };
 
-    public bool newLevelUnlocked;
+    internal bool newLevelUnlocked;
 
     // 0 based! So there is level 0, 1, 2
     public int CurrentLevel
     {
         get
         {
-            return State.CurrentLevel;
+            return Mathf.Clamp(State.CurrentLevel, 0, 2);
         }
         set
         {
-            State.CurrentLevel = value;
+            State.CurrentLevel = Mathf.Clamp(value, 0, 2);
             OnGameStateChanged?.Invoke(State);
             SaveSystem.Save(State);
         }
@@ -121,30 +123,30 @@ public class GameManager : MonoBehaviour
         return State.Upgrades;
     }
 
-    public int GetAdvanceEnergy()
+    public int GetRequiredAdvanceEnergy()
     {
-        return energyToAdvance[State.CurrentLevel];
+        return energyToAdvance[CurrentLevel];
     }
 
     public bool CanPlayLevel(int level = -1)
     {
         if (level < 0)
         {
-            level = State.CurrentLevel;
+            level = CurrentLevel;
         }
         return level <= State.CivTypePassed;
     }
 
     public bool CanAdvanceLevel()
     {
-        return State.CurrentLevel == State.CivTypePassed
-            && State.CollectedEnergy >= GetAdvanceEnergy();
+        return CurrentLevel == State.CivTypePassed
+            && State.CollectedEnergy >= GetRequiredAdvanceEnergy();
     }
 
     public void UnlockNextPhase()
     {
-        int advanceEnergy = GetAdvanceEnergy();
-        Debug.Assert(State.CurrentLevel == State.CivTypePassed, "Cannot upgrade level if not in the max level currently");
+        int advanceEnergy = GetRequiredAdvanceEnergy();
+        Debug.Assert(CurrentLevel == State.CivTypePassed, "Cannot upgrade level if not in the max level currently");
 
         State.CollectedEnergy -= advanceEnergy;
         State.CivTypePassed++;

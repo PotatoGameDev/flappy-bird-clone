@@ -3,11 +3,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(DamageCalculator))]
 public class PlanetController : MonoBehaviour
 {
-    private readonly float RPM_PENALTY_THRESHOLD = 20f;
-    private readonly float RPM_MAX = 80f; // This is when the damage is maximal
-
     private readonly WaitForSeconds EVERY_SECOND = new(1);
 
     [SerializeField] private InputActionReference jumpActionReference;
@@ -22,6 +20,8 @@ public class PlanetController : MonoBehaviour
     internal float ToorboBoost { get; set; }
 
     [SerializeField] private float jumpForce = 10f;
+
+    // TODO Couldn't have this been just a bool?
     private float currentJumpForce = 0f;
 
     private Rigidbody2D rb;
@@ -30,7 +30,6 @@ public class PlanetController : MonoBehaviour
     public Vector2 Velocity => rb.linearVelocity;
 
     [SerializeField] private float damageFlashingDurationSeconds = 1f;
-    [SerializeField] private float shieldFlashingDurationSeconds = 1f;
 
     private readonly float flashSpeed = 0.2f;
 
@@ -46,15 +45,12 @@ public class PlanetController : MonoBehaviour
     [SerializeField] private AudioClip[] hitAudioClips;
     [SerializeField] private AudioClip[] quakeAudioClips;
 
+
     // Particles
     [SerializeField] private ParticleSystem peopleParticleSystem;
 
     [SerializeField] private ParticleSystem[] spinDoctorParticleSystemsLeft;
     [SerializeField] private ParticleSystem[] spinDoctorParticleSystemsRight;
-
-    // Shield
-    [SerializeField] private SpriteRenderer shieldRenderer;
-    private Coroutine shieldCoroutine;
 
     // Burning Damage
     [SerializeField] private GameObject burningEffect;
@@ -65,8 +61,6 @@ public class PlanetController : MonoBehaviour
 
     private float rotationShake = 0f;
     private float boundaryDamageShake = 0f;
-    //private float speedShake = 0f;
-    //
 
     private const int LaserHitTextsCount = 4;
     private const string LaserHitTextsPrefix = "casualties_laser";
@@ -78,6 +72,13 @@ public class PlanetController : MonoBehaviour
     private float timeToLaserDamageSummary;
     private long totalLaserDamage = 0;
 
+    // Boss
+    [SerializeField] private BossManager bossManager;
+
+    // Other
+    [SerializeField] private EnergyShieldController shieldController;
+
+    private DamageCalculator damageCalculator;
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -86,6 +87,7 @@ public class PlanetController : MonoBehaviour
 
         GameplayManager.Instance.Player = this;
 
+        // Selecting the sprite
         SpriteHolder = transform.Find("Sprite");
 
         string selectedPlanetName = "planet0" + GameManager.Instance.PlanetType.ToString();
@@ -95,6 +97,8 @@ public class PlanetController : MonoBehaviour
             Transform child = SpriteHolder.GetChild(i);
             child.gameObject.SetActive(child.name == selectedPlanetName);
         }
+
+        damageCalculator = GetComponent<DamageCalculator>();
     }
 
     void Start()
@@ -106,6 +110,7 @@ public class PlanetController : MonoBehaviour
 
         // Damage for getting too close to the sun or to the black hole
         StartCoroutine(UpdateOutOfBoundsDamage());
+
     }
 
     void OnEnable()
@@ -118,7 +123,7 @@ public class PlanetController : MonoBehaviour
         jumpActionReference.action.performed -= OnJump;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (pauseMenuController.IsPaused)
         {
@@ -167,7 +172,7 @@ public class PlanetController : MonoBehaviour
         float deathHeightBottom = Camera.main.transform.position.y - height / 2;
         float dangerHeightBottom = deathHeightBottom + borderDangerMargin;
 
-        float outOfBoundsDamagePerSecond = 0f;
+        float outOfBoundsFraction = 0f;
         bool blackHoleDamage = false;
 
         if (transform.position.y <= dangerHeightBottom)
@@ -175,7 +180,7 @@ public class PlanetController : MonoBehaviour
             // The planet is below damage threshold, should start getting damage
             //
             float distance = Mathf.Abs(transform.position.y - dangerHeightBottom);
-            outOfBoundsDamagePerSecond = distance / borderDangerMargin;
+            outOfBoundsFraction = distance / borderDangerMargin;
             blackHoleDamage = false;
         }
         else if (transform.position.y >= dangerHeightTop)
@@ -184,16 +189,22 @@ public class PlanetController : MonoBehaviour
             //
             float distance = Mathf.Abs(transform.position.y - dangerHeightTop);
 
-            outOfBoundsDamagePerSecond = distance / borderDangerMargin;
+            outOfBoundsFraction = distance / borderDangerMargin;
             blackHoleDamage = true;
         }
 
-        if (outOfBoundsDamagePerSecond > 0f)
+        if (outOfBoundsFraction > 0f)
         {
-            // We lerp from the original color to the half of the red (so not so much red)
-            rendr.color = Color.Lerp(originalColor, Color.Lerp(originalColor, Color.red, 0.5f), outOfBoundsDamagePerSecond);
+            // We lerp from the original color to the half of the red 
+            // (so not so much red)
+            rendr.color = Color.Lerp(
+                    originalColor,
+                    Color.Lerp(originalColor, Color.red, 0.5f),
+                    outOfBoundsFraction);
 
-            long peopleDied = GameplayManager.Instance.TakeHit(HitType.BorderProximity, outOfBoundsDamagePerSecond * Time.deltaTime);
+            long peopleDied = GameplayManager.Instance.OutOfBoundsDamage(
+                    outOfBoundsFraction
+                    );
 
             if (peopleDied > 0)
             {
@@ -246,7 +257,7 @@ public class PlanetController : MonoBehaviour
             GameplayManager.Instance.AddPopulationLossText(totalLaserDamage, LaserHitTextsPrefix, LaserHitTextsCount, false);
             totalLaserDamage = 0;
         }
-        timeToLaserDamageSummary -= Time.deltaTime;
+        timeToLaserDamageSummary -= Time.fixedDeltaTime;
     }
 
     private IEnumerator UpdateRorationalPenalties()
@@ -270,22 +281,10 @@ public class PlanetController : MonoBehaviour
 
             if (rpmAbs > 0f)
             {
-                if (rpmAbs > RPM_PENALTY_THRESHOLD)
-                {
-                    penaltyRpm = rpmAbs - RPM_PENALTY_THRESHOLD;
+                GameplayManager.Instance.RotationalDamage(rpmAbs);
 
-                    // for each rpmAbs above threshold we kill people
-                    if (penaltyRpm > 0)
-                    {
-
-                        GameplayManager.Instance.RotationalDamage(
-                                rpmAbs / RPM_MAX
-                                );
-                    }
-
-                    // Add shake, max 1 for 50RPM, starting with 10 RPM 
-                    rotationShake = Mathf.Lerp(0, 1, (penaltyRpm - 10) / 50f);
-                }
+                // Add shake, max 1 for 50RPM, starting with 10 RPM 
+                rotationShake = Mathf.Lerp(0, 1, (rpmAbs - 10) / 50f);
 
                 float rpmDamped = GameplayManager.Instance.SpinDoctorUsagePerSecond;
                 if (rb.angularVelocity < 0f)
@@ -346,11 +345,13 @@ public class PlanetController : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext ctx)
     {
-        if (pauseMenuController.IsPaused)
+        if (pauseMenuController.IsPaused || Dead)
         {
             return;
         }
         currentJumpForce += jumpForce;
+
+        shieldController.RegisterJump();
     }
 
     // Collisions:
@@ -359,54 +360,65 @@ public class PlanetController : MonoBehaviour
     {
         if (Dead) return;
 
-        // Calculate hit fraction:
-        float maxHitPercent = 100f;
-        float maxHitForce = 10f;
+        // =======================
+        // TODO IMPORTANT
+        // Currently the shield only works in the frame the player jumps.
+        // This makes sense and the parry/shield is decided basing on the
+        // distance between the colliders. 
+        // It's handled in EnergyShieldController.
+        // But if the player HITS something, whichis handled here,
+        // we should not shield it at all (or apply the passive shield?)
+        // When I figure out how to design the jump shield vs the passive
+        // shield, I should remove the leftovers from the time based
+        // shield handling here, it's not used.
+        // =======================
+        collision.gameObject.TryGetComponent(out IPlayerHitReceiver enemyController);
 
-        HitType hitType = HitType.GateCollision;
-
-        if (collision.gameObject.CompareTag("GatePipe"))
+        if (enemyController == null)
         {
-            maxHitForce = 20f;
+            Debug.Log("No IPlayerHitReceiver on " + collision.gameObject.name);
+            return;
         }
-        else if (collision.gameObject.CompareTag("Enemy"))
-        {
-            hitType = HitType.BossCollision;
 
-            // TODO May be more enemy types later
-            if (collision.gameObject.GetComponent<FlyingSaucerController>().Active)
-            {
-                return;
-            }
-            // Nerfing damage, because UFOs seem lighter than the pipes, also it was hard to beat them.
-            maxHitForce = 5f;
-            maxHitPercent = 10f;
+        if (!enemyController.IsHittable())
+        {
+            return;
+        }
+
+        Damage damage = damageCalculator.CalculateDamage(
+                0f,
+                enemyController.GetLifeUnit(),
+                collision.relativeVelocity,
+                shieldController.IsInShieldITime()
+                );
+
+        Debug.Log("Enemy: " + ((MonoBehaviour)enemyController).gameObject.name + " life: " + enemyController.GetLifeUnit() + " damage: " + damage.enemy);
+
+        enemyController.PlayerHit(damage);
+
+        if (damage.shielded)
+        {
+            // Also, since the rocket hit, maybe this is never possible?
+            // TODO Actually, this could still work in the "coyoted" mode.
+            // Leaving it here for that.
+            shieldController.ActivateJumpShieldVisual(damage.parried);
+            // TODO also, if coyote works, then no damage should be done,
+            // just the shield
         }
 
         SoundManager.Instance.PlayRandomHit(hitAudioClips, hitVolume);
 
-        ShowShieldIfAvailable();
-
-
-        // Here we get the magnitude clamped by our max:
-        float hitForce = Mathf.Clamp(collision.relativeVelocity.magnitude, 0f, maxHitForce);
-        // Here we calculate how much of the maxHitPercent we get.
-        // If we hit with the maxHitForce we get 1 * maxHitPercent:
-        float hitPercent = maxHitPercent * Mathf.Clamp01(hitForce / maxHitForce);
-        //This means, that if maxHitPercent is 20, and we hit full force, we get 1 * 20 / 100, meaning 0.2.
-        float hitFraction = hitPercent / 100f;
-
-        // This hit fraction will calculate the percent of population, that died.
-        long peopleDied = GameplayManager.Instance.TakeHit(hitType, hitFraction);
-
+        long peopleDied = GameplayManager.Instance.TakeHit(damage);
 
         // Shaking the screen in direction of the collision
         // TODO: We should pass the shake in percent actually! RelativeVelocity means nothing to shake.
-        // % means everything, like 100% means crazy shake, meanwhile 20% is mid.:w
+        // % means everything, like 100% means crazy shake, meanwhile 20% is mid.
         EffectsManager.Instance.Shake(collision.relativeVelocity);
 
         if (peopleDied > 0)
         {
+            shieldController.ActivateProtectShield();
+
             SoundManager.Instance.PlayScreams(screamsVolume);
             SoundManager.Instance.PlayRandomQuake(quakeAudioClips, quakeVolume);
 
@@ -418,32 +430,42 @@ public class PlanetController : MonoBehaviour
         }
     }
 
-    private void ShowShieldIfAvailable()
+    internal void ResetSpeed()
     {
-        if (shieldCoroutine == null && GameplayManager.Instance.ShieldAvailable())
-        {
-            shieldCoroutine = StartCoroutine(ShieldFlashing(shieldRenderer));
-        }
+        speed = initialSpeed;
     }
 
     public void OnTriggerEnter2D(Collider2D collider)
     {
         if (Dead) return;
-        if (collider.CompareTag("BoundaryBack") || collider.CompareTag("BlackHoleBoundary") || collider.CompareTag("SunStarBoundary"))
+        if (collider.CompareTag("BoundaryBack")
+                || collider.CompareTag("BlackHoleBoundary")
+                || collider.CompareTag("SunStarBoundary"))
         {
             Death();
             return;
         }
 
+        // TODO Rename to laser actually...
         if (collider.CompareTag("Bullet"))
         {
-            ShowShieldIfAvailable();
+            shieldController.ActivateProtectShield();
 
-            long peopleDied = GameplayManager.Instance.TakeHit(HitType.BossLaser);
+            BulletController bullet = collider.GetComponent<BulletController>();
+
+            Damage damage = damageCalculator.CalculateDamage(
+
+                    0f,
+                    bullet.GetLifeUnit(),
+                    bullet.transform.up * bullet.speed,
+                    false);
+
+            long peopleDied = GameplayManager.Instance.TakeHit(damage);
             if (peopleDied > 0f)
             {
                 ExplosionController explosion = InstancePoolsManager.Instance.ExplosionControllerPool.Get();
                 explosion.transform.SetParent(SpriteHolder);
+
                 explosion.transform.position = collider.transform.position;
                 explosion.transform.localScale = Vector2.one * Random.Range(0.2f, 0.4f);
 
@@ -469,6 +491,11 @@ public class PlanetController : MonoBehaviour
         return rb.angularVelocity / 6f;
     }
 
+    public Vector2 GetVelocity()
+    {
+        return rb.linearVelocity;
+    }
+
     public void AddRpm(float rpm)
     {
         rb.angularVelocity += rpm * 6f;
@@ -492,25 +519,6 @@ public class PlanetController : MonoBehaviour
         r.color = originalColor;
     }
 
-    private IEnumerator ShieldFlashing(SpriteRenderer r)
-    {
-        float elapsed = 0f;
-        Color originalColor = r.color;
-
-        while (elapsed < shieldFlashingDurationSeconds)
-        {
-            elapsed += Time.deltaTime;
-
-            Color color = r.color;
-            color.a = Mathf.PingPong(Time.time * flashSpeed, 1f);
-
-            r.color = color;
-            yield return null;
-        }
-
-        r.color = originalColor;
-        shieldCoroutine = null;
-    }
 
     public void Death()
     {

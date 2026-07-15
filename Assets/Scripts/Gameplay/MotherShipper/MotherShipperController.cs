@@ -3,8 +3,9 @@ using System;
 using System.Collections;
 using Random = UnityEngine.Random;
 
+[RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(SwarmFollow))]
-public class MotherShipperController : MonoBehaviour
+public class MotherShipperController : MonoBehaviour, IPlayerHitReceiver
 {
     private static readonly WaitForSeconds WAIT_ONE_SECOND = new(1f);
     private static readonly WaitForSeconds WAIT_TENTH_OF_SECOND = new(0.1f);
@@ -16,11 +17,19 @@ public class MotherShipperController : MonoBehaviour
     [SerializeField] private float bulletSpeed = 15f;
     private float currentCooldown = 0f;
 
-    [SerializeField] private float maxLife = 100f;
+    [SerializeField] private long maxLife = 100L;
 
-    private float halfLife;
-    public float CurrentLife { get; private set; }
+    private long halfLife;
+    public long CurrentLife { get; private set; }
     private bool dead;
+
+    [SerializeField]
+    private float damageFactor = 100f;
+
+
+    [SerializeField]
+    private long cannonDamagePerSecond = 10L;
+
 
     public bool Active
     {
@@ -59,6 +68,9 @@ public class MotherShipperController : MonoBehaviour
     [SerializeField] private float plasmaBeamWidthMax = 1f;
     [SerializeField] private float plasmaBeamLengthMax = 30f;
 
+    [SerializeField]
+    private SwarmController[] swarmControllers;
+
     private Phase phase = Phase.Idle;
     private float cannonAngle;
     private Vector3 orbitOffset;
@@ -86,7 +98,7 @@ public class MotherShipperController : MonoBehaviour
     void Start()
     {
         CurrentLife = maxLife;
-        halfLife = maxLife * 0.5f;
+        halfLife = (long)(maxLife * 0.5f);
 
         Vector3 toCannon = plasmaCannon.transform.position - transform.position;
         if (Mathf.Approximately(toCannon.magnitude, 0f))
@@ -111,6 +123,13 @@ public class MotherShipperController : MonoBehaviour
                     transform.position,
                     transform.position
                 });
+
+        GameplayManager.Instance.OnGatePassed += GatePassed;
+    }
+
+    void OnDestroy()
+    {
+        GameplayManager.Instance.OnGatePassed -= GatePassed;
     }
 
     void Update()
@@ -136,7 +155,7 @@ public class MotherShipperController : MonoBehaviour
             smokeEmitter.Stop();
         }
 
-        if (CurrentLife <= 0f)
+        if (CurrentLife <= 0L)
         {
             plasmaCannon.SetActive(false);
 
@@ -266,7 +285,15 @@ public class MotherShipperController : MonoBehaviour
                         effectsManager.Shake();
                     }
 
-                    long peopleDied = GameplayManager.Instance.TakeHit(HitType.BossPlasmaCannon, Time.deltaTime);
+                    long peopleDied = GameplayManager.Instance.TakeHit(
+                            new(0L,
+                                (long)(cannonDamagePerSecond * Time.deltaTime),
+                                false,
+                                false,
+                                Vector2.zero
+                                )
+                            );
+
 
                     totalBeamKills += peopleDied;
                 }
@@ -274,7 +301,9 @@ public class MotherShipperController : MonoBehaviour
                 {
                     // Ufos:
                     FlyingSaucerController flyingSaucer = hit.collider.GetComponentInParent<FlyingSaucerController>();
-                    flyingSaucer.TakeHit(flyingSaucerDamage * Time.deltaTime);
+                    flyingSaucer.TakeHit(
+                            (long)(flyingSaucerDamage * Time.deltaTime)
+                            );
 
                     if (Time.time - lastExplosionTime >= explosionCooldownSeconds)
                     {
@@ -321,7 +350,6 @@ public class MotherShipperController : MonoBehaviour
                         );
 
                 plasmaBeamLineRenderer.enabled = true;
-                Debug.Log("Enabled");
 
                 plasmaCannonAudioSource.PlayOneShot(plasmaCannonBootUpSoundClip);
                 plasmaCannonAudioSource.loop = true;
@@ -335,8 +363,6 @@ public class MotherShipperController : MonoBehaviour
 
     IEnumerator FiringCoroutine()
     {
-        Debug.Log("FiringCoroutine");
-
         // The beam at min scale to signal danger to the player:
         SetBeam(
                 orbitOffset.normalized,
@@ -400,45 +426,13 @@ public class MotherShipperController : MonoBehaviour
 
     public void Repair(int energy)
     {
-        CurrentLife = Mathf.Clamp(CurrentLife + energy, 0f, maxLife);
+        CurrentLife = (long)Mathf.Clamp(CurrentLife + energy, 0L, maxLife);
 
         if (flashingCoroutine != null)
         {
             StopCoroutine(flashingCoroutine);
         }
         flashingCoroutine = StartCoroutine(HealthFlashing(false));
-    }
-
-    void OnTriggerStay2D(Collider2D collider)
-    {
-        if (dead || !Active)
-        {
-            return;
-        }
-
-        if (collider.CompareTag("Player"))
-        {
-            if (currentCooldown <= 0)
-            {
-                BulletController bullet = InstancePoolsManager.Instance.BulletControllerPool.Get();
-                bullet.Init();
-
-                bullet.transform.position = transform.position;
-
-                // Adding spread when the UFO is dying
-                Vector2 to = collider.transform.position;
-                if (CurrentLife <= halfLife)
-                {
-                    to += Random.insideUnitCircle * (5f * (CurrentLife / halfLife));
-                }
-
-                bullet.FromTo(transform.position, to);
-                bullet.speed = bulletSpeed;
-
-
-                currentCooldown = bulletCooldown;
-            }
-        }
     }
 
     IEnumerator HitStun()
@@ -474,26 +468,32 @@ public class MotherShipperController : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    public void PlayerHit(Damage damage)
     {
-        if (dead || !Active)
-        {
-            return;
-        }
-        if (!collision.gameObject.CompareTag("Player"))
+        if (!IsHittable())
         {
             return;
         }
 
-        TakeHit(5 * collision.relativeVelocity.magnitude, true);
+        TakeHit(damage.enemy, true);
     }
 
+    public bool IsHittable()
+    {
+        return !dead && Active;
+    }
 
-    private void TakeHit(float hit, bool stun = false)
+    public long GetLifeUnit()
+    {
+        return maxLife;
+    }
+
+    private void TakeHit(long hit, bool stun = false)
     {
         if (dead)
         {
-            // Don't check for swarmFollow.Active, because we want to do accrued damage even when not.
+            // Don't check for swarmFollow.Active,
+            // because we want to do accrued damage even when not.
             return;
         }
 
@@ -539,6 +539,22 @@ public class MotherShipperController : MonoBehaviour
         flashingCoroutine = null;
     }
 
+    private void GatePassed()
+    {
+        FlyingSaucerController flyingSaucer = InstancePoolsManager.Instance.
+            FlyingSaucerControllerPool.Get();
+
+        flyingSaucer.Init();
+
+        flyingSaucer.transform.position = transform.position +
+            Vector3.left * 2f;
+
+        SwarmController swarmController = swarmControllers[
+            Random.Range(0, swarmControllers.Length)
+        ];
+
+        swarmController.AddBoid(flyingSaucer.GetComponent<SwarmFollow>());
+    }
 }
 
 enum Phase

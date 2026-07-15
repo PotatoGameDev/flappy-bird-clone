@@ -40,11 +40,18 @@ public class SwarmController : MonoBehaviour
 
     private readonly List<Vector2> pendingPositions = new();
 
+    public void AddBoid(SwarmFollow boid)
+    {
+        Boids.Add(boid);
+    }
+
     void FixedUpdate()
     {
         if (Boids.Count == 0) return;
 
-        int removed = Boids.RemoveAll(boid => boid == null || !boid.enabled || !boid.gameObject.activeInHierarchy);
+        int removed = Boids.RemoveAll(boid => boid == null
+                || !boid.enabled
+                || !boid.gameObject.activeInHierarchy);
         if (removed > 0)
             SwarmBoidDied?.Invoke();
 

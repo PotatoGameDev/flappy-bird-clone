@@ -25,7 +25,7 @@ public class EnergyBallManager : MonoBehaviour
         Instance = null;
     }
 
-    public EnergyBallController GetRandom(int gate)
+    public EnergyBallController GetRandom(float gate)
     {
         float yellowMinGate = 5f;
         float redMinGate = 20f;

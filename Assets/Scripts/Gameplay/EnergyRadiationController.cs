@@ -4,11 +4,11 @@ using System.Collections;
 
 public class EnergyRadiationController : MonoBehaviour
 {
-
     [SerializeField] private Transform spawnPosition;
     [SerializeField] private Transform destinationPosition;
     [SerializeField] private Vector2 destinationSpread;
     [SerializeField] private float frequencySeconds = 1f;
+    [SerializeField] private float chancesMultiplier = 1f;
 
     [SerializeField] private LayerMask layerMask;
 
@@ -39,7 +39,7 @@ public class EnergyRadiationController : MonoBehaviour
             for (int i = 0; i < energyCount; i++)
             {
                 EnergyBallController ball = EnergyBallManager.Instance.GetRandom(
-                        GameplayManager.Instance.GateCount
+                        GameplayManager.Instance.GateCount * chancesMultiplier
                 );
                 ball.Init(spawnPosition.position
                     + new Vector3(Random.Range(-1, 2), Random.Range(-1, 2), 0f));

@@ -154,10 +154,40 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 51544466386944
-    m_Localized: 'This version of the game has not yet implemented this level fully
-      :D
+    m_Localized: 'No one can stop us! Now that we have defeated that Bad Mothershipper
 
-      Early access, amarite?'
+      we
+      are on the way to conquering the whole galaxy and gathering it''s energy.
+
+      Our
+      scientists already found a way to jump from four to five dimensions using that
+      energy.
+
+      You know what this means? Bagels!
+
+      So there is absolutely
+      no one who could stop... Wait, what''s that?
+
+      Is it some kind of small
+      moon? That''s no moon, that''s a rogue planet, and an angry one!
+
+      So
+      you know the drill, gather energy, defeat the Ultimate Enemy so we can
+
+      finally
+      push the whopper button!
+
+
+      ---------
+
+
+      Type III in the Kardashev
+      scale means that the civilization managed to
+
+      fully exploit the energy
+      of the whole galaxy. That''s a lot of energy!
+
+'
     m_Metadata:
       m_Items: []
   - m_Id: 52693919592448
@@ -191,8 +221,9 @@ MonoBehaviour:
     m_Localized: "Detects the energy particles that are radiated from that big, gaping
       black hole at the top.\nThe higher the level, the more energy particles are
       observed to eject.\nThe higher the gate number, the bigger the chance for a
-      high level energy particle, \ngiving more energy.\n\nCurrent black hole energy
-      particles: {0}\nNext black hole energy particles: {1}"
+      high level energy particle, \ngiving more energy.\n\nBlack hole has bigger
+      chance for high level energy!\n\nCurrent black hole energy particles: {0}\nNext
+      black hole energy particles: {1}"
     m_Metadata:
       m_Items: []
   - m_Id: 64025406468096
@@ -203,8 +234,9 @@ MonoBehaviour:
     m_Localized: "Detects the energy particles that are radiated from our SunStar
       at the bottom.\nThe higher level, the more energy particles are observed to
       eject.\nThe higher the gate number, the bigger the chance for a high level
-      energy particle, \ngiving more energy.\n\nCurrent SunStar energy particles:
-      {0}\nNext SunStar energy particles: {1}"
+      energy particle, \ngiving more energy.\n\nSunStar has bigger chance for high
+      level energy!\n\nCurrent SunStar energy particles: {0}\nNext SunStar energy
+      particles: {1}"
     m_Metadata:
       m_Items: []
   - m_Id: 64571504848896
@@ -263,9 +295,36 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 66369527476224
-    m_Localized: "Absorbs some damage from collisions. \nAlso absorbs black hole
-      and SunStar damage.\nDoes not protect from spin damage tho...\n\nCurrent max
-      population damage absorbed: {0}\nNext max population damage absorbed: {1}"
+    m_Localized: 'Energy Shield has two modes:
+
+      Active - when there are enemies
+      in it''s radius and press jump
+
+      the shield can damage them or even ''parry''
+      if close enough - dealing a lot of damage!
+
+      Passive - reduces damage
+      on collision.
+
+
+      Also absorbs black hole and SunStar damage.
+
+      Does
+      not protect from spin damage tho...
+
+
+      Regenerated with energy.
+
+
+      Current
+      max population damage absorbed: {0}
+
+      Next max population damage absorbed:
+      {1}
+
+      Current shield radius: {2}
+
+      Next shield radius: {3}'
     m_Metadata:
       m_Items: []
   - m_Id: 66368713781248
@@ -283,7 +342,7 @@ MonoBehaviour:
       being ejected into the void of space.
 
 
-      Works automatically until depleted.
+      Regenerated with energy.
 
 
       Current
@@ -313,10 +372,14 @@ MonoBehaviour:
       planet will speed up only until it reaches the initial position.
 
 
-      Current
-      max boost usage time: {0}
+      Regenerated
+      with energy.
 
-      Next max boost usage time: {1}'
+
+      Current max boost usage time: {0}
+
+      Next max boost
+      usage time: {1}'
     m_Metadata:
       m_Items: []
   - m_Id: 64396300382208
@@ -424,11 +487,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 5574446511026176
-    m_Localized: TODO
+    m_Localized: Ultimate Enemy
     m_Metadata:
       m_Items: []
   - m_Id: 5575115317964800
     m_Localized: Motherships' Mom came to complain!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15712873009115136
+    m_Localized: You meet your Ultimate Enemy!
     m_Metadata:
       m_Items: []
   references:

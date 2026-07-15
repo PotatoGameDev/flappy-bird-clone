@@ -36,7 +36,7 @@ public class LevelSelectionController : SecondaryMenuDelegate
         long startingPopulation = GameManager.Instance.GetBasePopulation();
 
         long currentEnergy = GameManager.Instance.CollectedEnergy;
-        long advanceEnergy = GameManager.Instance.GetAdvanceEnergy();
+        long advanceEnergy = GameManager.Instance.GetRequiredAdvanceEnergy();
 
         label.SetText(string.Format(
                 Loc.Get("level_select_stats"),
