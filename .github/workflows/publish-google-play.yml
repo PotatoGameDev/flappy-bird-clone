@@ -47,26 +47,20 @@ jobs:
           docker-images: true
           swap-storage: true
 
-      - name: Decode Keystore
-        run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android-release.keystore
-
       - name: Build Android App Bundle
         uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-          KEYSTORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          KEY_PASS: ${{ secrets.ANDROID_KEY_PASSWORD }}
         with:
           targetPlatform: Android
           androidExportType: androidAppBundle
-          androidExportSigningType: release
-          androidKeystoreName: android-release.keystore
+          androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           androidKeyaliasName: ${{ secrets.ANDROID_KEY_ALIAS }}
-          androidKeyPass: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          androidKeyaliasPass: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          allowDirtyBuild: true
 
       - name: Upload Android Build Artifact
         uses: actions/upload-artifact@v4
