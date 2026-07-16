@@ -367,7 +367,7 @@ public class GameplayManager : MonoBehaviour
 
     private void UpdateEnergyGoalSlider()
     {
-        energyGoalSlider.SetValueWithoutNotify(collectedEnergy);
+        energyGoalSlider.SetValueWithoutNotify(advanceEnergy);
     }
 
     private void UpdateRpmLabel()
