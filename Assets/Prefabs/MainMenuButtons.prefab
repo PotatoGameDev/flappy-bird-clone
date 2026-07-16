@@ -361,6 +361,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuManager
   startButtonLabel: {fileID: 8798473202928698940}
   resetButton: {fileID: 1148526363225735834}
+  resetProgressPanel: {fileID: 0}
 --- !u!1 &2055819182108086948
 GameObject:
   m_ObjectHideFlags: 0
@@ -1221,7 +1222,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 701274780593330913}
         m_TargetAssemblyTypeName: MainMenuManager, Assembly-CSharp
-        m_MethodName: ResetGame
+        m_MethodName: ShowResetModal
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

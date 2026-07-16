@@ -27,7 +27,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 604329734144
-    m_Localized: Od nowa
+    m_Localized: "Resetuj gr\u0119"
     m_Metadata:
       m_Items: []
   - m_Id: 711469035520
@@ -390,6 +390,23 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 15712873009115136
     m_Localized: Spotykasz swojego Ostatecznego Wroga!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20369774816784384
+    m_Localized: Nie resetuj
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20369858182770688
+    m_Localized: Resetuj
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20369948142202880
+    m_Localized: Na pewno?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20370038437179392
+    m_Localized: "To usunie ca\u0142y tw\xF3j post\u0119p w grze i zaczniesz od nowa.\nNIE
+      mo\u017Cna tego cofn\u0105\u0107!\nJeste\u015B pewien?"
     m_Metadata:
       m_Items: []
   references:

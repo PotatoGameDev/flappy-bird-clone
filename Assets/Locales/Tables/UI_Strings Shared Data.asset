@@ -303,6 +303,22 @@ MonoBehaviour:
     m_Key: gameplay_boss_intro_title_3
     m_Metadata:
       m_Items: []
+  - m_Id: 20369774816784384
+    m_Key: main_reset_cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20369858182770688
+    m_Key: main_reset_confirm
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20369948142202880
+    m_Key: main_reset_modal_title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20370038437179392
+    m_Key: main_reset_modal_text
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
