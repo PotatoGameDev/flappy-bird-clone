@@ -1,0 +1,69 @@
+name: Build & Publish to itch.io
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  build-webgl:
+    name: Build WebGL
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Cache Unity Library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-WebGL-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-WebGL-
+            Library-
+
+      - name: Build WebGL
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: WebGL
+
+      - name: Upload WebGL Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: webgl-build
+          path: build/WebGL
+
+  publish:
+    name: Publish to itch.io
+    needs: build-webgl
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download WebGL Build
+        uses: actions/download-artifact@v4
+        with:
+          name: webgl-build
+          path: build/WebGL
+
+      - name: Setup butler
+        uses: remarkablegames/setup-butler@v3
+
+      - name: Get version
+        id: version
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+            echo "version=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=0.0.0-${{ github.sha }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload to itch.io
+        run: butler push build/WebGL flappyplanet/flappyplanet:web --userversion ${{ steps.version.outputs.version }}
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}

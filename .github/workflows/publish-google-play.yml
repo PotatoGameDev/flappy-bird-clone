@@ -1,0 +1,103 @@
+name: Build & Publish to Google Play
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      track:
+        description: 'Release track'
+        required: true
+        default: 'internal'
+        type: choice
+        options:
+          - internal
+          - alpha
+          - beta
+          - production
+
+jobs:
+  build-android:
+    name: Build Android
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Cache Unity Library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-Android-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-Android-
+            Library-
+
+      - name: Free disk space (Android)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: false
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+
+      - name: Build Android App Bundle
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: Android
+          androidExportType: androidAppBundle
+          androidExportSigningType: debug
+
+      - name: Upload Android Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-build
+          path: build/Android
+
+  publish:
+    name: Publish to Google Play
+    needs: build-android
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Android Build
+        uses: actions/download-artifact@v4
+        with:
+          name: android-build
+          path: build/Android
+
+      - name: Find AAB file
+        id: find-aab
+        run: |
+          AAB_FILE=$(find build/Android -name "*.aab" | head -1)
+          echo "aab_path=$AAB_FILE" >> $GITHUB_OUTPUT
+          echo "Found AAB: $AAB_FILE"
+
+      - name: Determine release track
+        id: track
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "track=${{ github.event.inputs.track }}" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+            echo "track=beta" >> $GITHUB_OUTPUT
+          else
+            echo "track=internal" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload to Google Play
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_STORE_JSON_KEY }}
+          packageName: es.potatogam.flappyplanet
+          releaseFiles: ${{ steps.find-aab.outputs.aab_path }}
+          track: ${{ steps.track.outputs.track }}
+          status: completed
