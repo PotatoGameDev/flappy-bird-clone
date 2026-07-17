@@ -92,9 +92,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: Library
-          key: Library-Linux64-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          key: Library-StandaloneLinux64-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
           restore-keys: |
-            Library-Linux64-
+            Library-StandaloneLinux64-
             Library-
 
       - name: Build Linux
@@ -104,14 +104,14 @@ jobs:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          targetPlatform: Linux64
+          targetPlatform: StandaloneLinux64
           allowDirtyBuild: true
 
       - name: Upload Linux Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: linux-build
-          path: build/Linux64
+          path: build/StandaloneLinux64
 
   build-windows:
     name: Build Windows
@@ -140,9 +140,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: Library
-          key: Library-Windows64-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          key: Library-StandaloneWindows64-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
           restore-keys: |
-            Library-Windows64-
+            Library-StandaloneWindows64-
             Library-
 
       - name: Build Windows
@@ -152,14 +152,14 @@ jobs:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          targetPlatform: Windows64
+          targetPlatform: StandaloneWindows64
           allowDirtyBuild: true
 
       - name: Upload Windows Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: windows-build
-          path: build/Windows64
+          path: build/StandaloneWindows64
 
   build-android:
     name: Build Android
