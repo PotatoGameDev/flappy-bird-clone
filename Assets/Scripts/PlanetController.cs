@@ -17,6 +17,7 @@ public class PlanetController : MonoBehaviour
     [SerializeField] private float initialSpeed = 5f;
 
     [SerializeField] private float speedIncrease = 0.1f;
+    [SerializeField] private float speedIncreaseFinalBoss = 0.5f;
     internal float ToorboBoost { get; set; }
 
     [SerializeField] private float jumpForce = 10f;
@@ -482,7 +483,14 @@ public class PlanetController : MonoBehaviour
         if (collider.CompareTag("Gate"))
         {
             GameplayManager.Instance.PassGate();
-            speed += speedIncrease;
+            if (bossManager.IsFinalBossActive())
+            {
+                speed += speedIncreaseFinalBoss;
+            }
+            else
+            {
+                speed += speedIncrease;
+            }
         }
     }
 

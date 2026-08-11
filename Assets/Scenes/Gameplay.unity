@@ -5186,7 +5186,7 @@ MonoBehaviour:
   finalBossContainer: {fileID: 1086831020}
   finalBossPlayerSpeed: 5
   finalBoss: {fileID: 1885914594}
-  forceBoss: 0
+  forceBoss: 1
   forceLevel: 3
   bossHealthBarContainer: {fileID: 1262686247}
   gateCounterContainer: {fileID: 1694599427}
@@ -55020,8 +55020,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 894ebc8d9ee61ac5f8e8475edb386b4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FinalBossController
-  life: 1000000000
-  maxLife: 1000000000
+  life: 100000000
+  maxLife: 100000000
   delaySeconds: 1
   shieldChunks:
   - {fileID: 1549496978}
