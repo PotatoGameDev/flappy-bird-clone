@@ -12,22 +12,36 @@ namespace PotatoGameDev.InputGlyph
 
         [SerializeField] private PlayerInput playerInput;
 
+        public static GlyphManager Instance { get; private set; }
+
         public string CurrentScheme { get; private set; }
         public GlyphMapping CurrentMapping { get; private set; }
 
         public event Action<string, GlyphMapping> InputSchemeChanged;
 
-
-        void Start()
+        void Awake()
         {
-            playerInput.onControlsChanged += OnControlsChanged;
+            Instance = this;
 
-            OnControlsChanged(playerInput);
+            if (playerInput != null)
+            {
+                playerInput.onControlsChanged += OnControlsChanged;
+
+                OnControlsChanged(playerInput);
+            }
         }
 
         void OnDestroy()
         {
-            playerInput.onControlsChanged -= OnControlsChanged;
+            if (Instance == this)
+            {
+                Instance = null;
+            }
+
+            if (playerInput != null)
+            {
+                playerInput.onControlsChanged -= OnControlsChanged;
+            }
         }
 
         private void OnControlsChanged(PlayerInput input)
@@ -42,7 +56,6 @@ namespace PotatoGameDev.InputGlyph
             };
 
             InputSchemeChanged?.Invoke(CurrentScheme, CurrentMapping);
-            // TODO
         }
     }
 }

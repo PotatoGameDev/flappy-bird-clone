@@ -1,86 +1,133 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 using TMPro;
 
 namespace PotatoGameDev.InputGlyph
 {
+
+    public enum GlyphShowMode
+    {
+        WhenSelected,
+        Always,
+    }
 
     public class GlyphIcon : MonoBehaviour
     {
         [SerializeField] private InputActionReference action;
         [SerializeField] private Image image;
         [SerializeField] private TextMeshProUGUI label;
-        [SerializeField] private GlyphManager glyphManager;
         [SerializeField] private bool showLabel;
+        [SerializeField] private GlyphShowMode showMode;
 
-        void Start()
-        {
-            glyphManager = FindAnyObjectByType<GlyphManager>();
-            Debug.Assert(glyphManager != null, "No GlyphManager on scene!");
+        private bool shown;
+        private bool subscribed;
 
-            glyphManager.InputSchemeChanged += InputSchemeChanged;
-            InputSchemeChanged(glyphManager.CurrentScheme, glyphManager.CurrentMapping);
-
-
-            if (!showLabel)
-            {
-                label.gameObject.SetActive(false);
-            }
-        }
+        public bool Shown => shown;
 
         void OnEnable()
         {
-            if (glyphManager != null)
+            shown = showMode == GlyphShowMode.Always || IsCurrentSelection();
+
+            Subscribe();
+            Refresh();
+            Apply();
+        }
+
+        void Start()
+        {
+            if (!subscribed)
             {
-                glyphManager.InputSchemeChanged += InputSchemeChanged;
-                InputSchemeChanged(glyphManager.CurrentScheme, glyphManager.CurrentMapping);
+                Subscribe();
             }
+
+            Refresh();
+            Apply();
         }
 
         void OnDisable()
         {
-            if (glyphManager != null)
-            {
-                glyphManager.InputSchemeChanged -= InputSchemeChanged;
-            }
+            Unsubscribe();
         }
 
         void OnDestroy()
         {
-            if (glyphManager != null)
+            Unsubscribe();
+        }
+
+        private void Subscribe()
+        {
+            if (subscribed || GlyphManager.Instance == null)
             {
-                glyphManager.InputSchemeChanged -= InputSchemeChanged;
+                return;
+            }
+
+            GlyphManager.Instance.InputSchemeChanged += OnInputSchemeChanged;
+            subscribed = true;
+        }
+
+        private void Unsubscribe()
+        {
+            if (!subscribed)
+            {
+                return;
+            }
+
+            if (GlyphManager.Instance != null)
+            {
+                GlyphManager.Instance.InputSchemeChanged -= OnInputSchemeChanged;
+            }
+            subscribed = false;
+        }
+
+        public void SetShown(bool visible)
+        {
+            shown = visible;
+            Apply();
+        }
+
+        private void OnInputSchemeChanged(string scheme, GlyphMapping currentMapping)
+        {
+            Refresh();
+            Apply();
+        }
+
+        private void Refresh()
+        {
+            string bindingPath = GetBindingPath(action.action, GlyphManager.Instance?.CurrentScheme);
+
+            Sprite sprite = null;
+            if (bindingPath != null && GlyphManager.Instance != null)
+            {
+                sprite = GlyphManager.Instance.CurrentMapping?.GetGlyph(bindingPath);
+            }
+
+            if (image != null)
+            {
+                image.sprite = sprite;
             }
         }
 
-        void InputSchemeChanged(string scheme, GlyphMapping currentMapping)
+        private void Apply()
         {
-            string bindingPath = GetBindingPath(action.action, scheme);
+            bool visible = shown && image != null && image.sprite != null;
 
-            Sprite sprite = null;
-            if (bindingPath != null && currentMapping != null)
+            if (image != null)
             {
-                sprite = currentMapping.GetGlyph(bindingPath);
+                image.enabled = visible;
             }
-            if (sprite == null)
+
+            if (showLabel && label != null)
             {
-                // No binding in that scheme, hiding image
-                image.enabled = false;
-                if (showLabel)
-                {
-                    label.gameObject.SetActive(false);
-                }
+                label.gameObject.SetActive(visible);
             }
-            else
-            {
-                image.enabled = true;
-                image.sprite = sprite;
-                if (showLabel)
-                {
-                    label.gameObject.SetActive(true);
-                }
-            }
+        }
+
+        private bool IsCurrentSelection()
+        {
+            return EventSystem.current != null
+                    && EventSystem.current.currentSelectedGameObject == gameObject;
         }
 
         static string GetBindingPath(InputAction action, string scheme)

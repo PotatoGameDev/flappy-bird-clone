@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbcc5d5da691b60a5973fce90b96a837, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  glyph: {fileID: 2242935620932651770}
+  glyph: {fileID: 1652105709763453893}
 --- !u!114 &5556087225561609070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -630,6 +630,7 @@ GameObject:
   - component: {fileID: 2341202043092267562}
   - component: {fileID: 4417735631763901394}
   - component: {fileID: 4105340497738376464}
+  - component: {fileID: 8271532419847012345}
   m_Layer: 5
   m_Name: StartButton
   m_TagString: Untagged
@@ -766,7 +767,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbcc5d5da691b60a5973fce90b96a837, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  glyph: {fileID: 7158247359033299819}
+  glyph: {fileID: 7681667067003828820}
 --- !u!114 &4417735631763901394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1244,7 +1245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbcc5d5da691b60a5973fce90b96a837, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  glyph: {fileID: 7463103861113391224}
+  glyph: {fileID: 7953271283672162631}
 --- !u!114 &5414911984094814831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1908,3 +1909,49 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5804401525528830780, guid: 086374e6e0115a2039580410ec37ac2d, type: 3}
   m_PrefabInstance: {fileID: 5741494137155447238}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7681667067003828820 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6431306417436297731, guid: 086374e6e0115a2039580410ec37ac2d, type: 3}
+  m_PrefabInstance: {fileID: 3736391626100011095}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 569cb6dca11fe88de84249881dfe4183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlyphIcon
+--- !u!114 &7953271283672162631 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6431306417436297731, guid: 086374e6e0115a2039580410ec37ac2d, type: 3}
+  m_PrefabInstance: {fileID: 3971934097980468036}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 569cb6dca11fe88de84249881dfe4183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlyphIcon
+--- !u!114 &1652105709763453893 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6431306417436297731, guid: 086374e6e0115a2039580410ec37ac2d, type: 3}
+  m_PrefabInstance: {fileID: 5741494137155447238}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 569cb6dca11fe88de84249881dfe4183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlyphIcon
+--- !u!114 &8271532419847012345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2343934869045501381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15d5ac413226438f2849d9c96768dbf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AutoselectOnEnable
+  autoselect: 1

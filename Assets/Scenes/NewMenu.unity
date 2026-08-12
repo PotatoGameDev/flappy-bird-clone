@@ -2756,7 +2756,6 @@ MonoBehaviour:
   interactableColor: {r: 1, g: 1, b: 1, a: 1}
   nonInteractableColor: {r: 0.4619699, g: 0.4619699, b: 0.4619699, a: 1}
   label: {fileID: 831486623}
-  glyphIcon: {fileID: 0}
 --- !u!1 &614638647
 GameObject:
   m_ObjectHideFlags: 0
@@ -3132,18 +3131,10 @@ PrefabInstance:
       propertyPath: action
       value: 
       objectReference: {fileID: 1820802093452053531, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-    - target: {fileID: 6360182601608611863, guid: 086374e6e0115a2039580410ec37ac2d, type: 3}
-      propertyPath: glyphManager
-      value: 
-      objectReference: {fileID: 2056369752}
     - target: {fileID: 6431306417436297731, guid: 086374e6e0115a2039580410ec37ac2d, type: 3}
       propertyPath: action
       value: 
       objectReference: {fileID: 1820802093452053531, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-    - target: {fileID: 6431306417436297731, guid: 086374e6e0115a2039580410ec37ac2d, type: 3}
-      propertyPath: glyphManager
-      value: 
-      objectReference: {fileID: 2056369752}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3154,17 +3145,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6000242650470838905, guid: 086374e6e0115a2039580410ec37ac2d, type: 3}
   m_PrefabInstance: {fileID: 696492123}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &696492125 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6431306417436297731, guid: 086374e6e0115a2039580410ec37ac2d, type: 3}
-  m_PrefabInstance: {fileID: 696492123}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 569cb6dca11fe88de84249881dfe4183, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GlyphIcon
 --- !u!1 &730986253
 GameObject:
   m_ObjectHideFlags: 0
@@ -3704,6 +3684,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1497973429626725464, guid: 5e7b42df2a47a566bbe5b3939667cfa5, type: 3}
+      propertyPath: glyph
+      value: 
+      objectReference: {fileID: 783724552}
     - target: {fileID: 1564538343738042024, guid: 5e7b42df2a47a566bbe5b3939667cfa5, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -3920,6 +3904,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8581145590475161046, guid: 5e7b42df2a47a566bbe5b3939667cfa5, type: 3}
+      propertyPath: glyph
+      value: 
+      objectReference: {fileID: 783724553}
     - target: {fileID: 8650130477033218977, guid: 5e7b42df2a47a566bbe5b3939667cfa5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -3943,6 +3931,28 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7496179796043799788, guid: 5e7b42df2a47a566bbe5b3939667cfa5, type: 3}
   m_PrefabInstance: {fileID: 783724549}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &783724552 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6666284701530586334, guid: 5e7b42df2a47a566bbe5b3939667cfa5, type: 3}
+  m_PrefabInstance: {fileID: 783724549}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 569cb6dca11fe88de84249881dfe4183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlyphIcon
+--- !u!114 &783724553 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9134385936378841364, guid: 5e7b42df2a47a566bbe5b3939667cfa5, type: 3}
+  m_PrefabInstance: {fileID: 783724549}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 569cb6dca11fe88de84249881dfe4183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlyphIcon
 --- !u!1 &813704445
 GameObject:
   m_ObjectHideFlags: 0
@@ -4082,10 +4092,6 @@ PrefabInstance:
       propertyPath: showLabel
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1755024659807398325, guid: 2a935d53c14a8eb0b8dc5f0a69ad92bf, type: 3}
-      propertyPath: glyphManager
-      value: 
-      objectReference: {fileID: 2056369752}
     - target: {fileID: 1961939579595364144, guid: 2a935d53c14a8eb0b8dc5f0a69ad92bf, type: 3}
       propertyPath: m_Name
       value: InputHintOptionChange
@@ -5577,7 +5583,6 @@ MonoBehaviour:
   interactableColor: {r: 1, g: 1, b: 1, a: 1}
   nonInteractableColor: {r: 0.4619699, g: 0.4619699, b: 0.4619699, a: 1}
   label: {fileID: 394801755}
-  glyphIcon: {fileID: 0}
 --- !u!1 &1119627400
 GameObject:
   m_ObjectHideFlags: 0
@@ -7055,10 +7060,6 @@ PrefabInstance:
       propertyPath: action
       value: 
       objectReference: {fileID: 392368643174621059, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-    - target: {fileID: 1724326838251233745, guid: 943d1095f6068b02ab30cd0709b7b708, type: 3}
-      propertyPath: glyphManager
-      value: 
-      objectReference: {fileID: 2056369752}
     - target: {fileID: 1748906552422161831, guid: 943d1095f6068b02ab30cd0709b7b708, type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 0
@@ -7111,6 +7112,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -0.0000038146973
       objectReference: {fileID: 0}
+    - target: {fileID: 2341202043092267562, guid: 943d1095f6068b02ab30cd0709b7b708, type: 3}
+      propertyPath: glyph
+      value: 
+      objectReference: {fileID: 1429254700}
+    - target: {fileID: 2600410576979648043, guid: 943d1095f6068b02ab30cd0709b7b708, type: 3}
+      propertyPath: glyph
+      value: 
+      objectReference: {fileID: 1429254699}
     - target: {fileID: 2703970810334629091, guid: 943d1095f6068b02ab30cd0709b7b708, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -93
@@ -7118,10 +7127,6 @@ PrefabInstance:
     - target: {fileID: 2703970810334629091, guid: 943d1095f6068b02ab30cd0709b7b708, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 29.063
-      objectReference: {fileID: 0}
-    - target: {fileID: 3072299268547306651, guid: 943d1095f6068b02ab30cd0709b7b708, type: 3}
-      propertyPath: autoselect
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4105340497738376464, guid: 943d1095f6068b02ab30cd0709b7b708, type: 3}
       propertyPath: soundManager
@@ -7131,6 +7136,10 @@ PrefabInstance:
       propertyPath: border
       value: 
       objectReference: {fileID: 1708590055}
+    - target: {fileID: 4735434335951432745, guid: 943d1095f6068b02ab30cd0709b7b708, type: 3}
+      propertyPath: glyph
+      value: 
+      objectReference: {fileID: 1429254698}
     - target: {fileID: 5414911984094814831, guid: 943d1095f6068b02ab30cd0709b7b708, type: 3}
       propertyPath: border
       value: 
@@ -7335,18 +7344,10 @@ PrefabInstance:
       propertyPath: action
       value: 
       objectReference: {fileID: 392368643174621059, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-    - target: {fileID: 7753434958272608320, guid: 943d1095f6068b02ab30cd0709b7b708, type: 3}
-      propertyPath: glyphManager
-      value: 
-      objectReference: {fileID: 2056369752}
     - target: {fileID: 8024514467442418515, guid: 943d1095f6068b02ab30cd0709b7b708, type: 3}
       propertyPath: action
       value: 
       objectReference: {fileID: 392368643174621059, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-    - target: {fileID: 8024514467442418515, guid: 943d1095f6068b02ab30cd0709b7b708, type: 3}
-      propertyPath: glyphManager
-      value: 
-      objectReference: {fileID: 2056369752}
     - target: {fileID: 8152422728400053861, guid: 943d1095f6068b02ab30cd0709b7b708, type: 3}
       propertyPath: m_Name
       value: MainMenuButtons
@@ -7438,6 +7439,39 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6535804993045913415, guid: 943d1095f6068b02ab30cd0709b7b708, type: 3}
   m_PrefabInstance: {fileID: 1429254696}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1429254698 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7953271283672162631, guid: 943d1095f6068b02ab30cd0709b7b708, type: 3}
+  m_PrefabInstance: {fileID: 1429254696}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 569cb6dca11fe88de84249881dfe4183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlyphIcon
+--- !u!114 &1429254699 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1652105709763453893, guid: 943d1095f6068b02ab30cd0709b7b708, type: 3}
+  m_PrefabInstance: {fileID: 1429254696}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 569cb6dca11fe88de84249881dfe4183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlyphIcon
+--- !u!114 &1429254700 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7681667067003828820, guid: 943d1095f6068b02ab30cd0709b7b708, type: 3}
+  m_PrefabInstance: {fileID: 1429254696}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 569cb6dca11fe88de84249881dfe4183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlyphIcon
 --- !u!114 &1429929386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8073,10 +8107,6 @@ PrefabInstance:
       propertyPath: showLabel
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1755024659807398325, guid: 2a935d53c14a8eb0b8dc5f0a69ad92bf, type: 3}
-      propertyPath: glyphManager
-      value: 
-      objectReference: {fileID: 2056369752}
     - target: {fileID: 1961939579595364144, guid: 2a935d53c14a8eb0b8dc5f0a69ad92bf, type: 3}
       propertyPath: m_Name
       value: InputHintOptionSelect
@@ -8553,18 +8583,10 @@ PrefabInstance:
       propertyPath: action
       value: 
       objectReference: {fileID: 7505266862988751611, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-    - target: {fileID: 6360182601608611863, guid: 086374e6e0115a2039580410ec37ac2d, type: 3}
-      propertyPath: glyphManager
-      value: 
-      objectReference: {fileID: 2056369752}
     - target: {fileID: 6431306417436297731, guid: 086374e6e0115a2039580410ec37ac2d, type: 3}
       propertyPath: action
       value: 
       objectReference: {fileID: 7505266862988751611, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-    - target: {fileID: 6431306417436297731, guid: 086374e6e0115a2039580410ec37ac2d, type: 3}
-      propertyPath: glyphManager
-      value: 
-      objectReference: {fileID: 2056369752}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8704,10 +8726,6 @@ PrefabInstance:
       propertyPath: showLabel
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1755024659807398325, guid: 2a935d53c14a8eb0b8dc5f0a69ad92bf, type: 3}
-      propertyPath: glyphManager
-      value: 
-      objectReference: {fileID: 2056369752}
     - target: {fileID: 1961939579595364144, guid: 2a935d53c14a8eb0b8dc5f0a69ad92bf, type: 3}
       propertyPath: m_Name
       value: InputHintStart
@@ -9054,18 +9072,10 @@ PrefabInstance:
       propertyPath: action
       value: 
       objectReference: {fileID: 8703329838169073363, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-    - target: {fileID: 6360182601608611863, guid: 086374e6e0115a2039580410ec37ac2d, type: 3}
-      propertyPath: glyphManager
-      value: 
-      objectReference: {fileID: 2056369752}
     - target: {fileID: 6431306417436297731, guid: 086374e6e0115a2039580410ec37ac2d, type: 3}
       propertyPath: action
       value: 
       objectReference: {fileID: 8703329838169073363, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-    - target: {fileID: 6431306417436297731, guid: 086374e6e0115a2039580410ec37ac2d, type: 3}
-      propertyPath: glyphManager
-      value: 
-      objectReference: {fileID: 2056369752}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10122,7 +10132,6 @@ MonoBehaviour:
   interactableColor: {r: 1, g: 1, b: 1, a: 1}
   nonInteractableColor: {r: 0.4619699, g: 0.4619699, b: 0.4619699, a: 1}
   label: {fileID: 295030376}
-  glyphIcon: {fileID: 696492125}
 --- !u!1 &1690172069
 GameObject:
   m_ObjectHideFlags: 0
@@ -10233,7 +10242,6 @@ MonoBehaviour:
   interactableColor: {r: 1, g: 1, b: 1, a: 1}
   nonInteractableColor: {r: 0.4619699, g: 0.4619699, b: 0.4619699, a: 1}
   label: {fileID: 1097787952}
-  glyphIcon: {fileID: 0}
 --- !u!1001 &1697432189
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10758,7 +10766,6 @@ MonoBehaviour:
   interactableColor: {r: 1, g: 1, b: 1, a: 1}
   nonInteractableColor: {r: 0.4619699, g: 0.4619699, b: 0.4619699, a: 1}
   label: {fileID: 913855290}
-  glyphIcon: {fileID: 0}
 --- !u!114 &1748698205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11371,10 +11378,6 @@ PrefabInstance:
       propertyPath: action
       value: 
       objectReference: {fileID: 3057233612647025127, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-    - target: {fileID: 6431306417436297731, guid: 086374e6e0115a2039580410ec37ac2d, type: 3}
-      propertyPath: glyphManager
-      value: 
-      objectReference: {fileID: 2056369752}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12553,17 +12556,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e389dce1dfd5ee4929d646bf5c37c1f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
---- !u!114 &2056369752 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7916572389298984738, guid: e99d26a25d091a2aaba1795b358edac6, type: 3}
-  m_PrefabInstance: {fileID: 77803817}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c92eae187a502b32988e10646b76821, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PotatoGameDev.InputGlyph.GlyphManager
 --- !u!1 &2070941907
 GameObject:
   m_ObjectHideFlags: 0
@@ -13039,10 +13031,6 @@ PrefabInstance:
       propertyPath: showLabel
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1755024659807398325, guid: 2a935d53c14a8eb0b8dc5f0a69ad92bf, type: 3}
-      propertyPath: glyphManager
-      value: 
-      objectReference: {fileID: 2056369752}
     - target: {fileID: 1961939579595364144, guid: 2a935d53c14a8eb0b8dc5f0a69ad92bf, type: 3}
       propertyPath: m_Name
       value: InputHintUpgrade

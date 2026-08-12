@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class PauseMenuController : MonoBehaviour
@@ -6,6 +7,8 @@ public class PauseMenuController : MonoBehaviour
     [SerializeField] private GameObject content;
     [SerializeField] private GameObject bossModeContent;
     [SerializeField] private GameObject normalModeContent;
+
+    [SerializeField] private GameObject defaultSelectedButton;
 
     [SerializeField] private BossManager bossManager;
 
@@ -49,6 +52,7 @@ public class PauseMenuController : MonoBehaviour
 
     public void TogglePause()
     {
+        Debug.Log("Clicked!");
         if (canPause)
         {
             IsPaused = !IsPaused;
@@ -60,6 +64,11 @@ public class PauseMenuController : MonoBehaviour
 
                 bossModeContent.SetActive(bossManager.IsBossActive());
                 normalModeContent.SetActive(!bossManager.IsBossActive());
+
+                if (defaultSelectedButton != null && EventSystem.current != null)
+                {
+                    EventSystem.current.SetSelectedGameObject(defaultSelectedButton);
+                }
             }
             else
             {

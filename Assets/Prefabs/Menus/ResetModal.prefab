@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbcc5d5da691b60a5973fce90b96a837, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  glyph: {fileID: 6147010994209248737}
+  glyph: {fileID: 6666284701530586334}
 --- !u!114 &7496618892688061665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1041,6 +1041,7 @@ GameObject:
   - component: {fileID: 8581145590475161046}
   - component: {fileID: 6648479049479141850}
   - component: {fileID: 3266432928753236928}
+  - component: {fileID: 8271532419847012346}
   m_Layer: 5
   m_Name: ResetAbort
   m_TagString: Untagged
@@ -1177,7 +1178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbcc5d5da691b60a5973fce90b96a837, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  glyph: {fileID: 8578843747095535659}
+  glyph: {fileID: 9134385936378841364}
 --- !u!114 &6648479049479141850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1767,3 +1768,38 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5804401525528830780, guid: 086374e6e0115a2039580410ec37ac2d, type: 3}
   m_PrefabInstance: {fileID: 2847203503272903447}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6666284701530586334 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6431306417436297731, guid: 086374e6e0115a2039580410ec37ac2d, type: 3}
+  m_PrefabInstance: {fileID: 415441128656139997}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 569cb6dca11fe88de84249881dfe4183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlyphIcon
+--- !u!114 &9134385936378841364 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6431306417436297731, guid: 086374e6e0115a2039580410ec37ac2d, type: 3}
+  m_PrefabInstance: {fileID: 2847203503272903447}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 569cb6dca11fe88de84249881dfe4183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlyphIcon
+--- !u!114 &8271532419847012346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6452524364024925957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15d5ac413226438f2849d9c96768dbf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AutoselectOnEnable
+  autoselect: 1

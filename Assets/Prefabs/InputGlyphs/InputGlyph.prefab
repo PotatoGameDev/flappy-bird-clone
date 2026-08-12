@@ -265,5 +265,4 @@ MonoBehaviour:
   action: {fileID: 392368643174621059, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   image: {fileID: 2287944851791751669}
   label: {fileID: 3143241361928924656}
-  glyphManager: {fileID: 0}
   showLabel: 0

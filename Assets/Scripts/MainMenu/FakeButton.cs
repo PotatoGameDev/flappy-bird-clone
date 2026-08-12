@@ -15,7 +15,6 @@ public class FakeButton : MonoBehaviour, IPointerClickHandler
     [SerializeField] private Color nonInteractableColor = Color.gray;
 
     [SerializeField] private TextMeshProUGUI label;
-    [SerializeField] private GlyphIcon glyphIcon;
 
     private bool interactable = true;
     public bool Interactable
@@ -28,11 +27,6 @@ public class FakeButton : MonoBehaviour, IPointerClickHandler
             label.color = interactable
                 ? interactableColor
                 : nonInteractableColor;
-
-            if (glyphIcon != null)
-            {
-                glyphIcon.gameObject.SetActive(interactable);
-            }
         }
     }
 

@@ -1024,10 +1024,6 @@ PrefabInstance:
       propertyPath: soundManager
       value: 
       objectReference: {fileID: 486035222}
-    - target: {fileID: 1724326838251233745, guid: 943d1095f6068b02ab30cd0709b7b708, type: 3}
-      propertyPath: glyphManager
-      value: 
-      objectReference: {fileID: 774870155}
     - target: {fileID: 1958791231724902548, guid: 943d1095f6068b02ab30cd0709b7b708, type: 3}
       propertyPath: m_fontSize
       value: 72
@@ -1152,14 +1148,6 @@ PrefabInstance:
       propertyPath: soundManager
       value: 
       objectReference: {fileID: 486035222}
-    - target: {fileID: 7753434958272608320, guid: 943d1095f6068b02ab30cd0709b7b708, type: 3}
-      propertyPath: glyphManager
-      value: 
-      objectReference: {fileID: 774870155}
-    - target: {fileID: 8024514467442418515, guid: 943d1095f6068b02ab30cd0709b7b708, type: 3}
-      propertyPath: glyphManager
-      value: 
-      objectReference: {fileID: 774870155}
     - target: {fileID: 8152422728400053861, guid: 943d1095f6068b02ab30cd0709b7b708, type: 3}
       propertyPath: m_Name
       value: MainMenuButtons

@@ -5,45 +5,62 @@ namespace PotatoGameDev.InputGlyph
 {
     public class GlyphOnSelect : MonoBehaviour, ISelectHandler, IDeselectHandler
     {
-        [SerializeField] private GameObject glyph;
+        [SerializeField] private GlyphIcon glyph;
+
+        private GlyphIcon cachedGlyph;
 
         void Start()
         {
-            if (EventSystem.current.currentSelectedGameObject == gameObject)
+            if (EventSystem.current != null && EventSystem.current.currentSelectedGameObject == gameObject)
             {
-                glyph.SetActive(true);
+                GetGlyph()?.SetShown(true);
             }
             else
             {
-                glyph.SetActive(false);
+                GetGlyph()?.SetShown(false);
             }
         }
 
         void OnEnable()
         {
-            if (EventSystem.current.currentSelectedGameObject == gameObject)
+            if (EventSystem.current != null && EventSystem.current.currentSelectedGameObject == gameObject)
             {
-                glyph.SetActive(true);
+                GetGlyph()?.SetShown(true);
             }
             else
             {
-                glyph.SetActive(false);
+                GetGlyph()?.SetShown(false);
             }
         }
 
         void OnDisable()
         {
-            glyph.SetActive(false);
+            GetGlyph()?.SetShown(false);
         }
 
         public void OnSelect(BaseEventData eventData)
         {
-            glyph.SetActive(true);
+            GetGlyph()?.SetShown(true);
         }
 
         public void OnDeselect(BaseEventData eventData)
         {
-            glyph.SetActive(false);
+            GetGlyph()?.SetShown(false);
+        }
+
+        private GlyphIcon GetGlyph()
+        {
+            if (glyph != null)
+            {
+                return glyph;
+            }
+
+            if (cachedGlyph == null)
+            {
+                cachedGlyph = GetComponentInChildren<GlyphIcon>();
+            }
+
+            return cachedGlyph;
         }
     }
 }
