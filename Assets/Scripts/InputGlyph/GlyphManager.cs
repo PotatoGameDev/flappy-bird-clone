@@ -4,6 +4,7 @@ using System;
 
 namespace PotatoGameDev.InputGlyph
 {
+    [DefaultExecutionOrder(-1000)]
     public class GlyphManager : MonoBehaviour
     {
         [SerializeField] private GlyphMapping genericMapping;

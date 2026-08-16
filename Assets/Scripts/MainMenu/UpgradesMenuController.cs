@@ -95,7 +95,8 @@ public class UpgradesMenuController : SecondaryMenuDelegate
         long currentEnergy = GameManager.Instance.CollectedEnergy;
         long currentPopulation = GameManager.Instance.GetBasePopulation();
 
-        // This sets the current stat label based on the format in the label on UI
+        // This sets the current stat label based on the format 
+        // in the label on UI
         // Keep synched with the UI:
         // TODO: Maybe do it so that we do not need to keep it synched?
 
@@ -108,7 +109,8 @@ public class UpgradesMenuController : SecondaryMenuDelegate
 
     public override void UpdateMenu()
     {
-        // Update the start button, if the previous level has been completed, then this level can be started
+        // Update the start button, if the previous level has been completed, 
+        // then this level can be started
         startButton.gameObject.SetActive(true);
         if (GameManager.Instance.CanPlayLevel())
         {
@@ -138,24 +140,30 @@ public class UpgradesMenuController : SecondaryMenuDelegate
         return null;
     }
 
+    private Vector2 lastNavigateValue;
+
     void OnNavigate(InputAction.CallbackContext ctx)
     {
-        if (!ctx.action.WasPressedThisFrame())
+        Vector2 value = ctx.ReadValue<Vector2>();
+        if (value == lastNavigateValue)
         {
             return;
         }
 
-        Vector2 value = ctx.ReadValue<Vector2>();
-        if (value != Vector2.zero)
+        lastNavigateValue = value;
+
+        if (value == Vector2.zero || !ctx.action.WasPressedThisFrame())
         {
-            if (value.y > 0)
-            {
-                GetSelectedUpgrade().NavigateUp();
-            }
-            if (value.y < 0)
-            {
-                GetSelectedUpgrade().NavigateDown();
-            }
+            return;
+        }
+
+        if (value.y > 0)
+        {
+            GetSelectedUpgrade().NavigateUp();
+        }
+        if (value.y < 0)
+        {
+            GetSelectedUpgrade().NavigateDown();
         }
     }
 }

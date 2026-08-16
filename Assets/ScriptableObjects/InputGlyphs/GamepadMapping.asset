@@ -32,7 +32,5 @@ MonoBehaviour:
     glyph: {fileID: 21300000, guid: 7033e84b905fb7a4f94f8aa4a792c72e, type: 3}
   - bindingPath: start
     glyph: {fileID: 21300000, guid: 02c04bdf3f220fdceb35c7bc80dd7c75, type: 3}
-  - bindingPath: dpad/y
-    glyph: {fileID: 21300000, guid: 7c1a5b872341a2b9d9349e466367fe4f, type: 3}
-  - bindingPath: dpad/x
-    glyph: {fileID: 21300000, guid: 3b9d723c00bbdf8b18dbf133b757e4b4, type: 3}
+  - bindingPath: dpad
+    glyph: {fileID: 21300000, guid: c6a1d28b3879affa6be2145cf6039cf5, type: 3}

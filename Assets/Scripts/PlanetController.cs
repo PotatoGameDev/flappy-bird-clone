@@ -353,6 +353,8 @@ public class PlanetController : MonoBehaviour
         currentJumpForce += jumpForce;
 
         shieldController.RegisterJump();
+
+        RumbleManager.Instance.ImpulseRumble(RumbleSource.Jump, 0.3f, 0.1f);
     }
 
     // Collisions:

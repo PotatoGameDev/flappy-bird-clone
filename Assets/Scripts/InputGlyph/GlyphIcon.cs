@@ -95,13 +95,17 @@ namespace PotatoGameDev.InputGlyph
 
         private void Refresh()
         {
-            string bindingPath = GetBindingPath(action.action, GlyphManager.Instance?.CurrentScheme);
+            string bindingPath = GetBindingPath(
+                    action.action,
+                    GlyphManager.Instance.CurrentScheme
+                    );
 
             Sprite sprite = null;
             if (bindingPath != null && GlyphManager.Instance != null)
             {
-                sprite = GlyphManager.Instance.CurrentMapping?.GetGlyph(bindingPath);
+                sprite = GlyphManager.Instance.CurrentMapping.GetGlyph(bindingPath);
             }
+
 
             if (image != null)
             {
@@ -140,12 +144,16 @@ namespace PotatoGameDev.InputGlyph
             foreach (var binding in action.bindings)
             {
                 if (binding.isComposite || binding.isPartOfComposite)
+                {
                     continue;
+                }
 
                 if (binding.groups.Contains(scheme))
                 {
                     if (binding.effectivePath.Contains("{"))
+                    {
                         continue;
+                    }
 
                     return binding.effectivePath;
                 }

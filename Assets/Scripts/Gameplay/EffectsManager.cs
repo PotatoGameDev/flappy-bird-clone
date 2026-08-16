@@ -51,6 +51,12 @@ public class EffectsManager : MonoBehaviour
         sustainedShakesAmplitudes[shakeSource] = amplitude;
         sustainedShakesFrequencies[shakeSource] = frequency;
 
+        RumbleManager.Instance.StartSustainedRumble(
+                GetRumbleSource(shakeSource),
+                amplitude,
+                amplitude
+                );
+
         RecalculateSustainedShake();
     }
 
@@ -58,6 +64,10 @@ public class EffectsManager : MonoBehaviour
     {
         sustainedShakesAmplitudes[shakeSource] = 0f;
         sustainedShakesFrequencies[shakeSource] = 0f;
+
+        RumbleManager.Instance.StopSustainedRumble(
+                GetRumbleSource(shakeSource)
+                );
 
         RecalculateSustainedShake();
     }
@@ -76,6 +86,18 @@ public class EffectsManager : MonoBehaviour
         }
 
     }
+
+    private RumbleSource GetRumbleSource(ShakeSource shakeSource)
+    {
+        return shakeSource switch
+        {
+            ShakeSource.BoundaryDamage => RumbleSource.BoundaryDamage,
+            ShakeSource.PlasmaBeam => RumbleSource.PlasmaBeam,
+            _ => throw new Exception($"Unsupported RumbleSource: {shakeSource}")
+        };
+    }
+
+
 }
 
 public enum ShakeSource
