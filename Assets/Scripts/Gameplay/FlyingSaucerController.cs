@@ -250,7 +250,7 @@ public class FlyingSaucerController : PooledInstance, IPlayerHitReceiver
 
     public void PlayerHit(Damage damage)
     {
-        if (IsHittable())
+        if (!IsHittable())
         {
             return;
         }
@@ -260,7 +260,7 @@ public class FlyingSaucerController : PooledInstance, IPlayerHitReceiver
 
     public bool IsHittable()
     {
-        return state != FlyingSaucerState.ACTIVE;
+        return state == FlyingSaucerState.ACTIVE;
     }
 
     public long GetLifeUnit()

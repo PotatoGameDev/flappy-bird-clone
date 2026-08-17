@@ -383,6 +383,7 @@ public class PlanetController : MonoBehaviour
             return;
         }
 
+        Debug.Log($"Enemy hittable: {enemyController.IsHittable()}");
         if (!enemyController.IsHittable())
         {
             return;

@@ -37,7 +37,6 @@ public class BulletController : PooledInstance, IPlayerHitReceiver
     {
         rendr.sprite = sprites[Random.Range(0, sprites.Length)];
         rendr.enabled = true;
-        Debug.Log("enabling renderer");
         transform.localScale = Vector2.one * 0.1f;
         timeoutCoroutine = StartCoroutine(SelfDestruct());
         alive = true;
@@ -63,7 +62,6 @@ public class BulletController : PooledInstance, IPlayerHitReceiver
     new void Release()
     {
         rendr.enabled = false;
-        Debug.Log("Disabling renderer");
         alive = false;
         StopCoroutine(timeoutCoroutine);
         base.Release();
