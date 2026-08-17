@@ -132,7 +132,6 @@ public class PlanetController : MonoBehaviour
 
     void FixedUpdate()
     {
-        Debug.Log($"SPEED: {speed}");
         if (pauseMenuController.IsPaused)
         {
             return;

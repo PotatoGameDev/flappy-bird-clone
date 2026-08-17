@@ -15,7 +15,7 @@ public class DisableBloom : MonoBehaviour
     static bool FindVolumeComponent<T>(out T component) where T : VolumeComponent
     {
         component = null;
-        var volume = Object.FindObjectOfType<Volume>();
+        var volume = FindFirstObjectByType<Volume>();
         return volume != null && volume.profile.TryGet(out component);
     }
 }

@@ -13,19 +13,11 @@ public class MotherShipperController : MonoBehaviour, IPlayerHitReceiver
     private SwarmFollow swarmFollow;
     [SerializeField] private SpriteRenderer spriteRenderer;
 
-    [SerializeField] private float bulletCooldown = 0.5f;
-    [SerializeField] private float bulletSpeed = 15f;
-    private float currentCooldown = 0f;
-
     [SerializeField] private long maxLife = 100L;
 
     private long halfLife;
     public long CurrentLife { get; private set; }
     private bool dead;
-
-    [SerializeField]
-    private float damageFactor = 100f;
-
 
     [SerializeField]
     private long cannonDamagePerSecond = 10L;
@@ -65,7 +57,6 @@ public class MotherShipperController : MonoBehaviour, IPlayerHitReceiver
     [SerializeField] private float plasmaBeamTargettingWidthMax = 0.5f;
     private float plasmaBeamTargettingWidthCurrent;
 
-    [SerializeField] private float plasmaBeamWidthMax = 1f;
     [SerializeField] private float plasmaBeamLengthMax = 30f;
 
     [SerializeField]
@@ -135,11 +126,6 @@ public class MotherShipperController : MonoBehaviour, IPlayerHitReceiver
     void Update()
     {
         if (dead) return;
-
-        if (currentCooldown > 0f)
-        {
-            currentCooldown -= Time.deltaTime;
-        }
 
         if (CurrentLife < halfLife)
         {

@@ -24,9 +24,6 @@ public class FlyingSaucerController : PooledInstance, IPlayerHitReceiver
 
     public FlyingSaucerState state = FlyingSaucerState.ACTIVE;
 
-    [SerializeField]
-    private float damageFactor = 100f;
-
     private bool playerInShootingRange = false;
 
     [SerializeField] private float damageFlashingDurationSeconds = 1f;

@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
 
 public static class PerformanceBootstrap
 {
@@ -10,7 +8,7 @@ public static class PerformanceBootstrap
 #if UNITY_ANDROID
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = Mathf.RoundToInt(
-                (float)Screen.currentResolution.refreshRate
+                (float)Screen.currentResolution.refreshRateRatio.value
                 );
 
         Screen.SetResolution(

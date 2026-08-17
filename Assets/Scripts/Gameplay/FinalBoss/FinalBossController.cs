@@ -121,7 +121,10 @@ public class FinalBossController : MonoBehaviour, IPlayerHitReceiver
             yield return TINY_ROCKET_INTERVAL;
         }
 
-        tinyRocketsCount += tinyRocketsCountIncrease;
+        tinyRocketsCount = Mathf.Clamp(
+                tinyRocketsCount + tinyRocketsCountIncrease,
+                0,
+                tinyRocketsCountMax);
     }
 
     public void PlayerHit(Damage damage)
