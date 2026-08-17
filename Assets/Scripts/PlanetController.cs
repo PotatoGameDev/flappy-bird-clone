@@ -395,8 +395,6 @@ public class PlanetController : MonoBehaviour
                 shieldController.IsInShieldITime()
                 );
 
-        Debug.Log("Enemy: " + ((MonoBehaviour)enemyController).gameObject.name + " life: " + enemyController.GetLifeUnit() + " damage: " + damage.enemy);
-
         enemyController.PlayerHit(damage);
 
         if (damage.shielded)

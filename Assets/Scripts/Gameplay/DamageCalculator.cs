@@ -63,8 +63,6 @@ public class DamageCalculator : MonoBehaviour
         // Simple formula!
         long totalEnemyDamage = (long)(baseDamageFactor * hitForceFactor * baseLifeUnit);
 
-        Debug.Log("Dist: " + dist + " MaxDist: " + GetMaxDistance());
-
         // This is a design decision:
         // The player gets the same shielded damage as the enemy.
         // So the closer you get when shielding, the more damage you get, but also the enemy gets it.
@@ -97,8 +95,6 @@ public class DamageCalculator : MonoBehaviour
             shielded,
             relativeVelocity
             );
-
-        Debug.Log("baseDamageFactor: " + baseDamageFactor + " hitForceFactor: " + hitForceFactor + " finally = " + result);
 
         return result;
     }
