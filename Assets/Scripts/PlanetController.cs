@@ -12,7 +12,8 @@ public class PlanetController : MonoBehaviour
 
     [SerializeField] private PauseMenuController pauseMenuController;
 
-    // This is the speed param that influences camera movement and other items. That's why it's internal, not private - other code has to know.
+    // This is the speed param that influences camera movement and other items. 
+    // That's why it's internal, not private - other code has to know.
     internal float speed = 0f;
     [SerializeField] internal float initialSpeed = 5f;
 
@@ -87,7 +88,8 @@ public class PlanetController : MonoBehaviour
         // Selecting the sprite
         SpriteHolder = transform.Find("Sprite");
 
-        string selectedPlanetName = "planet0" + GameManager.Instance.PlanetType.ToString();
+        string selectedPlanetName = "planet0" + GameManager.Instance.
+            PlanetType.ToString();
 
         for (int i = 0; i < SpriteHolder.childCount; i++)
         {
@@ -144,8 +146,10 @@ public class PlanetController : MonoBehaviour
 
         if (speed == 0f)
         {
-            // This is to manage the problem of FixedUpdate in camera script running before this method.
-            // That caused camera to be initially slightly faster than the planet... 
+            // This is to manage the problem of FixedUpdate in camera script 
+            // running before this method.
+            // That caused camera to be 
+            // initially slightly faster than the planet... 
             // This way, the camera starts with 0 speed.
             speed = initialSpeed;
         }
@@ -171,7 +175,6 @@ public class PlanetController : MonoBehaviour
         float height = Camera.main.orthographicSize * 2f;
         boundaryDamageShake = 0f;
 
-        // TODO If i switch to moving camera (that follows the player) then there might be a problem
         float deathHeightTop = Camera.main.transform.position.y + height / 2;
         float dangerHeightTop = deathHeightTop - borderDangerMargin;
 
@@ -185,7 +188,9 @@ public class PlanetController : MonoBehaviour
         {
             // The planet is below damage threshold, should start getting damage
             //
-            float distance = Mathf.Abs(transform.position.y - dangerHeightBottom);
+            float distance = Mathf.Abs(
+                    transform.position.y - dangerHeightBottom
+                    );
             outOfBoundsFraction = distance / borderDangerMargin;
             blackHoleDamage = false;
         }
@@ -228,7 +233,8 @@ public class PlanetController : MonoBehaviour
                 boundaryDamageShake = Mathf.Lerp(
                         0,
                         1,
-                        (currentSunStarCasualties + currentBlackHoleCasualties) / 5000
+                        (currentSunStarCasualties + currentBlackHoleCasualties)
+                            / 5000
                 );
 
                 SoundManager.Instance.PlayScreams(screamsVolume);
@@ -260,7 +266,11 @@ public class PlanetController : MonoBehaviour
         // Ufo Swarm Damage:
         if (totalLaserDamage > 0 && timeToLaserDamageSummary <= 0f)
         {
-            GameplayManager.Instance.AddPopulationLossText(totalLaserDamage, LaserHitTextsPrefix, LaserHitTextsCount, false);
+            GameplayManager.Instance.AddPopulationLossText(
+                    totalLaserDamage,
+                    LaserHitTextsPrefix,
+                    LaserHitTextsCount,
+                    false);
             totalLaserDamage = 0;
         }
         timeToLaserDamageSummary -= Time.fixedDeltaTime;
@@ -550,6 +560,19 @@ public class PlanetController : MonoBehaviour
 
         burningEffect.SetActive(true);
 
+        ToorboBoost = 0.0f;
+
+        foreach (ParticleSystem sdParticles in spinDoctorParticleSystemsLeft)
+        {
+            var emission = sdParticles.emission;
+            emission.enabled = false;
+        }
+        foreach (ParticleSystem sdParticles in spinDoctorParticleSystemsRight)
+        {
+            var emission = sdParticles.emission;
+            emission.enabled = false;
+        }
+
         // Hiding the player
         rendr.enabled = false;
 
@@ -557,7 +580,8 @@ public class PlanetController : MonoBehaviour
         GameplayManager.Instance.Death();
 
         // Explosion animation for fun
-        ExplosionController explosion = InstancePoolsManager.Instance.ExplosionControllerPool.Get();
+        ExplosionController explosion = InstancePoolsManager.Instance.
+            ExplosionControllerPool.Get();
         explosion.transform.SetParent(transform);
         explosion.transform.localPosition = Vector2.zero;
         explosion.transform.localScale = Vector2.one * 2f;
