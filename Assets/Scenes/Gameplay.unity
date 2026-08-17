@@ -5283,7 +5283,7 @@ MonoBehaviour:
   finalBossContainer: {fileID: 1086831020}
   finalBossPlayerSpeed: 5
   finalBoss: {fileID: 1885914594}
-  forceBoss: 1
+  forceBoss: 0
   forceLevel: 1
   bossHealthBarContainer: {fileID: 1262686247}
   gateCounterContainer: {fileID: 1694599427}
@@ -37639,10 +37639,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   spriteRenderer: {fileID: 142080622}
-  bulletCooldown: 0.5
-  bulletSpeed: 15
   maxLife: 100000
-  damageFactor: 100
   cannonDamagePerSecond: 100
   damageFlashingDurationSeconds: 1
   smokeEmitter: {fileID: 271066284}
@@ -37657,7 +37654,6 @@ MonoBehaviour:
   plasmaCannonRadiusMax: 1.25
   plasmaBeamTargettingWidthMin: 0.05
   plasmaBeamTargettingWidthMax: 0.3
-  plasmaBeamWidthMax: 1
   plasmaBeamLengthMax: 30
   swarmControllers:
   - {fileID: 1843238851}

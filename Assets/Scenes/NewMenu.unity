@@ -5529,12 +5529,12 @@ MonoBehaviour:
   mainSelectionL: {fileID: 1107941960}
   mainSelectionR: {fileID: 1690172074}
   mainSelectionContents:
-  - {fileID: 488857255}
   - {fileID: 205292935}
+  - {fileID: 488857255}
   - {fileID: 169444384}
   mainSelectionOptions:
-  - navigation_upgrades
   - navigation_level_select
+  - navigation_upgrades
   - navigation_system
 --- !u!4 &1164979819
 Transform:

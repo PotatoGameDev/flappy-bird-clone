@@ -223,6 +223,8 @@ public class GameplayManager : MonoBehaviour
         energyGoalSlider.value = 0;
 
         damageCalculator = Player.GetComponent<DamageCalculator>();
+
+        GameManager.Instance.backFromGameplay = true;
     }
 
     // TODO This should be in the boss manager...

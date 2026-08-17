@@ -17,12 +17,10 @@ public class MenusController : MonoBehaviour
 
     [SerializeField] private string[] mainSelectionOptions;
 
-    private int currentMainSelection = 0;
+    private int currentMainSelection = -1;
 
-    // Remembering last player screen to go back after the gameplay
-    private static int lastMainSelection = 0;
-
-    private const int LEVEL_SELECTION_MENU = 1;
+    private const int LEVEL_SELECTION_MENU = 0;
+    private const int UPGRADES_MENU = 1;
 
     void Awake()
     {
@@ -45,8 +43,12 @@ public class MenusController : MonoBehaviour
         backAction.performed += BackPressed;
         backAction.Enable();
 
-        // This is for when the player returns from the gameplay:
-        if (GameManager.Instance.newLevelUnlocked)
+        // This is for when the player returns from the gameplay.
+        // If just turned on the game - go to level select.
+        // If new level unlocked - level select.
+        // Any other case - just go to the upgrades, makes most sense.
+        if (GameManager.Instance.newLevelUnlocked ||
+                !GameManager.Instance.backFromGameplay)
         {
             GameManager.Instance.newLevelUnlocked = false;
 
@@ -54,7 +56,8 @@ public class MenusController : MonoBehaviour
         }
         else
         {
-            currentMainSelection = lastMainSelection;
+            currentMainSelection = UPGRADES_MENU;
+            Debug.Log("Going to menu " + currentMainSelection);
         }
 
         Loc.OnLanguageChanged += UpdateMainSelectionMenus;
@@ -190,7 +193,6 @@ public class MenusController : MonoBehaviour
         {
             return;
         }
-        lastMainSelection = currentMainSelection;
         GameManager.Instance.levelSettings.levelType = LevelType.Normal;
         SceneManager.LoadScene("Loading");
     }
