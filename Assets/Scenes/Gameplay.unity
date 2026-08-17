@@ -24176,8 +24176,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 457437701}
     - target: {fileID: 4483183010449108538, guid: 3c6863b1d6445b69ebba23573fce9c84, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4483183010449108538, guid: 3c6863b1d6445b69ebba23573fce9c84, type: 3}
       propertyPath: musicClips.Array.size
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5541045753577964808, guid: 3c6863b1d6445b69ebba23573fce9c84, type: 3}
       propertyPath: m_Name
