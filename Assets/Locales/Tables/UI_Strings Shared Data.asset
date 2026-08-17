@@ -323,6 +323,18 @@ MonoBehaviour:
     m_Key: level_select_flavor_level_4
     m_Metadata:
       m_Items: []
+  - m_Id: 32116077678555136
+    m_Key: credits_text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32122607631069184
+    m_Key: navigation_level_select_level_4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32124200036331520
+    m_Key: navigation_system_credits
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

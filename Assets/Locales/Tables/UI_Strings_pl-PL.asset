@@ -432,6 +432,20 @@ MonoBehaviour:
       na tym poziomie, zostanie dodana do listy najlepszych wynik\xF3w!"
     m_Metadata:
       m_Items: []
+  - m_Id: 32116077678555136
+    m_Localized: "2026 by Piotr Kaczmarski\nDzi\u0119kuj\u0119 za gr\u0119!\nPom\xF3\u017C
+      stworzy\u0107 ziemniaczan\u0105 spo\u0142eczno\u015B\u0107 na Discordzie, Twitchu
+      i YouTube, zapraszam!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32122607631069184
+    m_Localized: "Pi\u0105ty Wymiar"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32124200036331520
+    m_Localized: Autor
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

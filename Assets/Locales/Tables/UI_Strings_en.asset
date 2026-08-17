@@ -536,6 +536,23 @@ MonoBehaviour:
       scores list!\n"
     m_Metadata:
       m_Items: []
+  - m_Id: 32116077678555136
+    m_Localized: '2026 by Piotr Kaczmarski
+
+      Thank You For Playing!
+
+      Please,
+      help build the Potato Community on Discord, Twitch or YouTube!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32122607631069184
+    m_Localized: Fifth Dimension
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32124200036331520
+    m_Localized: Author
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

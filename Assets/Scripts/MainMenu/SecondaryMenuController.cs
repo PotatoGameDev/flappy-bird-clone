@@ -36,7 +36,10 @@ public class SecondaryMenuController : MonoBehaviour
 
             for (int i = 0; i < statLabels.Length; i++)
             {
-                statLabelTemplates[i] = statLabels[i].text;
+                if (statLabels[i] != null)
+                {
+                    statLabelTemplates[i] = statLabels[i].text;
+                }
             }
         }
 
@@ -69,6 +72,7 @@ public class SecondaryMenuController : MonoBehaviour
             // make sure we don't try to select the same button again
             if (defaultSelectable != null && EventSystem.current.currentSelectedGameObject != defaultSelectable)
             {
+                Debug.Log($"Selecting: {defaultSelectable}");
                 EventSystem.current.SetSelectedGameObject(null);
                 EventSystem.current.SetSelectedGameObject(defaultSelectable);
             }
@@ -96,10 +100,16 @@ public class SecondaryMenuController : MonoBehaviour
         {
             if (statLabels.Length > 0)
             {
-                controller.FillInStatTexts(
-                        statLabelTemplates[currentSelection],
-                        statLabels[currentSelection]
-                        );
+                TextMeshProUGUI label = statLabels[currentSelection];
+
+                if (label != null)
+                {
+                    string template = statLabelTemplates[currentSelection];
+                    controller.FillInStatTexts(
+                            template,
+                            label
+                            );
+                }
             }
 
             controller.UpdateMenu();
