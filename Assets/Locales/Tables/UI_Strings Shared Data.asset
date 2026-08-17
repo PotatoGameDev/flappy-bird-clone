@@ -319,6 +319,10 @@ MonoBehaviour:
     m_Key: main_reset_modal_text
     m_Metadata:
       m_Items: []
+  - m_Id: 32108316106420224
+    m_Key: level_select_flavor_level_4
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
