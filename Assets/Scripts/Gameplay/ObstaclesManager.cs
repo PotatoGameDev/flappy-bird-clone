@@ -35,18 +35,22 @@ public class ObstaclesManager : MonoBehaviour
 
         float lastObstaclePosX = obstacles.Count > 0 ? obstacles[^1].transform.position.x : 0f;
 
+
+        Vector3 spawnPos = Camera.main.ViewportToWorldPoint(new Vector3(1.1f, 0.5f, 1f));
+
         float distToLastObstacle = playerPosX - lastObstaclePosX;
 
-        if (distToLastObstacle > 0 && distToLastObstacle > minGap)
+        float lastObstacleDistanceFromSpawn = spawnPos.x - lastObstaclePosX;
+
+        if (obstacles.Count == 0 || lastObstacleDistanceFromSpawn > GetGap())
         {
             // Spawning next obstacle just outside of the camera view:
-            Vector3 pos = Camera.main.ViewportToWorldPoint(new Vector3(1.1f, 0.5f, 1f));
-            pos.z = 0f;
-            pos.y = Random.Range(-verticalSpan, verticalSpan);
+            spawnPos.z = 0f;
+            spawnPos.y = Random.Range(-verticalSpan, verticalSpan);
 
             // Generating regular vanila gate
             GateController gateInst = pool.Get();
-            gateInst.transform.position = pos;
+            gateInst.transform.position = spawnPos;
             gateInst.Init();
 
             obstacles.Add(gateInst);
@@ -54,7 +58,7 @@ public class ObstaclesManager : MonoBehaviour
             // And the final boss obstacles:
             if (bossManager.IsFinalBossActive())
             {
-                Vector3 distantPos = pos + bossManager.GetFinalBoss().PlayerOffset;
+                Vector3 distantPos = spawnPos + bossManager.GetFinalBoss().PlayerOffset;
                 distantPos.z = 0f;
 
                 GateController gateDistantInst = poolDistant.Get();
@@ -64,6 +68,16 @@ public class ObstaclesManager : MonoBehaviour
                 obstaclesDistant.Add(gateDistantInst);
             }
         }
+    }
+
+    private float GetGap()
+    {
+        float currentSpeed = GameplayManager.Instance.Player.speed;
+        float minSpeed = GameplayManager.Instance.Player.initialSpeed;
+
+        float speedInc = minSpeed - currentSpeed;
+        return minGap;
+        //return Mathf.LerpUnclamped(minGap, 2 * minGap, speedInc / minSpeed);
     }
 
     void Update()

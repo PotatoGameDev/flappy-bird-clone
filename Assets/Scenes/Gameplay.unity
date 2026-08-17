@@ -5187,7 +5187,7 @@ MonoBehaviour:
   finalBossPlayerSpeed: 5
   finalBoss: {fileID: 1885914594}
   forceBoss: 0
-  forceLevel: 3
+  forceLevel: 1
   bossHealthBarContainer: {fileID: 1262686247}
   gateCounterContainer: {fileID: 1694599427}
 --- !u!1 &47030982
@@ -24407,7 +24407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64976fc204f34be2bafa32f51cf97e83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  minGap: 5
+  minGap: 12
   verticalSpan: 4
   obstaclePrefab: {fileID: 8028266045150266681, guid: 161dda93af069b949867802970020114, type: 3}
   obstacleDistantPrefab: {fileID: 7659293787408493286, guid: e4e882ab0d6c0dc1481a456e42f16425, type: 3}
@@ -35262,7 +35262,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -3.4812, y: -314.28}
+  m_AnchoredPosition: {x: -3.4813232, y: -314.28003}
   m_SizeDelta: {x: -1279.092, y: -866.5767}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1212504021

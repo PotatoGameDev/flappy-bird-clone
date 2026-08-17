@@ -14,7 +14,7 @@ public class PlanetController : MonoBehaviour
 
     // This is the speed param that influences camera movement and other items. That's why it's internal, not private - other code has to know.
     internal float speed = 0f;
-    [SerializeField] private float initialSpeed = 5f;
+    [SerializeField] internal float initialSpeed = 5f;
 
     [SerializeField] private float speedIncrease = 0.1f;
     [SerializeField] private float speedIncreaseFinalBoss = 0.5f;
