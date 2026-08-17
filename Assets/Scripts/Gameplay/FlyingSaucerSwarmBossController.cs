@@ -36,7 +36,6 @@ public class FlyingSaucerSwarmBossController : MonoBehaviour
                 continue;
             }
         }
-        Debug.Log("End Attaching event");
 
         GameplayManager.Instance.SetBossHealth(totalBossHealth, totalBossHealth);
     }

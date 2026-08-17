@@ -17,6 +17,8 @@ public class BulletController : PooledInstance, IPlayerHitReceiver
     private WaitForSeconds WAIT_LIFETIME;
     private Coroutine timeoutCoroutine;
 
+    public bool alive;
+
     void Awake()
     {
         rendr = GetComponent<SpriteRenderer>();
@@ -35,8 +37,10 @@ public class BulletController : PooledInstance, IPlayerHitReceiver
     {
         rendr.sprite = sprites[Random.Range(0, sprites.Length)];
         rendr.enabled = true;
+        Debug.Log("enabling renderer");
         transform.localScale = Vector2.one * 0.1f;
         timeoutCoroutine = StartCoroutine(SelfDestruct());
+        alive = true;
     }
 
     void FixedUpdate()
@@ -58,6 +62,9 @@ public class BulletController : PooledInstance, IPlayerHitReceiver
 
     new void Release()
     {
+        rendr.enabled = false;
+        Debug.Log("Disabling renderer");
+        alive = false;
         StopCoroutine(timeoutCoroutine);
         base.Release();
         // TODO maybe stop all coroutines in base?

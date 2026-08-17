@@ -461,6 +461,11 @@ public class PlanetController : MonoBehaviour
                     bullet.transform.up * bullet.speed,
                     false);
 
+            bullet.PlayerHit(damage);
+
+            // Make the hits more felt by the player
+            rb.AddForceAtPosition(transform.up * 100f * damage.player, collider.transform.position);
+
             long peopleDied = GameplayManager.Instance.TakeHit(damage);
             if (peopleDied > 0f)
             {

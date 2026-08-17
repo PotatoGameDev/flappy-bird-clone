@@ -52,7 +52,6 @@ public class PauseMenuController : MonoBehaviour
 
     public void TogglePause()
     {
-        Debug.Log("Clicked!");
         if (canPause)
         {
             IsPaused = !IsPaused;
