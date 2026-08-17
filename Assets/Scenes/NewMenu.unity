@@ -723,6 +723,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4960825093065785799, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
+      propertyPath: menuSoundManager
+      value: 
+      objectReference: {fileID: 1593900403}
+    - target: {fileID: 4960825093065785799, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
       propertyPath: navigationAction
       value: 
       objectReference: {fileID: 5060697400078234956, guid: b63f73a4e39e835f6a2542cf1eda950c, type: 3}
@@ -754,6 +758,10 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
       objectReference: {fileID: 694139054}
+    - target: {fileID: 7536681865514428602, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
+      propertyPath: soundManager
+      value: 
+      objectReference: {fileID: 1593900403}
     - target: {fileID: 8322394065268055635, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
       propertyPath: m_fontSize
       value: 50
@@ -4422,6 +4430,10 @@ PrefabInstance:
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4960825093065785799, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
+      propertyPath: menuSoundManager
+      value: 
+      objectReference: {fileID: 1593900403}
+    - target: {fileID: 4960825093065785799, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
       propertyPath: navigationAction
       value: 
       objectReference: {fileID: 5060697400078234956, guid: b63f73a4e39e835f6a2542cf1eda950c, type: 3}
@@ -4493,6 +4505,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7536681865514428602, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
+      propertyPath: soundManager
+      value: 
+      objectReference: {fileID: 1593900403}
     - target: {fileID: 8322394065268055635, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
       propertyPath: m_fontAsset
       value: 
@@ -5825,6 +5841,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4960825093065785799, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
+      propertyPath: menuSoundManager
+      value: 
+      objectReference: {fileID: 1593900403}
+    - target: {fileID: 4960825093065785799, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
       propertyPath: navigationAction
       value: 
       objectReference: {fileID: 5060697400078234956, guid: b63f73a4e39e835f6a2542cf1eda950c, type: 3}
@@ -5856,6 +5876,10 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
       objectReference: {fileID: 334956209}
+    - target: {fileID: 7536681865514428602, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
+      propertyPath: soundManager
+      value: 
+      objectReference: {fileID: 1593900403}
     - target: {fileID: 8322394065268055635, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
       propertyPath: m_fontSize
       value: 40
@@ -7262,6 +7286,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4960825093065785799, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
+      propertyPath: menuSoundManager
+      value: 
+      objectReference: {fileID: 1593900403}
+    - target: {fileID: 4960825093065785799, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
       propertyPath: navigationAction
       value: 
       objectReference: {fileID: 5060697400078234956, guid: b63f73a4e39e835f6a2542cf1eda950c, type: 3}
@@ -7297,6 +7325,10 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
       objectReference: {fileID: 1287368820}
+    - target: {fileID: 7536681865514428602, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
+      propertyPath: soundManager
+      value: 
+      objectReference: {fileID: 1593900403}
     - target: {fileID: 8322394065268055635, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
       propertyPath: m_fontSize
       value: 50
@@ -8903,6 +8935,10 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4960825093065785799, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
+      propertyPath: menuSoundManager
+      value: 
+      objectReference: {fileID: 1593900403}
+    - target: {fileID: 4960825093065785799, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
       propertyPath: navigationAction
       value: 
       objectReference: {fileID: 5060697400078234956, guid: b63f73a4e39e835f6a2542cf1eda950c, type: 3}
@@ -8978,6 +9014,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7536681865514428602, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
+      propertyPath: soundManager
+      value: 
+      objectReference: {fileID: 1593900403}
     - target: {fileID: 8322394065268055635, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
       propertyPath: m_fontSize
       value: 40
@@ -9300,6 +9340,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4960825093065785799, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
+      propertyPath: menuSoundManager
+      value: 
+      objectReference: {fileID: 1593900403}
+    - target: {fileID: 4960825093065785799, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
       propertyPath: navigationAction
       value: 
       objectReference: {fileID: 5060697400078234956, guid: b63f73a4e39e835f6a2542cf1eda950c, type: 3}
@@ -9351,6 +9395,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -86.49422
       objectReference: {fileID: 0}
+    - target: {fileID: 7536681865514428602, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
+      propertyPath: soundManager
+      value: 
+      objectReference: {fileID: 1593900403}
     - target: {fileID: 8322394065268055635, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
       propertyPath: m_fontSize
       value: 40
@@ -9833,6 +9881,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4960825093065785799, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
+      propertyPath: menuSoundManager
+      value: 
+      objectReference: {fileID: 1593900403}
+    - target: {fileID: 4960825093065785799, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
       propertyPath: navigationAction
       value: 
       objectReference: {fileID: 5060697400078234956, guid: b63f73a4e39e835f6a2542cf1eda950c, type: 3}
@@ -9908,6 +9960,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7536681865514428602, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
+      propertyPath: soundManager
+      value: 
+      objectReference: {fileID: 1593900403}
     - target: {fileID: 8322394065268055635, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
       propertyPath: m_fontAsset
       value: 
@@ -10316,6 +10372,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4960825093065785799, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
+      propertyPath: menuSoundManager
+      value: 
+      objectReference: {fileID: 1593900403}
+    - target: {fileID: 4960825093065785799, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
       propertyPath: navigationAction
       value: 
       objectReference: {fileID: 5060697400078234956, guid: b63f73a4e39e835f6a2542cf1eda950c, type: 3}
@@ -10339,6 +10399,10 @@ PrefabInstance:
       propertyPath: m_PreserveAspect
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7536681865514428602, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
+      propertyPath: soundManager
+      value: 
+      objectReference: {fileID: 1593900403}
     - target: {fileID: 8630510205124130984, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
       propertyPath: m_text
       value: ORing
@@ -11437,6 +11501,10 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4960825093065785799, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
+      propertyPath: menuSoundManager
+      value: 
+      objectReference: {fileID: 1593900403}
+    - target: {fileID: 4960825093065785799, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
       propertyPath: navigationAction
       value: 
       objectReference: {fileID: 5060697400078234956, guid: b63f73a4e39e835f6a2542cf1eda950c, type: 3}
@@ -11484,6 +11552,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -70.98756
       objectReference: {fileID: 0}
+    - target: {fileID: 7536681865514428602, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
+      propertyPath: soundManager
+      value: 
+      objectReference: {fileID: 1593900403}
     - target: {fileID: 8322394065268055635, guid: dc295e86acbb0799d896cac56ca364a6, type: 3}
       propertyPath: m_fontAsset
       value: 

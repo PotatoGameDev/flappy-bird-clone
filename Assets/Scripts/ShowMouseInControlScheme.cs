@@ -6,13 +6,21 @@ public class ShowMouseInControlScheme : MonoBehaviour
     [SerializeField] private string[] schemes;
     [SerializeField] private PlayerInput playerInput;
 
+    private static string lastScheme;
+
     void OnEnable()
     {
         playerInput.onControlsChanged += OnControlsChanged;
 
         // Initial check, so we don't need actual change
         // to hide/show the item.
-        OnControlsChanged(playerInput);
+
+        if (lastScheme == null)
+        {
+            lastScheme = playerInput.currentControlScheme;
+        }
+
+        ApplyCursorState(lastScheme);
     }
 
     void OnDisable()
@@ -20,11 +28,11 @@ public class ShowMouseInControlScheme : MonoBehaviour
         playerInput.onControlsChanged -= OnControlsChanged;
     }
 
-    private void OnControlsChanged(PlayerInput input)
+    private void ApplyCursorState(string scheme)
     {
-        foreach (string scheme in schemes)
+        foreach (string s in schemes)
         {
-            if (scheme == input.currentControlScheme)
+            if (scheme == s)
             {
                 Cursor.visible = true;
                 return;
@@ -33,4 +41,9 @@ public class ShowMouseInControlScheme : MonoBehaviour
         Cursor.visible = false;
     }
 
+    private void OnControlsChanged(PlayerInput input)
+    {
+        lastScheme = input.currentControlScheme;
+        ApplyCursorState(lastScheme);
+    }
 }

@@ -195,6 +195,10 @@ public class UpgradePanelController : MonoBehaviour, IPointerEnterHandler
 
     public void SetSelected(bool selected)
     {
+        if (selected && !Selected)
+        {
+            soundManager.PlaySelect();
+        }
 
         Selected = selected;
         if (selected)
