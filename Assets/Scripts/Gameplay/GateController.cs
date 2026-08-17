@@ -42,8 +42,9 @@ public class GateController : PooledInstance
 
         for (int i = 0; i < energyPerGate; i++)
         {
-            EnergyBallController ball = EnergyBallManager.Instance.GetRandom(
-                    GameplayManager.Instance.GateCount * chancesMultiplier
+            EnergyBallController ball = EnergyBallManager.Instance
+                .GetRandomForSpeed(
+                    GameplayManager.Instance.Player.speed * chancesMultiplier
                     );
             if (i % 2 == 0)
             {

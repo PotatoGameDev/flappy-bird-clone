@@ -32,8 +32,6 @@ public class PlanetController : MonoBehaviour
 
     [SerializeField] private float damageFlashingDurationSeconds = 1f;
 
-    private readonly float flashSpeed = 0.2f;
-
     public Transform SpriteHolder { get; private set; }
 
     private Color originalColor;
@@ -132,6 +130,7 @@ public class PlanetController : MonoBehaviour
 
     void FixedUpdate()
     {
+        Debug.Log($"SPEED: {speed}");
         if (pauseMenuController.IsPaused)
         {
             return;

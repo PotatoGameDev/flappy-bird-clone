@@ -25,7 +25,27 @@ public class EnergyBallManager : MonoBehaviour
         Instance = null;
     }
 
-    public EnergyBallController GetRandom(float gate)
+    public EnergyBallController GetRandomForSpeed(float speed)
+    {
+        float yellowMinSpeed = 6f;
+        float redMinSpeed = 8f;
+        float blueMinSpeed = 10f;
+
+        float white = 100f;
+        float yellow = Mathf.Max(0f, Mathf.Pow(Mathf.Max(0, speed - yellowMinSpeed), 1.5f) * 6f);
+        float red = Mathf.Max(0f, Mathf.Pow(Mathf.Max(0, speed - redMinSpeed), 1.5f) * 4f);
+        float blue = Mathf.Max(0f, Mathf.Pow(Mathf.Max(0, speed - blueMinSpeed), 1.5f) * 2f);
+
+        float total = white + yellow + red + blue;
+        float roll = Random.Range(0f, total);
+
+        if (roll < white) return GetWhite();
+        if (roll < white + yellow) return GetYellow();
+        if (roll < white + yellow + red) return GetRed();
+        return GetBlue();
+    }
+
+    public EnergyBallController GetRandomForGate(int gate)
     {
         float yellowMinGate = 5f;
         float redMinGate = 20f;

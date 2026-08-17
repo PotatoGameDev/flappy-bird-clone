@@ -75,9 +75,9 @@ public class ObstaclesManager : MonoBehaviour
         float currentSpeed = GameplayManager.Instance.Player.speed;
         float minSpeed = GameplayManager.Instance.Player.initialSpeed;
 
-        float speedInc = minSpeed - currentSpeed;
-        return minGap;
-        //return Mathf.LerpUnclamped(minGap, 2 * minGap, speedInc / minSpeed);
+        float speedInc = currentSpeed - minSpeed;
+
+        return Mathf.LerpUnclamped(minGap, 2 * minGap, speedInc / minSpeed);
     }
 
     void Update()
