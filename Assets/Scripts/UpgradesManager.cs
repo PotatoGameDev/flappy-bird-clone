@@ -6,7 +6,7 @@ using System;
 public class UpgradesManager : MonoBehaviour
 {
     private static readonly long SHIELD_AMOUNT_PER_LEVEL = 10_000;
-    internal static readonly long SHIELD_AMOUNT_PER_ENERGY = 100;
+    internal static readonly long SHIELD_AMOUNT_PER_ENERGY = 1000;
     private static readonly float SHIELD_SIZE_PER_LEVEL = 0.01f;
     private static readonly int SPIN_DOCTOR_RPM_PER_LEVEL = 100;
     private static readonly int TOORBO_BOOST_SECONDS_PER_LEVEL = 5;

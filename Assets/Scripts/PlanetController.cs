@@ -83,8 +83,6 @@ public class PlanetController : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        rendr = GetComponentInChildren<SpriteRenderer>();
-        originalColor = rendr.color;
 
         GameplayManager.Instance.Player = this;
 
@@ -96,7 +94,15 @@ public class PlanetController : MonoBehaviour
         for (int i = 0; i < SpriteHolder.childCount; i++)
         {
             Transform child = SpriteHolder.GetChild(i);
-            child.gameObject.SetActive(child.name == selectedPlanetName);
+
+            bool active = child.name == selectedPlanetName;
+            child.gameObject.SetActive(active);
+
+            if (active)
+            {
+                rendr = child.GetComponent<SpriteRenderer>();
+                originalColor = rendr.color;
+            }
         }
 
         damageCalculator = GetComponent<DamageCalculator>();
@@ -383,7 +389,6 @@ public class PlanetController : MonoBehaviour
             return;
         }
 
-        Debug.Log($"Enemy hittable: {enemyController.IsHittable()}");
         if (!enemyController.IsHittable())
         {
             return;
@@ -440,6 +445,7 @@ public class PlanetController : MonoBehaviour
     public void OnTriggerEnter2D(Collider2D collider)
     {
         if (Dead) return;
+
         if (collider.CompareTag("BoundaryBack")
                 || collider.CompareTag("BlackHoleBoundary")
                 || collider.CompareTag("SunStarBoundary"))
@@ -536,6 +542,10 @@ public class PlanetController : MonoBehaviour
 
     public void Death()
     {
+        if (Dead)
+        {
+            return;
+        }
         // Letting know other components that the player died
         Dead = true;
 
@@ -561,7 +571,6 @@ public class PlanetController : MonoBehaviour
     public void DeathAnimationEnded()
     {
         burningEffect.SetActive(false);
-        //Destroy(gameObject);
     }
 
 }
