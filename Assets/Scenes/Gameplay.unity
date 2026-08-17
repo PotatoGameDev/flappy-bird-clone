@@ -5283,7 +5283,7 @@ MonoBehaviour:
   finalBossContainer: {fileID: 1086831020}
   finalBossPlayerSpeed: 5
   finalBoss: {fileID: 1885914594}
-  forceBoss: 0
+  forceBoss: 1
   forceLevel: 1
   bossHealthBarContainer: {fileID: 1262686247}
   gateCounterContainer: {fileID: 1694599427}

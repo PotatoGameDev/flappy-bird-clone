@@ -55,6 +55,8 @@ public class FlyingSaucerController : PooledInstance, IPlayerHitReceiver
     public new void Release()
     {
         StopAllCoroutines();
+
+        smokeEmitter.Stop();
         base.Release();
     }
 
@@ -98,10 +100,6 @@ public class FlyingSaucerController : PooledInstance, IPlayerHitReceiver
             }
             ParticleSystem.EmissionModule emission = smokeEmitter.emission;
             emission.rateOverTime = maxSmokeEmission * CurrentLife / halfLife;
-        }
-        else
-        {
-            smokeEmitter.Stop();
         }
 
         if (CurrentLife <= 0f)
