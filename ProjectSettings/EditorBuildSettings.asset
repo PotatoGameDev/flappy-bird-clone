@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/NewMenu.unity
     guid: f7b07a3a2e395598d996ca6b354968cf
+  - enabled: 1
+    path: Assets/Scenes/Credits.unity
+    guid: d4c7edfe2cab5453f81b74f4d38c1a37
   m_configObjects:
     com.unity.adaptivePerformance.basic.provider_settings: {fileID: 11400000, guid: ca7dd307236881c338e1c4cbe7dd9c7f, type: 2}
     com.unity.adaptiveperformance.google.android.provider_settings: {fileID: 11400000, guid: 48963a7245e774717a77d6746d1153cc, type: 2}

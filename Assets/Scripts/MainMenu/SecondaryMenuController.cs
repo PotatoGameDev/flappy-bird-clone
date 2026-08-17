@@ -72,7 +72,6 @@ public class SecondaryMenuController : MonoBehaviour
             // make sure we don't try to select the same button again
             if (defaultSelectable != null && EventSystem.current.currentSelectedGameObject != defaultSelectable)
             {
-                Debug.Log($"Selecting: {defaultSelectable}");
                 EventSystem.current.SetSelectedGameObject(null);
                 EventSystem.current.SetSelectedGameObject(defaultSelectable);
             }
