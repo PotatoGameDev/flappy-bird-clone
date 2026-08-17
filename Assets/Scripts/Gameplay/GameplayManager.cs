@@ -33,6 +33,11 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] private FadingMessagesManager energyMessagesManager;
     [SerializeField] private FadingMessagesManager rpmMessagesManager;
 
+    [SerializeField] private Image lifeBar;
+    [SerializeField] private Image antiLifeBar;
+    private float targetLifeBarValue;
+
+
     public event Action OnGatePassed;
 
     private long _currentPopulation = 0;
@@ -180,6 +185,7 @@ public class GameplayManager : MonoBehaviour
     {
         // TODO: might be replaying previous level, have to pass the current civ type from menu to here
         CurrentPopulation = GameManager.Instance.GetBasePopulation();
+        targetLifeBarValue = 1f;
 
         UpdateLabels();
 
@@ -319,6 +325,8 @@ public class GameplayManager : MonoBehaviour
 
     void Update()
     {
+        UpdateLifeBar();
+
         if (Player.Dead) return;
 
         float rpm = Player.GetRpm();
@@ -393,7 +401,16 @@ public class GameplayManager : MonoBehaviour
 
         KillPopulation(peopleDied);
 
+        targetLifeBarValue = (float)CurrentPopulation / GameManager.Instance.GetBasePopulation();
+
         return peopleDied;
+    }
+
+    private void UpdateLifeBar()
+    {
+        lifeBar.fillAmount = Mathf.MoveTowards(lifeBar.fillAmount, targetLifeBarValue, Time.unscaledDeltaTime * 2f);
+
+        antiLifeBar.fillAmount = 1.0f - lifeBar.fillAmount;
     }
 
     internal void UseUpShield(long shieldLoss)
