@@ -101,15 +101,18 @@ public class GameplayManager : MonoBehaviour
 
     public void AddCollectedEnergy(long amount)
     {
-        advanceEnergy += amount;
-        // Separate stash for the advance energy, so the player can
-        // collect energy to start the boss fight, and still have repairs
-        // to the shield and stuff. More forgiving, less frustrating.
-        if (advanceEnergy >= GameManager.Instance.GetRequiredAdvanceEnergy())
+        if (GameManager.Instance.CurrentLevel <= 2)
         {
-            if (!bossManager.IsBossActive())
+            advanceEnergy += amount;
+            // Separate stash for the advance energy, so the player can
+            // collect energy to start the boss fight, and still have repairs
+            // to the shield and stuff. More forgiving, less frustrating.
+            if (advanceEnergy >= GameManager.Instance.GetRequiredAdvanceEnergy())
             {
-                bossManager.ActivateBoss();
+                if (!bossManager.IsBossActive())
+                {
+                    bossManager.ActivateBoss();
+                }
             }
         }
 
@@ -218,9 +221,17 @@ public class GameplayManager : MonoBehaviour
             shieldLevelSlider.value = shieldLeft;
         }
 
-        energyGoalSlider.minValue = 0;
-        energyGoalSlider.maxValue = GameManager.Instance.GetRequiredAdvanceEnergy();
-        energyGoalSlider.value = 0;
+        if (GameManager.Instance.CurrentLevel <= 2)
+        {
+            energyGoalSlider.minValue = 0;
+            energyGoalSlider.maxValue = GameManager.Instance.
+                GetRequiredAdvanceEnergy();
+            energyGoalSlider.value = 0;
+        }
+        else
+        {
+            energyGoalSlider.gameObject.SetActive(false);
+        }
 
         damageCalculator = Player.GetComponent<DamageCalculator>();
 
@@ -255,10 +266,20 @@ public class GameplayManager : MonoBehaviour
         yield return WAIT_2_SECONDS;
         yield return WAIT_1_SECOND;
 
+        bool finalBoss = GameManager.Instance.CurrentLevel == 2;
+
         GameManager.Instance.UnlockNextPhase();
 
         InstancePoolsManager.Instance.ReleaseAll();
-        SceneManager.LoadScene("NewMenu");
+
+        if (finalBoss)
+        {
+            SceneManager.LoadScene("Credits");
+        }
+        else
+        {
+            SceneManager.LoadScene("NewMenu");
+        }
     }
 
     public bool ShieldAvailable()

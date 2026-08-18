@@ -542,7 +542,7 @@ MonoBehaviour:
       Thank You For Playing!
 
       Please,
-      help build the Potato Community on Discord, Twitch or YouTube!'
+      help build the potato community on Discord, Twitch or YouTube!'
     m_Metadata:
       m_Items: []
   - m_Id: 32122607631069184
@@ -551,6 +551,20 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 32124200036331520
     m_Localized: Author
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32308032345731072
+    m_Localized: Back
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32308651257229312
+    m_Localized: "You won! \nYou have destroyed your evil future self! The Universe
+      is safe, at least until you become the evil version of yourself again. Then
+      it will all turn around, time is a flat circle, etc... You get the idea? \nWell,
+      now you unlocked a special level in which you can prove to the world who's
+      the best! There will be no boss and it has a High Score table!\n\nThank You
+      for Playing!\n2026 by Piotr Kaczmarski\nPlease, help build the potato community
+      on Discord, Twitch or YouTube!"
     m_Metadata:
       m_Items: []
   references:

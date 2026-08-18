@@ -446,6 +446,22 @@ MonoBehaviour:
     m_Localized: Autor
     m_Metadata:
       m_Items: []
+  - m_Id: 32308032345731072
+    m_Localized: Wstecz
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32308651257229312
+    m_Localized: "Wygra\u0142e\u015B! \nZniszczy\u0142e\u015B swoj\u0105 z\u0142\u0105
+      wersj\u0119 z przysz\u0142o\u015Bci! Wszech\u015Bwiat jest bezpieczny, przynajmniej
+      dop\xF3ki znowu nie staniesz si\u0119 swoj\u0105 z\u0142\u0105 wersj\u0105.
+      Wtedy wszystko si\u0119 odwr\xF3ci. Czas zatacza ko\u0142o, itd... Wiesz, o
+      co chodzi. \nOdblokowa\u0142e\u015B specjalny poziom, na kt\xF3rym mo\u017Cesz
+      udowodni\u0107 \u015Bwiatu, kto jest najlepszy! Nie b\u0119dzie \u017Cadnego
+      bossa, za to b\u0119dzie tabela najlepszych wynik\xF3w!\n\nDzi\u0119kuj\u0119
+      za gr\u0119!\n2026, Piotr Kaczmarski\nPom\xF3\u017C rozwija\u0107 spo\u0142eczno\u015B\u0107
+      Potato na Discordzie, Twitchu lub YouTube!"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

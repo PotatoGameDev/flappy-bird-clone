@@ -335,6 +335,14 @@ MonoBehaviour:
     m_Key: navigation_system_credits
     m_Metadata:
       m_Items: []
+  - m_Id: 32308032345731072
+    m_Key: menu_back
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32308651257229312
+    m_Key: credits_text_ending
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
