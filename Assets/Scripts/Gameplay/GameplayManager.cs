@@ -389,10 +389,6 @@ public class GameplayManager : MonoBehaviour
     {
         long peopleDied = damage.player;
 
-        if (peopleDied > CurrentPopulation)
-        {
-            peopleDied = CurrentPopulation;
-        }
 
         long newPeopleDied = peopleDied > shieldLeft
             ? (peopleDied - shieldLeft)
@@ -404,6 +400,11 @@ public class GameplayManager : MonoBehaviour
         KillPopulation(peopleDied);
 
         targetLifeBarValue = (float)CurrentPopulation / GameManager.Instance.GetBasePopulation();
+
+        if (peopleDied > CurrentPopulation)
+        {
+            peopleDied = CurrentPopulation;
+        }
 
         return peopleDied;
     }

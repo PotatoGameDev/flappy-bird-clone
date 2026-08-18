@@ -57,7 +57,6 @@ public class MenusController : MonoBehaviour
         else
         {
             currentMainSelection = UPGRADES_MENU;
-            Debug.Log("Going to menu " + currentMainSelection);
         }
 
         Loc.OnLanguageChanged += UpdateMainSelectionMenus;
