@@ -267,7 +267,7 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.PLAY_STORE_JSON_KEY }}
           packageName: es.potatogam.flappyplanet
           releaseFiles: ${{ steps.find-aab.outputs.aab_path }}
-          track: ${{ steps.track.outputs.track }}
+          tracks: ${{ steps.track.outputs.track }}
           status: completed
 
   publish-itch:
