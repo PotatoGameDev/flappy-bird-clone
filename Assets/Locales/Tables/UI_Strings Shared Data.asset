@@ -343,6 +343,30 @@ MonoBehaviour:
     m_Key: credits_text_ending
     m_Metadata:
       m_Items: []
+  - m_Id: 32853114803187712
+    m_Key: leaderboards_no_results
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32853216905129984
+    m_Key: leaderboards_edit_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32853298215907328
+    m_Key: leaderboards_save_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32853385197383680
+    m_Key: leaderboards_player_name_label
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32853535819034624
+    m_Key: leaderboards_enter_text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32855676424024064
+    m_Key: leaderboards_edit_save_name
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

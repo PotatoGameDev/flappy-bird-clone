@@ -14,17 +14,13 @@ public class SecondaryMenuController : MonoBehaviour
     [SerializeField] private FakeButton selectionR;
     [SerializeField] private TextMeshProUGUI selectionLabelR;
 
-    [SerializeField] private GameObject[] selectionContents;
+    [SerializeField] private SubmenuContent[] selectionContents;
     [SerializeField] private TextMeshProUGUI[] statLabels;
     private string[] statLabelTemplates;
-
-    [SerializeField] private GameObject[] defaultSelectables = { null, null, null };
 
     [SerializeField] private string[] availableOptions;
 
     [SerializeField] private GameObject[] glyphs;
-    [SerializeField] private GameObject[] showGlyphs;
-    [SerializeField] private bool[] showGlyphsOnScreens;
 
     private int currentSelection;
 
@@ -65,17 +61,7 @@ public class SecondaryMenuController : MonoBehaviour
 
     private void SelectDefaultControl()
     {
-        if (defaultSelectables.Length > currentSelection)
-        {
-            GameObject defaultSelectable = defaultSelectables[currentSelection];
-
-            // make sure we don't try to select the same button again
-            if (defaultSelectable != null && EventSystem.current.currentSelectedGameObject != defaultSelectable)
-            {
-                EventSystem.current.SetSelectedGameObject(null);
-                EventSystem.current.SetSelectedGameObject(defaultSelectable);
-            }
-        }
+        selectionContents[currentSelection].SelectDefalutControl();
     }
 
     private void UpdateMenus()
@@ -87,11 +73,11 @@ public class SecondaryMenuController : MonoBehaviour
         {
             if (i == currentSelection)
             {
-                selectionContents[currentSelection].SetActive(true);
+                selectionContents[currentSelection].gameObject.SetActive(true);
             }
             else
             {
-                selectionContents[i].SetActive(false);
+                selectionContents[i].gameObject.SetActive(false);
             }
         }
 
@@ -118,12 +104,11 @@ public class SecondaryMenuController : MonoBehaviour
         {
             glyph.SetActive(false);
         }
-        if (showGlyphsOnScreens.Length == 0 || (showGlyphsOnScreens.Length > currentSelection && showGlyphsOnScreens[currentSelection] == true))
+
+        foreach (GameObject glyph in selectionContents[currentSelection]
+                .inputGlyphsActive)
         {
-            foreach (GameObject glyph in showGlyphs)
-            {
-                glyph.SetActive(true);
-            }
+            glyph.SetActive(true);
         }
     }
 

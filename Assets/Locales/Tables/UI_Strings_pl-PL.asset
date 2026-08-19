@@ -462,6 +462,30 @@ MonoBehaviour:
       Potato na Discordzie, Twitchu lub YouTube!"
     m_Metadata:
       m_Items: []
+  - m_Id: 32853114803187712
+    m_Localized: "Brak wynik\xF3w"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32853216905129984
+    m_Localized: "Zmie\u0144 imi\u0119"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32853298215907328
+    m_Localized: Zapisz
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32853385197383680
+    m_Localized: "Podaj imi\u0119 do tabeli wynik\xF3w:"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32853535819034624
+    m_Localized: Wpisz tekst
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32855676424024064
+    m_Localized: "Edytuj/Zapisz imi\u0119"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

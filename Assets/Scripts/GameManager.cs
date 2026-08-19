@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviour
     internal bool newLevelUnlocked;
     internal bool backFromGameplay;
 
+    internal int lastScore = 0;
+
     // 0 based! So there is level 0, 1, 2
     public int CurrentLevel
     {

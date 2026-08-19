@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class SystemMenuController : SecondaryMenuDelegate
 {
     [SerializeField] private FakeButton startButton;
+    [SerializeField] private FakeButton savePlayerNameButton;
     [SerializeField] private TMP_Dropdown languageSelector;
 
 

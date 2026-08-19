@@ -567,6 +567,30 @@ MonoBehaviour:
       on Discord, Twitch or YouTube!"
     m_Metadata:
       m_Items: []
+  - m_Id: 32853114803187712
+    m_Localized: No results
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32853216905129984
+    m_Localized: Edit name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32853298215907328
+    m_Localized: Save
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32853385197383680
+    m_Localized: 'Provide a name for the leaderboard:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32853535819034624
+    m_Localized: Enter text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32855676424024064
+    m_Localized: Edit/Save Name
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

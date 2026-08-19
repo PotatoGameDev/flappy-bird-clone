@@ -274,11 +274,11 @@ public class GameplayManager : MonoBehaviour
 
         if (finalBoss)
         {
-            SceneManager.LoadScene("Credits");
+            LoadScene("Credits");
         }
         else
         {
-            SceneManager.LoadScene("NewMenu");
+            LoadScene("NewMenu");
         }
     }
 
@@ -552,7 +552,7 @@ public class GameplayManager : MonoBehaviour
     {
         yield return WAIT_2_SECONDS;
         InstancePoolsManager.Instance.ReleaseAll();
-        SceneManager.LoadScene("NewMenu");
+        LoadScene("NewMenu");
     }
 
     public void PassGate()
@@ -577,6 +577,12 @@ public class GameplayManager : MonoBehaviour
         //if (value >= 1_000_000) return (value / 1_000_000_000_000).ToString("F1") + "M";
         //if (value >= 1_000) return (value / 1_000_000_000_000).ToString("F1") + "K";
         return value.ToString("N0");
+    }
+
+    private void LoadScene(string sceneName)
+    {
+        GameManager.Instance.lastScore = GateCount;
+        SceneManager.LoadScene(sceneName);
     }
 
 }
