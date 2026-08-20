@@ -15,7 +15,6 @@ on:
           - alpha
           - beta
           - production
-          - early-access
 
 jobs:
   build-webgl:
@@ -256,7 +255,7 @@ jobs:
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "track=${{ github.event.inputs.track }}" >> $GITHUB_OUTPUT
           elif [[ "${{ github.ref }}" == refs/tags/v* ]]; then
-            echo "track=early-access" >> $GITHUB_OUTPUT
+            echo "track=internal" >> $GITHUB_OUTPUT
           else
             echo "track=internal" >> $GITHUB_OUTPUT
           fi
